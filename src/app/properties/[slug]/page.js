@@ -1,18 +1,17 @@
 import Link from 'next/link';
-import { getPropertyBySlug, properties } from '@/data/properties';
+import { getPropertyBySlug, getAllSlugs } from '@/lib/properties';
 import { notFound } from 'next/navigation';
 
 // Generate static params for all properties
 export async function generateStaticParams() {
-  return properties.map((property) => ({
-    slug: property.slug,
-  }));
+  const slugs = await getAllSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const property = getPropertyBySlug(slug);
+  const property = await getPropertyBySlug(slug);
 
   if (!property) {
     return {
@@ -28,7 +27,7 @@ export async function generateMetadata({ params }) {
 
 export default async function PropertyDetailPage({ params }) {
   const { slug } = await params;
-  const property = getPropertyBySlug(slug);
+  const property = await getPropertyBySlug(slug);
 
   // If property not found, show 404
   if (!property) {
