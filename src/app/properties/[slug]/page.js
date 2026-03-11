@@ -15,12 +15,12 @@ export async function generateMetadata({ params }) {
 
   if (!property) {
     return {
-      title: 'Имотът не е намерен | Имоти Директ',
+      title: 'Имотът не е намерен | ArtHouse94',
     };
   }
 
   return {
-    title: `${property.title} | Имоти Директ`,
+    title: `${property.title} | ArtHouse94`,
     description: property.description.substring(0, 160),
   };
 }
@@ -317,7 +317,7 @@ export default async function PropertyDetailPage({ params }) {
                       </svg>
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">Имоти Директ</p>
+                      <p className="font-semibold text-gray-900">ArtHouse94</p>
                       <p className="text-sm text-gray-500">Агенция за недвижими имоти</p>
                     </div>
                   </div>

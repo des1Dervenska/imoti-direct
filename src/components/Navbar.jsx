@@ -23,7 +23,7 @@ export default function Navbar() {
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
           </svg>
           <span className="self-center text-xl font-bold whitespace-nowrap text-gray-900">
-            Имоти Директ
+            ArtHouse94
           </span>
         </Link>
 

@@ -15,7 +15,7 @@ export default function Footer() {
               >
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               </svg>
-              <span className="text-xl font-bold">Имоти Директ</span>
+              <span className="text-xl font-bold">ArtHouse94</span>
             </div>
             <p className="text-gray-400 text-sm">
               Вашият надежден партньор в света на недвижимите имоти.
@@ -153,7 +153,7 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm">
-              &copy; {new Date().getFullYear()} Имоти Директ. Всички права запазени.
+              &copy; {new Date().getFullYear()} ArtHouse94. Всички права запазени.
             </p>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
