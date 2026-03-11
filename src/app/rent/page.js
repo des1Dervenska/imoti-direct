@@ -1,13 +1,14 @@
 import PropertyGrid from "@/components/PropertyGrid";
-import { getRentProperties, propertyTypes, cities } from "@/data/properties";
+import { getRentProperties } from "@/lib/properties";
+import { propertyTypes, cities } from "@/data/properties";
 
 export const metadata = {
   title: "Имоти под наем | Имоти Директ",
   description: "Разгледайте нашите актуални оферти за наем на апартаменти, къщи и ваканционни имоти в цяла България.",
 };
 
-export default function RentPage() {
-  const properties = getRentProperties();
+export default async function RentPage() {
+  const properties = await getRentProperties();
 
   return (
     <>

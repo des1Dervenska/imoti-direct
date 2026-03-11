@@ -1,11 +1,13 @@
 import HeroSection from "@/components/HeroSection";
 import PropertyGrid from "@/components/PropertyGrid";
-import { getSaleProperties, getRentProperties } from "@/data/properties";
+import { getSaleProperties, getRentProperties } from "@/lib/properties";
 import Link from "next/link";
 
-export default function Home() {
-  const saleProperties = getSaleProperties().slice(0, 3);
-  const rentProperties = getRentProperties().slice(0, 3);
+export default async function Home() {
+  const allSaleProperties = await getSaleProperties();
+  const allRentProperties = await getRentProperties();
+  const saleProperties = allSaleProperties.slice(0, 3);
+  const rentProperties = allRentProperties.slice(0, 3);
 
   return (
     <>
