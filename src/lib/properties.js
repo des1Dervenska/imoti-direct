@@ -259,3 +259,133 @@ export async function getAllSlugs() {
 
   return mockProperties.map(p => p.slug);
 }
+
+// =============================================================================
+// ADMIN: GET ALL PROPERTIES (includes all statuses)
+// =============================================================================
+
+export async function getAllPropertiesAdmin() {
+  if (!isSupabaseConfigured) {
+    return { data: mockProperties, error: null, isDemo: true };
+  }
+
+  const { data, error } = await supabase
+    .from('properties')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching admin properties:', error);
+    return { data: [], error: error.message, isDemo: false };
+  }
+
+  return { data: (data || []).map(transformProperty), error: null, isDemo: false };
+}
+
+// =============================================================================
+// ADMIN: GET PROPERTY BY ID
+// =============================================================================
+
+export async function getPropertyById(id) {
+  if (!isSupabaseConfigured) {
+    const property = mockProperties.find(p => p.id === Number(id));
+    return { data: property || null, error: null, isDemo: true };
+  }
+
+  const { data, error } = await supabase
+    .from('properties')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    console.error('Error fetching property by id:', error);
+    return { data: null, error: error.message, isDemo: false };
+  }
+
+  return { data: transformProperty(data), error: null, isDemo: false };
+}
+
+// =============================================================================
+// ADMIN: CREATE PROPERTY
+// =============================================================================
+
+function transformToSupabase(property) {
+  return {
+    slug: property.slug,
+    title: property.title,
+    category: property.category,
+    type: property.type,
+    status: property.status || PROPERTY_STATUS.ACTIVE,
+    price: property.price,
+    currency: property.currency || 'EUR',
+    area: property.area,
+    rooms: property.rooms || null,
+    floor: property.floor || null,
+    total_floors: property.totalFloors || null,
+    year_built: property.yearBuilt || null,
+    city: property.city,
+    neighborhood: property.neighborhood || null,
+    address: property.address,
+    description: property.description || '',
+    features: property.features || [],
+    images: property.images || [],
+    map_url: property.mapUrl || null,
+    is_featured: property.isFeatured || false,
+  };
+}
+
+export async function createProperty(propertyData) {
+  if (!isSupabaseConfigured) {
+    return {
+      data: null,
+      error: 'Supabase не е конфигуриран. Моля, добавете NEXT_PUBLIC_SUPABASE_URL и NEXT_PUBLIC_SUPABASE_ANON_KEY в .env.local',
+      isDemo: true
+    };
+  }
+
+  const supabaseData = transformToSupabase(propertyData);
+
+  const { data, error } = await supabase
+    .from('properties')
+    .insert([supabaseData])
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error creating property:', error);
+    return { data: null, error: error.message, isDemo: false };
+  }
+
+  return { data: transformProperty(data), error: null, isDemo: false };
+}
+
+// =============================================================================
+// ADMIN: UPDATE PROPERTY
+// =============================================================================
+
+export async function updateProperty(id, propertyData) {
+  if (!isSupabaseConfigured) {
+    return {
+      data: null,
+      error: 'Supabase не е конфигуриран. Моля, добавете NEXT_PUBLIC_SUPABASE_URL и NEXT_PUBLIC_SUPABASE_ANON_KEY в .env.local',
+      isDemo: true
+    };
+  }
+
+  const supabaseData = transformToSupabase(propertyData);
+
+  const { data, error } = await supabase
+    .from('properties')
+    .update(supabaseData)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating property:', error);
+    return { data: null, error: error.message, isDemo: false };
+  }
+
+  return { data: transformProperty(data), error: null, isDemo: false };
+}
