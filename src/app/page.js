@@ -18,10 +18,10 @@ export default async function Home() {
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">
+              <h2 className="text-3xl font-bold text-[#495464]">
                 Имоти за продажба
               </h2>
-              <p className="text-gray-600 mt-2">
+              <p className="text-[#6b7a8f] mt-2">
                 Разгледайте нашите най-нови оферти
               </p>
             </div>
@@ -77,10 +77,10 @@ export default async function Home() {
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">
+              <h2 className="text-3xl font-bold text-[#495464]">
                 Имоти под наем
               </h2>
-              <p className="text-gray-600 mt-2">
+              <p className="text-[#6b7a8f] mt-2">
                 Намерете перфектния имот за вас
               </p>
             </div>
@@ -135,10 +135,10 @@ export default async function Home() {
       <section className="py-16 bg-white">
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-3xl font-bold text-[#495464]">
               Защо да изберете нас?
             </h2>
-            <p className="text-gray-600 mt-2">Нашите предимства</p>
+            <p className="text-[#6b7a8f] mt-2">Нашите предимства</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -158,10 +158,10 @@ export default async function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">
                 Сигурност
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-[#6b7a8f] text-sm">
                 Пълна проверка на всички документи и юридическа подкрепа
               </p>
             </div>
@@ -182,10 +182,10 @@ export default async function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">
                 Бързина
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-[#6b7a8f] text-sm">
                 Бърза и ефективна комуникация с всички страни по сделката
               </p>
             </div>
@@ -206,10 +206,10 @@ export default async function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">
                 Професионализъм
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-[#6b7a8f] text-sm">
                 Екип от опитни брокери с дългогодишен опит в сектора
               </p>
             </div>
@@ -230,10 +230,10 @@ export default async function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">
                 Честни цени
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-[#6b7a8f] text-sm">
                 Прозрачност в цените и без скрити такси
               </p>
             </div>
@@ -261,7 +261,7 @@ export default async function Home() {
               </Link>
               <Link
                 href="/sales"
-                className="inline-flex items-center justify-center px-6 py-3 border-2 border-[#495464] text-[#495464] font-medium rounded-lg hover:bg-[#495464] hover:text-white transition-colors"
+                className="inline-flex items-center justify-center px-6 py-3 border-2 border-[cadetblue] text-[cadetblue] font-medium rounded-lg hover:bg-[cadetblue] hover:text-white transition-colors"
               >
                 Разгледайте имотите
               </Link>

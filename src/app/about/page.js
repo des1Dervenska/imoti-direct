@@ -15,13 +15,13 @@ export default function AboutPage() {
   return (
     <>
       {/* Page Header */}
-      <section className="bg-gradient-to-r from-gray-800 to-gray-900 py-20">
+      <section className="pt-8 pb-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-[#495464] mb-3">
               За нас
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#6b7a8f] max-w-xl mx-auto">
               Вашият надежден партньор в света на недвижимите имоти
             </p>
           </div>
@@ -44,15 +44,15 @@ export default function AboutPage() {
 
             {/* Content */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl font-bold text-[#495464] mb-6">
                 {BRAND_NAME}
               </h2>
-              <div className="space-y-4 text-gray-600">
+              <div className="space-y-4 text-[#6b7a8f]">
                 <p>
-                  <strong className="text-gray-900">{BRAND_NAME}</strong> е {BRAND_DESCRIPTION.toLowerCase()}. {BRAND_TAGLINE}. Доверете ни се и оставете грижите на нас!
+                  <strong className="text-[#495464]">{BRAND_NAME}</strong> е {BRAND_DESCRIPTION.toLowerCase()}. {BRAND_TAGLINE}. Доверете ни се и оставете грижите на нас!
                 </p>
                 <p>
-                  Зад агенцията стои <strong className="text-gray-900">{CONTACT_PERSON}</strong> - професионалист с богат опит в сферата на недвижимите имоти. Предлагаме пълно съдействие при покупка, продажба и отдаване под наем на имоти.
+                  Зад агенцията стои <strong className="text-[#495464]">{CONTACT_PERSON}</strong> - професионалист с богат опит в сферата на недвижимите имоти. Предлагаме пълно съдействие при покупка, продажба и отдаване под наем на имоти.
                 </p>
                 <p>
                   Работим с индивидуален подход към всеки клиент, като се стремим да разберем вашите нужди и да намерим най-доброто решение за вас. Нашата цел е всяка сделка да премине гладко и безпроблемно.
@@ -67,7 +67,7 @@ export default function AboutPage() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-lg font-semibold text-gray-900">{CONTACT_PERSON}</div>
+                    <div className="text-lg font-semibold text-[#495464]">{CONTACT_PERSON}</div>
                     <div className="text-[#495464]">Управител, {BRAND_NAME}</div>
                   </div>
                 </div>
@@ -81,8 +81,8 @@ export default function AboutPage() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Нашите услуги</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-[#495464] mb-4">Нашите услуги</h2>
+            <p className="text-[#6b7a8f] max-w-2xl mx-auto">
               Предлагаме пълен спектър от услуги в сферата на недвижимите имоти
             </p>
           </div>
@@ -94,8 +94,8 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Покупко-продажба</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">Покупко-продажба</h3>
+              <p className="text-[#6b7a8f] text-sm">
                 Пълно съдействие при покупка или продажба на недвижим имот - от първоначалната консултация до финализиране на сделката.
               </p>
             </div>
@@ -106,8 +106,8 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Отдаване под наем</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">Отдаване под наем</h3>
+              <p className="text-[#6b7a8f] text-sm">
                 Намираме надеждни наематели за вашия имот и се грижим за целия процес - от огледите до подписване на договор.
               </p>
             </div>
@@ -118,8 +118,8 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Проверка на документи</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">Проверка на документи</h3>
+              <p className="text-[#6b7a8f] text-sm">
                 Извършваме пълна проверка на документите на имота - собственост, тежести, данъчни задължения и други.
               </p>
             </div>
@@ -130,8 +130,8 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Оценка на имоти</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">Оценка на имоти</h3>
+              <p className="text-[#6b7a8f] text-sm">
                 Професионална оценка на пазарната стойност на вашия имот, базирана на актуални данни от пазара.
               </p>
             </div>
@@ -142,8 +142,8 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Консултации</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">Консултации</h3>
+              <p className="text-[#6b7a8f] text-sm">
                 Безплатни консултации за всички аспекти на сделките с недвижими имоти - правни, финансови и практически.
               </p>
             </div>
@@ -154,8 +154,8 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Инвестиции</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-lg font-semibold text-[#495464] mb-2">Инвестиции</h3>
+              <p className="text-[#6b7a8f] text-sm">
                 Консултации за инвестиции в недвижими имоти - анализ на доходност, потенциал за растеж и рискове.
               </p>
             </div>
@@ -164,27 +164,29 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-[#495464]">
-        <div className="max-w-screen-xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Готови да започнем?
-          </h2>
-          <p className="text-white/80 mb-8 max-w-2xl mx-auto">
-            Свържете се с нас за безплатна консултация. Ще се радваме да ви помогнем да намерите вашия перфектен имот.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center px-6 py-3 bg-white text-[#495464] font-medium rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              Свържете се с нас
-            </Link>
-            <Link
-              href="/sales"
-              className="inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-[#495464] transition-colors"
-            >
-              Разгледайте имотите
-            </Link>
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-screen-xl mx-auto px-4">
+          <div className="bg-white rounded-2xl p-8 md:p-12 text-center border border-gray-100">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#495464] mb-4">
+              Готови да започнем?
+            </h2>
+            <p className="text-[#6b7a8f] mb-8 max-w-2xl mx-auto">
+              Свържете се с нас за безплатна консултация. Ще се радваме да ви помогнем да намерите вашия перфектен имот.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center px-6 py-3 bg-[cadetblue] hover:bg-[#4a8a8c] text-white font-medium rounded-lg transition-colors"
+              >
+                Свържете се с нас
+              </Link>
+              <Link
+                href="/sales"
+                className="inline-flex items-center justify-center px-6 py-3 border-2 border-[cadetblue] text-[cadetblue] font-medium rounded-lg hover:bg-[cadetblue] hover:text-white transition-colors"
+              >
+                Разгледайте имотите
+              </Link>
+            </div>
           </div>
         </div>
       </section>

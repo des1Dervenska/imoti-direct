@@ -117,12 +117,12 @@ export default function PropertyCard({ property }) {
           </h3>
         </Link>
 
-        <div className="flex items-center text-gray-500 text-sm mb-3">
-          <MapPinIcon className="w-4 h-4 mr-1.5 flex-shrink-0 text-gray-400" />
+        <div className="flex items-center text-[#6b7a8f] text-sm mb-3">
+          <MapPinIcon className="w-4 h-4 mr-1.5 flex-shrink-0 text-[#6b7a8f]" />
           <span className="font-medium">{location}</span>
         </div>
 
-        <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">
+        <p className="text-[#6b7a8f] text-sm leading-relaxed mb-4 flex-grow">
           {truncateText(description)}
         </p>
 
