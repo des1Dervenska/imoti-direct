@@ -1,9 +1,10 @@
 import PropertyGrid from "@/components/PropertyGrid";
 import { getRentProperties } from "@/lib/properties";
 import { propertyTypes, cities } from "@/data/properties";
+import { BRAND_NAME } from "@/lib/constants";
 
 export const metadata = {
-  title: "Имоти под наем | ART HOUSE 94",
+  title: `Имоти под наем | ${BRAND_NAME}`,
   description: "Разгледайте нашите актуални оферти за наем на апартаменти и къщи в България.",
 };
 

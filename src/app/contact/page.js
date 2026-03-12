@@ -1,6 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import {
+  CONTACT_ADDRESS,
+  CONTACT_CITY,
+  CONTACT_PHONE,
+  CONTACT_PHONE_LINK,
+  CONTACT_EMAIL,
+  CONTACT_ADDRESS_SHORT,
+  WORKING_HOURS,
+  GOOGLE_MAPS_SEARCH_URL,
+} from '@/lib/constants';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -22,10 +32,7 @@ export default function ContactPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Demo: само показваме съобщение за успех
-    console.log('Form data:', formData);
     setIsSubmitted(true);
-    // Reset form
     setFormData({
       name: '',
       email: '',
@@ -33,7 +40,6 @@ export default function ContactPage() {
       subject: '',
       message: ''
     });
-    // Hide success message after 5 seconds
     setTimeout(() => setIsSubmitted(false), 5000);
   };
 
@@ -75,8 +81,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Адрес</h3>
                     <p className="text-gray-600">
-                      ж.к. Белите Брези, бл. 4, ап. 37<br />
-                      София, България
+                      {CONTACT_ADDRESS}<br />
+                      {CONTACT_CITY}
                     </p>
                   </div>
                 </div>
@@ -91,8 +97,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Телефон</h3>
                     <p className="text-gray-600">
-                      <a href="tel:+359887803064" className="hover:text-blue-600 transition-colors">
-                        0887 803 064
+                      <a href={`tel:${CONTACT_PHONE_LINK}`} className="hover:text-blue-600 transition-colors">
+                        {CONTACT_PHONE}
                       </a>
                     </p>
                   </div>
@@ -108,8 +114,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Имейл</h3>
                     <p className="text-gray-600">
-                      <a href="mailto:genoveva@arthouse94.com" className="hover:text-blue-600 transition-colors">
-                        genoveva@arthouse94.com
+                      <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-blue-600 transition-colors">
+                        {CONTACT_EMAIL}
                       </a>
                     </p>
                   </div>
@@ -124,9 +130,9 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Работно време</h3>
-                    <p className="text-gray-600">Понеделник - Петък: 9:00 - 18:00</p>
-                    <p className="text-gray-600">Събота: 10:00 - 14:00</p>
-                    <p className="text-gray-600">Неделя: Почивен ден</p>
+                    <p className="text-gray-600">{WORKING_HOURS.weekdays}</p>
+                    <p className="text-gray-600">{WORKING_HOURS.saturday}</p>
+                    <p className="text-gray-600">{WORKING_HOURS.sunday}</p>
                   </div>
                 </div>
               </div>
@@ -298,7 +304,7 @@ export default function ContactPage() {
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Къде да ни намерите</h2>
-            <p className="text-gray-600">ж.к. Белите Брези, София</p>
+            <p className="text-gray-600">{CONTACT_ADDRESS_SHORT}</p>
           </div>
 
           {/* Map placeholder */}
@@ -308,9 +314,9 @@ export default function ContactPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
               </svg>
               <p className="text-lg font-medium">Google Maps</p>
-              <p className="text-sm">ж.к. Белите Брези, бл. 4</p>
+              <p className="text-sm">{CONTACT_ADDRESS_SHORT}</p>
               <a
-                href="https://www.google.com/maps/search/?api=1&query=Белите+Брези+София"
+                href={GOOGLE_MAPS_SEARCH_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center mt-4 text-blue-600 hover:text-blue-700 font-medium"

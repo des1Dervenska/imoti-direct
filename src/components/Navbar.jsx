@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { BRAND_NAME } from '@/lib/constants';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,7 +24,7 @@ export default function Navbar() {
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
           </svg>
           <span className="self-center text-xl font-bold whitespace-nowrap text-gray-900">
-            ART HOUSE 94
+            {BRAND_NAME}
           </span>
         </Link>
 

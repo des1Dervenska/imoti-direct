@@ -1,9 +1,10 @@
 import PropertyGrid from "@/components/PropertyGrid";
 import { getSaleProperties } from "@/lib/properties";
 import { propertyTypes, cities } from "@/data/properties";
+import { BRAND_NAME } from "@/lib/constants";
 
 export const metadata = {
-  title: "Имоти за продажба | ART HOUSE 94",
+  title: `Имоти за продажба | ${BRAND_NAME}`,
   description: "Разгледайте нашите актуални оферти за продажба на апартаменти, къщи и парцели в България.",
 };
 
