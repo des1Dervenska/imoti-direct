@@ -5,9 +5,9 @@ import PropertyGrid from './PropertyGrid';
 import { propertyTypes, cities } from '@/data/properties';
 
 // Styles
-const selectStyle = 'px-4 py-2.5 border border-gray-200 rounded-lg text-[#495464] bg-white focus:ring-2 focus:ring-[#495464]/20 focus:border-[#495464] cursor-pointer transition-colors hover:border-[#495464]/50';
-const countStyle = 'text-[#6b7a8f]';
-const countNumber = 'font-semibold text-[#495464]';
+const selectStyle = 'px-4 py-2.5 border border-gray-200 rounded-lg text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite cursor-pointer transition-colors hover:border-graphite/50';
+const countStyle = 'text-graphite-light';
+const countNumber = 'font-semibold text-graphite';
 
 // Default price ranges for sale
 const SALE_PRICE_RANGES = [

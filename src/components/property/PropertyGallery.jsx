@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { DEFAULT_PROPERTY_IMAGE } from '@/lib/constants';
-import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 // Styles
 const mainImageContainer = 'relative bg-gray-200 rounded-2xl overflow-hidden h-72 md:h-96 lg:h-[500px]';
@@ -11,7 +11,7 @@ const counterBadge = 'absolute bottom-4 right-4 bg-black/60 text-white text-sm p
 const navBtnBase = 'absolute top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors';
 const navIconStyle = 'w-5 h-5 text-gray-700';
 const thumbBase = 'flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all';
-const thumbActive = 'border-[#495464] ring-2 ring-[#495464]/20';
+const thumbActive = 'border-graphite ring-2 ring-graphite/20';
 const thumbInactive = 'border-transparent hover:border-gray-300';
 
 // Navigation config

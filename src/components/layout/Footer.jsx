@@ -9,18 +9,16 @@ import {
 } from '@/lib/constants';
 import { QUICK_LINKS, USEFUL_LINKS } from '@/lib/footer.config';
 import {
-  HomeIcon,
-  TwitterIcon,
-  InstagramIcon,
-  FacebookIcon,
   MapPinIcon,
   PhoneIcon,
-  MailIcon,
+  EnvelopeIcon,
   ClockIcon,
-} from '@/components/icons';
+} from '@heroicons/react/24/outline';
+import { TwitterIcon, InstagramIcon, FacebookIcon } from '@/components/icons';
+import Logo from '@/components/ui/Logo';
 
 // Styles
-const footerBg = 'bg-gradient-to-b from-[#5F9EA0] to-[#4a8587] text-white';
+const footerBg = 'bg-gradient-to-b from-cadetblue to-cadetblue-dark text-white';
 const linkStyle = 'text-white/70 hover:text-white transition-colors';
 const sectionTitle = 'text-lg font-bold mb-4 text-white';
 const iconStyle = 'w-5 h-5 text-white/80 flex-shrink-0';
@@ -38,7 +36,7 @@ const SOCIAL_LINKS = [
 const CONTACT_INFO = [
   { Icon: MapPinIcon, value: CONTACT_ADDRESS_SHORT, iconClass: `${iconStyle} mt-0.5` },
   { Icon: PhoneIcon, value: CONTACT_PHONE, iconClass: iconStyle },
-  { Icon: MailIcon, value: CONTACT_EMAIL, iconClass: iconStyle },
+  { Icon: EnvelopeIcon, value: CONTACT_EMAIL, iconClass: iconStyle },
   { Icon: ClockIcon, value: 'Пон-Пет: 9:00 - 18:00', iconClass: iconStyle },
 ];
 
@@ -55,10 +53,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <HomeIcon className="w-8 h-8 text-white" />
+            <Link href="/" className="flex items-center space-x-3">
+              <Logo width={40} height={40} className="rounded bg-white/90 p-1" />
               <span className="text-xl font-bold text-white">{BRAND_NAME}</span>
-            </div>
+            </Link>
             <p className={contactText}>
               {BRAND_DESCRIPTION}. {BRAND_TAGLINE}.
             </p>
