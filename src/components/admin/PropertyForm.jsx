@@ -11,6 +11,7 @@ import {
   CURRENCY,
 } from '@/data/properties';
 import { createProperty, updateProperty } from '@/lib/properties';
+import ImageUpload from './ImageUpload';
 
 export default function PropertyForm({ property = null, isDemo = false }) {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     address: property?.address || '',
     description: property?.description || '',
     features: property?.features?.join(', ') || '',
-    images: property?.images?.join('\n') || '',
+    images: property?.images || [],
     mapUrl: property?.mapUrl || '',
     isFeatured: property?.isFeatured || false,
   });
@@ -69,6 +70,9 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     setSuccess(null);
     setIsSubmitting(true);
 
+    console.log('[PropertyForm] handleSubmit called');
+    console.log('[PropertyForm] Current formData.images:', formData.images);
+
     // Prepare data
     const propertyData = {
       ...formData,
@@ -82,20 +86,24 @@ export default function PropertyForm({ property = null, isDemo = false }) {
         .split(',')
         .map(f => f.trim())
         .filter(Boolean),
-      images: formData.images
-        .split('\n')
-        .map(url => url.trim())
-        .filter(Boolean),
+      images: formData.images,
     };
+
+    console.log('[PropertyForm] Prepared propertyData:', propertyData);
+    console.log('[PropertyForm] propertyData.images:', propertyData.images);
 
     try {
       let result;
 
       if (isEditing) {
+        console.log('[PropertyForm] Calling updateProperty with id:', property.id);
         result = await updateProperty(property.id, propertyData);
       } else {
+        console.log('[PropertyForm] Calling createProperty');
         result = await createProperty(propertyData);
       }
+
+      console.log('[PropertyForm] API result:', result);
 
       if (result.error) {
         setError(result.error);
@@ -109,7 +117,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
       }
     } catch (err) {
       setError('Възникна неочаквана грешка. Моля, опитайте отново.');
-      console.error(err);
+      console.error('[PropertyForm] Exception:', err);
     } finally {
       setIsSubmitting(false);
     }
@@ -490,18 +498,22 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             />
           </div>
 
+          {/* Image Upload */}
           <div>
-            <label htmlFor="images" className="block text-sm font-medium text-gray-700 mb-1">
-              Снимки (URL адреси, по един на ред)
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Снимки
             </label>
-            <textarea
-              id="images"
-              name="images"
-              value={formData.images}
-              onChange={handleChange}
-              rows={3}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="/images/apartment-1.jpg&#10;/images/apartment-1-2.jpg"
+            <ImageUpload
+              images={formData.images}
+              onChange={(newImages) => {
+                console.log('[PropertyForm] ImageUpload onChange called with:', newImages);
+                setFormData(prev => {
+                  const updated = { ...prev, images: newImages };
+                  console.log('[PropertyForm] Updated formData.images:', updated.images);
+                  return updated;
+                });
+              }}
+              disabled={isSubmitting}
             />
           </div>
 

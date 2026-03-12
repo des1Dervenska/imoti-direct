@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getPropertyBySlug, getAllSlugs } from '@/lib/properties';
 import { notFound } from 'next/navigation';
+import PropertyGallery from '@/components/PropertyGallery';
 
 // Generate static params for all properties
 export async function generateStaticParams() {
@@ -47,6 +48,7 @@ export default async function PropertyDetailPage({ params }) {
     yearBuilt,
     description,
     features,
+    images,
     address,
     city,
     neighborhood,
@@ -112,20 +114,12 @@ export default async function PropertyDetailPage({ params }) {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Left Column - Main Content */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Image Section */}
-              <div className="relative bg-gray-200 rounded-2xl overflow-hidden h-72 md:h-96 lg:h-[500px]">
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-gradient-to-br from-gray-100 to-gray-300">
-                  <div className="text-center">
-                    <svg className="w-24 h-24 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 22V12h6v10"/>
-                    </svg>
-                    <p className="text-lg">Снимка на имота</p>
-                  </div>
-                </div>
+              {/* Image Gallery Section */}
+              <div className="relative">
+                <PropertyGallery images={images} title={title} />
 
-                {/* Badges */}
-                <div className="absolute top-4 left-4 flex gap-2">
+                {/* Badges - positioned over the gallery */}
+                <div className="absolute top-4 left-4 flex gap-2 z-10">
                   <span className={`px-4 py-2 text-sm font-semibold rounded-full shadow-lg ${
                     category === 'sale'
                       ? 'bg-green-500 text-white'
