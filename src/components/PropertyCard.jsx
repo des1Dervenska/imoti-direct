@@ -42,13 +42,21 @@ export default function PropertyCard({ property }) {
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
       {/* Снимка */}
       <Link href={`/properties/${slug}`} className="block relative h-52 bg-gray-200 overflow-hidden group">
-        {/* Placeholder изображение */}
-        <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-gradient-to-br from-gray-100 to-gray-200">
-          <svg className="w-20 h-20 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 22V12h6v10"/>
-          </svg>
-        </div>
+        {/* Реална снимка или placeholder */}
+        {images && images.length > 0 && images[0] ? (
+          <img
+            src={images[0]}
+            alt={title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-gradient-to-br from-gray-100 to-gray-200">
+            <svg className="w-20 h-20 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 22V12h6v10"/>
+            </svg>
+          </div>
+        )}
 
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
