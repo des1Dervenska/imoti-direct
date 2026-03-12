@@ -2,7 +2,7 @@ import PropertyFilters from "@/components/property/PropertyFilters";
 import { getSaleProperties } from "@/lib/properties";
 import { BRAND_NAME } from "@/lib/constants";
 import { Section, Container, LinkButton, Card } from "@/components/ui";
-import { ArrowRightIcon } from "@/components/icons";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 export const metadata = {
   title: `Имоти за продажба | ${BRAND_NAME}`,

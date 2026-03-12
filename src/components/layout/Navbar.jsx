@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { BRAND_NAME } from "@/lib/constants";
-import { HomeIcon, MenuIcon } from "@/components/icons";
+import { HomeIcon, Bars3Icon } from "@heroicons/react/24/outline";
 
 // Repeated styles
 const navLinkStyle =
@@ -47,7 +47,7 @@ export default function Navbar() {
           aria-expanded={isMenuOpen}
         >
           <span className="sr-only">Отвори менюто</span>
-          <MenuIcon className="w-5 h-5" />
+          <Bars3Icon className="w-5 h-5" />
         </button>
 
         {/* Navigation menu */}

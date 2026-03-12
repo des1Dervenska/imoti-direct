@@ -10,14 +10,12 @@ import {
 import { QUICK_LINKS, USEFUL_LINKS } from '@/lib/footer.config';
 import {
   HomeIcon,
-  TwitterIcon,
-  InstagramIcon,
-  FacebookIcon,
   MapPinIcon,
   PhoneIcon,
-  MailIcon,
+  EnvelopeIcon,
   ClockIcon,
-} from '@/components/icons';
+} from '@heroicons/react/24/outline';
+import { TwitterIcon, InstagramIcon, FacebookIcon } from '@/components/icons';
 
 // Styles
 const footerBg = 'bg-gradient-to-b from-cadetblue to-cadetblue-dark text-white';
@@ -38,7 +36,7 @@ const SOCIAL_LINKS = [
 const CONTACT_INFO = [
   { Icon: MapPinIcon, value: CONTACT_ADDRESS_SHORT, iconClass: `${iconStyle} mt-0.5` },
   { Icon: PhoneIcon, value: CONTACT_PHONE, iconClass: iconStyle },
-  { Icon: MailIcon, value: CONTACT_EMAIL, iconClass: iconStyle },
+  { Icon: EnvelopeIcon, value: CONTACT_EMAIL, iconClass: iconStyle },
   { Icon: ClockIcon, value: 'Пон-Пет: 9:00 - 18:00', iconClass: iconStyle },
 ];
 

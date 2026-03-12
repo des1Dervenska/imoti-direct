@@ -1,5 +1,5 @@
 import PropertyCard from './PropertyCard';
-import { BoxIcon } from '@/components/icons';
+import { InboxIcon } from '@heroicons/react/24/outline';
 
 // Styles
 const gridStyle = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
@@ -14,7 +14,7 @@ function EmptyState({ message }) {
   return (
     <div className={emptyContainer}>
       <div className={emptyIconWrapper}>
-        <BoxIcon className={emptyIconStyle} />
+        <InboxIcon className={emptyIconStyle} />
       </div>
       <h3 className={emptyTitle}>{message}</h3>
       <p className={emptyText}>Опитайте да промените критериите за търсене</p>

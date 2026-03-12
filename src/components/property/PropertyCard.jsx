@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { DEFAULT_PROPERTY_IMAGE } from '@/lib/constants';
-import { ExpandIcon, RoomsIcon, MapPinIcon } from '@/components/icons';
+import { ArrowsPointingOutIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { RoomsIcon } from '@/components/icons';
 import { Badge, LinkButton } from '@/components/ui';
 
 // Styles
@@ -42,7 +43,7 @@ export default function PropertyCard({ property }) {
 
   // Features config (dynamic based on property data)
   const features = [
-    { Icon: ExpandIcon, value: `${area} м²`, show: true },
+    { Icon: ArrowsPointingOutIcon, value: `${area} м²`, show: true },
     { Icon: RoomsIcon, value: `${rooms} стаи`, show: !!rooms },
   ];
 

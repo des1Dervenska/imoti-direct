@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { DEFAULT_PROPERTY_IMAGE } from '@/lib/constants';
-import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 // Styles
 const mainImageContainer = 'relative bg-gray-200 rounded-2xl overflow-hidden h-72 md:h-96 lg:h-[500px]';
