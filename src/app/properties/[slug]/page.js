@@ -129,8 +129,8 @@ export default async function PropertyDetailPage({ params }) {
                 <div className="absolute top-4 left-4 flex gap-2 z-10">
                   <span className={`px-4 py-2 text-sm font-semibold rounded-full shadow-lg ${
                     category === 'sale'
-                      ? 'bg-green-500 text-white'
-                      : 'bg-[#495464]/50 text-white'
+                      ? 'bg-[cadetblue] text-white'
+                      : 'bg-[#495464] text-white'
                   }`}>
                     {categoryLabels[category]}
                   </span>

@@ -23,8 +23,8 @@ const CATEGORY_LABELS = {
 };
 
 const CATEGORY_STYLES = {
-  sale: 'bg-green-500 text-white',
-  rent: 'bg-blue-500 text-white',
+  sale: 'bg-[cadetblue] text-white',
+  rent: 'bg-[#495464] text-white',
 };
 
 // Helpers
