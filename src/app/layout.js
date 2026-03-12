@@ -1,7 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import { BRAND_NAME, BRAND_DESCRIPTION, BRAND_TAGLINE } from "@/lib/constants";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "ART HOUSE 94 - Недвижими имоти в България",
-  description: "Професионална компания за недвижими имоти. С нас вашата сделка ще бъде в сигурни ръце. Покупко-продажба и наем на имоти в София и България.",
+  title: `${BRAND_NAME} - Недвижими имоти в България`,
+  description: `${BRAND_DESCRIPTION}. ${BRAND_TAGLINE}. Покупко-продажба и наем на имоти в София и България.`,
   keywords: "имоти, недвижими имоти, апартаменти, къщи, парцели, продажба, наем, България, София",
 };
 

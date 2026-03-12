@@ -1,5 +1,5 @@
-import HeroSection from "@/components/HeroSection";
-import PropertyGrid from "@/components/PropertyGrid";
+import HeroSection from "@/components/sections/HeroSection";
+import PropertyGrid from "@/components/property/PropertyGrid";
 import { getSaleProperties, getRentProperties } from "@/lib/properties";
 import Link from "next/link";
 

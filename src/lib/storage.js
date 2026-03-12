@@ -52,36 +52,24 @@ function generateFileName(originalName) {
  * @returns {Promise<{url: string|null, error: string|null}>}
  */
 export async function uploadPropertyImage(file) {
-  console.log('[Storage] uploadPropertyImage called with:', {
-    name: file.name,
-    type: file.type,
-    size: file.size,
-  });
-
   if (!isSupabaseConfigured) {
-    console.error('[Storage] Supabase not configured!');
     return {
       url: null,
       error: 'Supabase не е конфигуриран. Моля, добавете credentials в .env.local',
     };
   }
 
-  console.log('[Storage] Supabase is configured, proceeding with upload...');
-
   // Validate file
   const validation = validateFile(file);
   if (!validation.valid) {
-    console.error('[Storage] File validation failed:', validation.error);
     return { url: null, error: validation.error };
   }
 
   // Generate unique filename
   const fileName = generateFileName(file.name);
   const filePath = `properties/${fileName}`;
-  console.log('[Storage] Generated file path:', filePath);
 
   // Upload to Supabase Storage
-  console.log('[Storage] Starting upload to bucket:', BUCKET_NAME);
   const { data, error } = await supabase.storage
     .from(BUCKET_NAME)
     .upload(filePath, file, {
@@ -89,10 +77,7 @@ export async function uploadPropertyImage(file) {
       upsert: false,
     });
 
-  console.log('[Storage] Upload response:', { data, error });
-
   if (error) {
-    console.error('[Storage] Upload error:', error);
     return { url: null, error: `Грешка при качване: ${error.message}` };
   }
 
@@ -100,9 +85,6 @@ export async function uploadPropertyImage(file) {
   const { data: urlData } = supabase.storage
     .from(BUCKET_NAME)
     .getPublicUrl(data.path);
-
-  console.log('[Storage] Public URL data:', urlData);
-  console.log('[Storage] Final public URL:', urlData.publicUrl);
 
   return { url: urlData.publicUrl, error: null };
 }
@@ -114,10 +96,7 @@ export async function uploadPropertyImage(file) {
  * @returns {Promise<{urls: string[], errors: string[]}>}
  */
 export async function uploadMultipleImages(files, onProgress) {
-  console.log('[Storage] uploadMultipleImages called with', files.length, 'files');
-
   if (!isSupabaseConfigured) {
-    console.error('[Storage] Cannot upload - Supabase not configured');
     return {
       urls: [],
       errors: ['Supabase не е конфигуриран. Моля, добавете credentials в .env.local'],
@@ -131,7 +110,6 @@ export async function uploadMultipleImages(files, onProgress) {
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
-    console.log(`[Storage] Processing file ${i + 1}/${files.length}:`, file.name);
 
     if (onProgress) {
       onProgress({
@@ -142,7 +120,6 @@ export async function uploadMultipleImages(files, onProgress) {
     }
 
     const { url, error } = await uploadPropertyImage(file);
-    console.log(`[Storage] Result for ${file.name}:`, { url, error });
 
     if (url) {
       results.urls.push(url);
@@ -153,7 +130,6 @@ export async function uploadMultipleImages(files, onProgress) {
     }
   }
 
-  console.log('[Storage] uploadMultipleImages final results:', results);
   return results;
 }
 
@@ -187,7 +163,6 @@ export async function deletePropertyImage(url) {
       .remove([filePath]);
 
     if (error) {
-      console.error('Delete error:', error);
       return { success: false, error: `Грешка при изтриване: ${error.message}` };
     }
 

@@ -1,8 +1,14 @@
 import Link from "next/link";
+import {
+  BRAND_NAME,
+  BRAND_DESCRIPTION,
+  BRAND_TAGLINE,
+  CONTACT_PERSON,
+} from '@/lib/constants';
 
 export const metadata = {
-  title: "За нас | ART HOUSE 94",
-  description: "ART HOUSE 94 е професионална компания за недвижими имоти. С нас вашата сделка ще бъде в сигурни ръце.",
+  title: `За нас | ${BRAND_NAME}`,
+  description: `${BRAND_NAME} е ${BRAND_DESCRIPTION.toLowerCase()}. ${BRAND_TAGLINE}.`,
 };
 
 export default function AboutPage() {
@@ -39,14 +45,14 @@ export default function AboutPage() {
             {/* Content */}
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                ART HOUSE 94
+                {BRAND_NAME}
               </h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  <strong className="text-gray-900">ART HOUSE 94</strong> е професионална компания за недвижими имоти. С нашата компания вашата сделка ще бъде в сигурни ръце. Доверете ни се и оставете грижите на нас!
+                  <strong className="text-gray-900">{BRAND_NAME}</strong> е {BRAND_DESCRIPTION.toLowerCase()}. {BRAND_TAGLINE}. Доверете ни се и оставете грижите на нас!
                 </p>
                 <p>
-                  Зад агенцията стои <strong className="text-gray-900">Геновева Филева</strong> - професионалист с богат опит в сферата на недвижимите имоти. Предлагаме пълно съдействие при покупка, продажба и отдаване под наем на имоти.
+                  Зад агенцията стои <strong className="text-gray-900">{CONTACT_PERSON}</strong> - професионалист с богат опит в сферата на недвижимите имоти. Предлагаме пълно съдействие при покупка, продажба и отдаване под наем на имоти.
                 </p>
                 <p>
                   Работим с индивидуален подход към всеки клиент, като се стремим да разберем вашите нужди и да намерим най-доброто решение за вас. Нашата цел е всяка сделка да премине гладко и безпроблемно.
@@ -61,8 +67,8 @@ export default function AboutPage() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-lg font-semibold text-gray-900">Геновева Филева</div>
-                    <div className="text-blue-600">Управител, ART HOUSE 94</div>
+                    <div className="text-lg font-semibold text-gray-900">{CONTACT_PERSON}</div>
+                    <div className="text-blue-600">Управител, {BRAND_NAME}</div>
                   </div>
                 </div>
               </div>

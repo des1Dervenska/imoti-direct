@@ -311,9 +311,6 @@ export async function getPropertyById(id) {
 // =============================================================================
 
 function transformToSupabase(property) {
-  console.log('[properties.js] transformToSupabase input:', property);
-  console.log('[properties.js] Input images:', property.images);
-
   const result = {
     slug: property.slug,
     title: property.title,
@@ -337,15 +334,11 @@ function transformToSupabase(property) {
     is_featured: property.isFeatured || false,
   };
 
-  console.log('[properties.js] transformToSupabase output images:', result.images);
   return result;
 }
 
 export async function createProperty(propertyData) {
-  console.log('[properties.js] createProperty called with:', propertyData);
-
   if (!isSupabaseConfigured) {
-    console.error('[properties.js] createProperty: Supabase not configured');
     return {
       data: null,
       error: 'Supabase не е конфигуриран. Моля, добавете NEXT_PUBLIC_SUPABASE_URL и NEXT_PUBLIC_SUPABASE_ANON_KEY в .env.local',
@@ -354,7 +347,6 @@ export async function createProperty(propertyData) {
   }
 
   const supabaseData = transformToSupabase(propertyData);
-  console.log('[properties.js] createProperty supabaseData:', supabaseData);
 
   const { data, error } = await supabase
     .from('properties')
@@ -362,10 +354,7 @@ export async function createProperty(propertyData) {
     .select()
     .single();
 
-  console.log('[properties.js] createProperty result:', { data, error });
-
   if (error) {
-    console.error('Error creating property:', error);
     return { data: null, error: error.message, isDemo: false };
   }
 
@@ -377,11 +366,7 @@ export async function createProperty(propertyData) {
 // =============================================================================
 
 export async function updateProperty(id, propertyData) {
-  console.log('[properties.js] updateProperty called with id:', id);
-  console.log('[properties.js] updateProperty propertyData:', propertyData);
-
   if (!isSupabaseConfigured) {
-    console.error('[properties.js] updateProperty: Supabase not configured');
     return {
       data: null,
       error: 'Supabase не е конфигуриран. Моля, добавете NEXT_PUBLIC_SUPABASE_URL и NEXT_PUBLIC_SUPABASE_ANON_KEY в .env.local',
@@ -390,7 +375,6 @@ export async function updateProperty(id, propertyData) {
   }
 
   const supabaseData = transformToSupabase(propertyData);
-  console.log('[properties.js] updateProperty supabaseData:', supabaseData);
 
   const { data, error } = await supabase
     .from('properties')
@@ -399,10 +383,7 @@ export async function updateProperty(id, propertyData) {
     .select()
     .single();
 
-  console.log('[properties.js] updateProperty result:', { data, error });
-
   if (error) {
-    console.error('Error updating property:', error);
     return { data: null, error: error.message, isDemo: false };
   }
 
