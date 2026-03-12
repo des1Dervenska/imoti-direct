@@ -15,3 +15,4 @@ export { default as FeatureCard } from './FeatureCard';
 export { default as Input } from './Input';
 export { default as LinkButton } from './LinkButton';
 export { default as Section } from './Section';
+export { default as Logo } from './Logo';

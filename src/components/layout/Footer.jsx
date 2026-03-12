@@ -9,13 +9,13 @@ import {
 } from '@/lib/constants';
 import { QUICK_LINKS, USEFUL_LINKS } from '@/lib/footer.config';
 import {
-  HomeIcon,
   MapPinIcon,
   PhoneIcon,
   EnvelopeIcon,
   ClockIcon,
 } from '@heroicons/react/24/outline';
 import { TwitterIcon, InstagramIcon, FacebookIcon } from '@/components/icons';
+import Logo from '@/components/ui/Logo';
 
 // Styles
 const footerBg = 'bg-gradient-to-b from-cadetblue to-cadetblue-dark text-white';
@@ -53,10 +53,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <HomeIcon className="w-8 h-8 text-white" />
+            <Link href="/" className="flex items-center space-x-3">
+              <Logo width={40} height={40} className="rounded bg-white/90 p-1" />
               <span className="text-xl font-bold text-white">{BRAND_NAME}</span>
-            </div>
+            </Link>
             <p className={contactText}>
               {BRAND_DESCRIPTION}. {BRAND_TAGLINE}.
             </p>

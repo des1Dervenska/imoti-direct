@@ -18,6 +18,10 @@ export const metadata = {
   title: `${BRAND_NAME} - Недвижими имоти в България`,
   description: `${BRAND_DESCRIPTION}. ${BRAND_TAGLINE}. Покупко-продажба и наем на имоти в София и България.`,
   keywords: "имоти, недвижими имоти, апартаменти, къщи, парцели, продажба, наем, България, София",
+  icons: {
+    icon: '/images/logo.jpg',
+    apple: '/images/logo.jpg',
+  },
 };
 
 export default function RootLayout({ children }) {
