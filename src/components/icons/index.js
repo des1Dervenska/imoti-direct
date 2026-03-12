@@ -8,6 +8,7 @@ export { default as MenuIcon } from './MenuIcon';
 export { default as SearchIcon } from './SearchIcon';
 
 // Arrows & Chevrons
+export { default as ArrowRightIcon } from './ArrowRightIcon';
 export { default as ChevronLeftIcon } from './ChevronLeftIcon';
 export { default as ChevronRightIcon } from './ChevronRightIcon';
 

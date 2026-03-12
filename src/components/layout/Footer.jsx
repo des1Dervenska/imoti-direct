@@ -20,7 +20,7 @@ import {
 } from '@/components/icons';
 
 // Styles
-const footerBg = 'bg-gradient-to-b from-[#5F9EA0] to-[#4a8587] text-white';
+const footerBg = 'bg-gradient-to-b from-cadetblue to-cadetblue-dark text-white';
 const linkStyle = 'text-white/70 hover:text-white transition-colors';
 const sectionTitle = 'text-lg font-bold mb-4 text-white';
 const iconStyle = 'w-5 h-5 text-white/80 flex-shrink-0';

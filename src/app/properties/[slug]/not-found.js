@@ -22,7 +22,7 @@ export default function PropertyNotFound() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/sales"
-            className="inline-flex items-center justify-center px-6 py-3 bg-[#495464] hover:bg-[#3d4654] text-white font-medium rounded-lg transition-colors"
+            className="inline-flex items-center justify-center px-6 py-3 bg-graphite hover:bg-graphite-dark text-white font-medium rounded-lg transition-colors"
           >
             Имоти за продажба
           </Link>
@@ -37,7 +37,7 @@ export default function PropertyNotFound() {
         <div className="mt-8">
           <Link
             href="/"
-            className="inline-flex items-center text-[#495464] hover:text-[#3d4654]"
+            className="inline-flex items-center text-graphite hover:text-graphite-dark"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/>

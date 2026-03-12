@@ -7,9 +7,9 @@ import { HomeIcon, MenuIcon } from "@/components/icons";
 
 // Repeated styles
 const navLinkStyle =
-  "block py-2 px-3 text-[#495464] rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#3d4654] md:p-0";
+  "block py-2 px-3 text-graphite rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-graphite-dark md:p-0";
 const ctaButtonStyle =
-  "text-white bg-[#495464] hover:bg-[#3d4654] focus:ring-4 focus:outline-none focus:ring-[#495464]/30 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors";
+  "text-white bg-graphite hover:bg-graphite-dark focus:ring-4 focus:outline-none focus:ring-graphite/30 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors";
 const mobileMenuBtnStyle =
   "inline-flex items-center p-2 w-10 h-10 justify-center text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200";
 
@@ -32,8 +32,8 @@ export default function Navbar() {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-3">
-          <HomeIcon className="w-8 h-8 text-[#495464]" />
-          <span className="self-center text-xl font-bold whitespace-nowrap text-[#495464]">
+          <HomeIcon className="w-8 h-8 text-graphite" />
+          <span className="self-center text-xl font-bold whitespace-nowrap text-graphite">
             {BRAND_NAME}
           </span>
         </Link>

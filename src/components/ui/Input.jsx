@@ -22,7 +22,7 @@ const Input = forwardRef(function Input(
   ref
 ) {
   const baseStyles =
-    'w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-[#495464] placeholder-[#64748b] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#495464]/30 focus:border-[#495464]';
+    'w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-graphite placeholder-graphite-light transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-graphite/30 focus:border-graphite';
 
   const errorStyles = error
     ? 'border-red-400 focus:ring-red-300 focus:border-red-400'
@@ -34,7 +34,7 @@ const Input = forwardRef(function Input(
   return (
     <div className={containerClassName}>
       {label && (
-        <label className="block text-sm font-medium text-[#495464] mb-2">
+        <label className="block text-sm font-medium text-graphite mb-2">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -48,7 +48,7 @@ const Input = forwardRef(function Input(
       />
 
       {(error || helperText) && (
-        <p className={`mt-1.5 text-sm ${error ? 'text-red-500' : 'text-[#64748b]'}`}>
+        <p className={`mt-1.5 text-sm ${error ? 'text-red-500' : 'text-graphite-light'}`}>
           {error || helperText}
         </p>
       )}
