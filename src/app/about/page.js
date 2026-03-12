@@ -1,34 +1,11 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "За нас | ArtHouse94",
-  description: "Научете повече за ArtHouse94 - вашият надежден партньор в света на недвижимите имоти с над 15 години опит.",
+  title: "За нас | ART HOUSE 94",
+  description: "ART HOUSE 94 е професионална компания за недвижими имоти. С нас вашата сделка ще бъде в сигурни ръце.",
 };
 
 export default function AboutPage() {
-  const team = [
-    {
-      name: "Мария Иванова",
-      role: "Управител",
-      description: "Над 20 години опит в сектора на недвижимите имоти",
-    },
-    {
-      name: "Георги Петров",
-      role: "Старши брокер",
-      description: "Специалист по луксозни имоти и инвестиции",
-    },
-    {
-      name: "Елена Стоянова",
-      role: "Брокер",
-      description: "Експерт по морски и ваканционни имоти",
-    },
-    {
-      name: "Петър Николов",
-      role: "Брокер",
-      description: "Специалист по парцели и земеделски земи",
-    },
-  ];
-
   return (
     <>
       {/* Page Header */}
@@ -62,36 +39,31 @@ export default function AboutPage() {
             {/* Content */}
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                ArtHouse94 - повече от 15 години на пазара
+                ART HOUSE 94
               </h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  <strong className="text-gray-900">ArtHouse94</strong> е агенция за недвижими имоти, основана през 2009 година в София. От самото начало нашата мисия е да предоставяме професионални и надеждни услуги в сферата на недвижимите имоти.
+                  <strong className="text-gray-900">ART HOUSE 94</strong> е професионална компания за недвижими имоти. С нашата компания вашата сделка ще бъде в сигурни ръце. Доверете ни се и оставете грижите на нас!
                 </p>
                 <p>
-                  През годините изградихме репутация на коректен и надежден партньор, като помогнахме на стотици клиенти да намерят своя мечтан дом или да направят успешна инвестиция в недвижим имот.
+                  Зад агенцията стои <strong className="text-gray-900">Геновева Филева</strong> - професионалист с богат опит в сферата на недвижимите имоти. Предлагаме пълно съдействие при покупка, продажба и отдаване под наем на имоти.
                 </p>
                 <p>
-                  Нашият екип от опитни брокери познава в детайли пазара на недвижими имоти в цяла България. Работим с индивидуален подход към всеки клиент, като се стремим да разберем вашите нужди и да намерим най-доброто решение за вас.
+                  Работим с индивидуален подход към всеки клиент, като се стремим да разберем вашите нужди и да намерим най-доброто решение за вас. Нашата цел е всяка сделка да премине гладко и безпроблемно.
                 </p>
               </div>
 
-              <div className="mt-8 grid grid-cols-2 gap-6">
-                <div>
-                  <div className="text-3xl font-bold text-blue-600">500+</div>
-                  <div className="text-gray-600">Успешни сделки</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-blue-600">15+</div>
-                  <div className="text-gray-600">Години опит</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-blue-600">1000+</div>
-                  <div className="text-gray-600">Доволни клиенти</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-blue-600">50+</div>
-                  <div className="text-gray-600">Градове в България</div>
+              <div className="mt-8 p-6 bg-blue-50 rounded-xl">
+                <div className="flex items-center space-x-4">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-lg font-semibold text-gray-900">Геновева Филева</div>
+                    <div className="text-blue-600">Управител, ART HOUSE 94</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -181,33 +153,6 @@ export default function AboutPage() {
                 Консултации за инвестиции в недвижими имоти - анализ на доходност, потенциал за растеж и рискове.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-screen-xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Нашият екип</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Запознайте се с професионалистите, които ще ви помогнат
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="text-center">
-                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900">{member.name}</h3>
-                <p className="text-blue-600 text-sm font-medium mb-2">{member.role}</p>
-                <p className="text-gray-600 text-sm">{member.description}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>

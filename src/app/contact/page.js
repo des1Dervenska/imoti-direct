@@ -75,8 +75,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Адрес</h3>
                     <p className="text-gray-600">
-                      ул. Витошка 15, ет. 3<br />
-                      София 1000, България
+                      ж.к. Белите Брези, бл. 4, ап. 37<br />
+                      София, България
                     </p>
                   </div>
                 </div>
@@ -91,13 +91,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Телефон</h3>
                     <p className="text-gray-600">
-                      <a href="tel:+35921234567" className="hover:text-blue-600 transition-colors">
-                        +359 2 123 4567
-                      </a>
-                    </p>
-                    <p className="text-gray-600">
-                      <a href="tel:+359888123456" className="hover:text-blue-600 transition-colors">
-                        +359 888 123 456
+                      <a href="tel:+359887803064" className="hover:text-blue-600 transition-colors">
+                        0887 803 064
                       </a>
                     </p>
                   </div>
@@ -113,13 +108,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Имейл</h3>
                     <p className="text-gray-600">
-                      <a href="mailto:info@imoti-direct.com" className="hover:text-blue-600 transition-colors">
-                        info@imoti-direct.com
-                      </a>
-                    </p>
-                    <p className="text-gray-600">
-                      <a href="mailto:office@imoti-direct.com" className="hover:text-blue-600 transition-colors">
-                        office@imoti-direct.com
+                      <a href="mailto:genoveva@arthouse94.com" className="hover:text-blue-600 transition-colors">
+                        genoveva@arthouse94.com
                       </a>
                     </p>
                   </div>
@@ -308,7 +298,7 @@ export default function ContactPage() {
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Къде да ни намерите</h2>
-            <p className="text-gray-600">Заповядайте в нашия офис в центъра на София</p>
+            <p className="text-gray-600">ж.к. Белите Брези, София</p>
           </div>
 
           {/* Map placeholder */}
@@ -318,9 +308,9 @@ export default function ContactPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
               </svg>
               <p className="text-lg font-medium">Google Maps</p>
-              <p className="text-sm">ул. Витошка 15, София</p>
+              <p className="text-sm">ж.к. Белите Брези, бл. 4</p>
               <a
-                href="https://www.google.com/maps/search/?api=1&query=42.6977,23.3219"
+                href="https://www.google.com/maps/search/?api=1&query=Белите+Брези+София"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center mt-4 text-blue-600 hover:text-blue-700 font-medium"

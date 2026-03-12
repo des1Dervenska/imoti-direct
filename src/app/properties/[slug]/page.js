@@ -16,12 +16,12 @@ export async function generateMetadata({ params }) {
 
   if (!property) {
     return {
-      title: 'Имотът не е намерен | ArtHouse94',
+      title: 'Имотът не е намерен | ART HOUSE 94',
     };
   }
 
   return {
-    title: `${property.title} | ArtHouse94`,
+    title: `${property.title} | ART HOUSE 94`,
     description: property.description.substring(0, 160),
   };
 }
@@ -311,24 +311,24 @@ export default async function PropertyDetailPage({ params }) {
                       </svg>
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">ArtHouse94</p>
-                      <p className="text-sm text-gray-500">Агенция за недвижими имоти</p>
+                      <p className="font-semibold text-gray-900">Геновева Филева</p>
+                      <p className="text-sm text-gray-500">ART HOUSE 94</p>
                     </div>
                   </div>
 
                   <div className="space-y-3">
                     <a
-                      href="tel:+35921234567"
+                      href="tel:+359887803064"
                       className="flex items-center justify-center w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
                     >
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                       </svg>
-                      +359 2 123 4567
+                      0887 803 064
                     </a>
 
                     <a
-                      href={`mailto:info@imoti-direct.com?subject=Запитване за: ${title}`}
+                      href={`mailto:genoveva@arthouse94.com?subject=Запитване за: ${title}`}
                       className="flex items-center justify-center w-full px-4 py-3 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg border border-gray-300 transition-colors"
                     >
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
