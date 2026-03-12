@@ -3,8 +3,8 @@ import { getSaleProperties } from "@/lib/properties";
 import { propertyTypes, cities } from "@/data/properties";
 
 export const metadata = {
-  title: "Имоти за продажба | ArtHouse94",
-  description: "Разгледайте нашите актуални оферти за продажба на апартаменти, къщи и парцели в цяла България.",
+  title: "Имоти за продажба | ART HOUSE 94",
+  description: "Разгледайте нашите актуални оферти за продажба на апартаменти, къщи и парцели в България.",
 };
 
 export default async function SalesPage() {

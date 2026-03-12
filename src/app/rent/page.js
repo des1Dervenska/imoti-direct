@@ -3,8 +3,8 @@ import { getRentProperties } from "@/lib/properties";
 import { propertyTypes, cities } from "@/data/properties";
 
 export const metadata = {
-  title: "Имоти под наем | ArtHouse94",
-  description: "Разгледайте нашите актуални оферти за наем на апартаменти, къщи и ваканционни имоти в цяла България.",
+  title: "Имоти под наем | ART HOUSE 94",
+  description: "Разгледайте нашите актуални оферти за наем на апартаменти и къщи в България.",
 };
 
 export default async function RentPage() {

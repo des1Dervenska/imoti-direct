@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Admin | ArtHouse94',
+  title: 'Admin | ART HOUSE 94',
 };
 
 export default function AdminLayout({ children }) {
