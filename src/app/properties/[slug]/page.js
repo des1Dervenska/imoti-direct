@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getPropertyBySlug, getAllSlugs } from '@/lib/properties';
 import { notFound } from 'next/navigation';
-import PropertyGallery from '@/components/PropertyGallery';
+import PropertyGallery from '@/components/property/PropertyGallery';
 import {
   BRAND_NAME,
   CONTACT_PERSON,

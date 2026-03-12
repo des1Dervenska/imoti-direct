@@ -1,4 +1,4 @@
-import PropertyGrid from "@/components/PropertyGrid";
+import PropertyGrid from "@/components/property/PropertyGrid";
 import { getRentProperties } from "@/lib/properties";
 import { propertyTypes, cities } from "@/data/properties";
 import { BRAND_NAME } from "@/lib/constants";

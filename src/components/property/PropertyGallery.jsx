@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { DEFAULT_PROPERTY_IMAGE } from '@/lib/constants';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons';
 
 export default function PropertyGallery({ images = [], title = 'Имот' }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -35,18 +36,14 @@ export default function PropertyGallery({ images = [], title = 'Имот' }) {
               className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors"
               aria-label="Предишна снимка"
             >
-              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/>
-              </svg>
+              <ChevronLeftIcon className="w-5 h-5 text-gray-700" />
             </button>
             <button
               onClick={() => setActiveIndex(prev => prev === displayImages.length - 1 ? 0 : prev + 1)}
               className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors"
               aria-label="Следваща снимка"
             >
-              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-              </svg>
+              <ChevronRightIcon className="w-5 h-5 text-gray-700" />
             </button>
           </>
         )}
