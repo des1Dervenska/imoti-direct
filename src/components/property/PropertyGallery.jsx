@@ -11,7 +11,7 @@ const counterBadge = 'absolute bottom-4 right-4 bg-black/60 text-white text-sm p
 const navBtnBase = 'absolute top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors';
 const navIconStyle = 'w-5 h-5 text-gray-700';
 const thumbBase = 'flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all';
-const thumbActive = 'border-blue-500 ring-2 ring-blue-200';
+const thumbActive = 'border-[#495464] ring-2 ring-[#495464]/20';
 const thumbInactive = 'border-transparent hover:border-gray-300';
 
 // Navigation config

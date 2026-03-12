@@ -8,7 +8,7 @@ const badgeBase = 'px-3 py-1.5 text-xs rounded-full shadow-sm';
 const typeBadgeStyle = `${badgeBase} font-medium bg-white/90 text-gray-700`;
 const featureStyle = 'flex items-center';
 const featureIconStyle = 'w-4 h-4 mr-1';
-const buttonStyle = 'mt-auto block w-full text-center py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors focus:ring-4 focus:ring-blue-300';
+const buttonStyle = 'mt-auto block w-full text-center py-3 px-4 bg-[cadetblue] hover:bg-[#4a8a8c] text-white font-medium rounded-lg transition-colors focus:ring-4 focus:ring-[cadetblue]/30';
 
 // Labels config
 const TYPE_LABELS = {
@@ -76,7 +76,7 @@ export default function PropertyCard({ property }) {
         />
 
         {/* Hover overlay */}
-        <div className="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-[#495464] opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
 
         {/* Category badge */}
         <div className="absolute top-3 left-3">
@@ -107,12 +107,12 @@ export default function PropertyCard({ property }) {
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
-        <div className="text-2xl font-bold text-blue-600 mb-2">
+        <div className="text-2xl font-bold text-[#495464] mb-2">
           {formatPrice(price, currency, category)}
         </div>
 
         <Link href={propertyUrl}>
-          <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2 mb-2">
+          <h3 className="text-lg font-semibold text-[#495464] hover:text-[#3d4654] transition-colors line-clamp-2 mb-2">
             {title}
           </h3>
         </Link>

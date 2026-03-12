@@ -19,11 +19,13 @@ import {
   ClockIcon,
 } from '@/components/icons';
 
-// Repeated styles
-const linkStyle = 'text-gray-400 hover:text-white transition-colors';
-const sectionTitle = 'text-lg font-semibold mb-4';
-const iconStyle = 'w-5 h-5 text-blue-500 flex-shrink-0';
-const contactText = 'text-gray-400 text-sm';
+// Styles
+const footerBg = 'bg-gradient-to-b from-[#5F9EA0] to-[#4a8587] text-white';
+const linkStyle = 'text-white/70 hover:text-white transition-colors';
+const sectionTitle = 'text-lg font-bold mb-4 text-white';
+const iconStyle = 'w-5 h-5 text-white/80 flex-shrink-0';
+const contactText = 'text-white/70 text-sm';
+const borderStyle = 'border-white/20';
 
 // Social links config
 const SOCIAL_LINKS = [
@@ -48,14 +50,14 @@ const BOTTOM_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-screen-xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className={`${footerBg} py-12`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <HomeIcon className="w-8 h-8 text-blue-500" />
-              <span className="text-xl font-bold">{BRAND_NAME}</span>
+              <HomeIcon className="w-8 h-8 text-white" />
+              <span className="text-xl font-bold text-white">{BRAND_NAME}</span>
             </div>
             <p className={contactText}>
               {BRAND_DESCRIPTION}. {BRAND_TAGLINE}.
@@ -117,7 +119,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-8 border-t border-gray-800">
+        <div className={`pt-8 border-t ${borderStyle}`}>
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className={contactText}>
               &copy; {new Date().getFullYear()} {BRAND_NAME}. Всички права запазени.
