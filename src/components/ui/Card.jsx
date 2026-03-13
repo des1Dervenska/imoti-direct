@@ -5,12 +5,14 @@
  * - default: White background with subtle shadow
  * - outlined: Border only, no shadow
  * - elevated: Stronger shadow for emphasis
+ * - light: Light gray background, no shadow
  */
 
 const variants = {
   default: 'bg-white shadow-sm',
   outlined: 'bg-white border border-gray-200',
   elevated: 'bg-white shadow-lg',
+  light: 'bg-gray-50',
 };
 
 export default function Card({
