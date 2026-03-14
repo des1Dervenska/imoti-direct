@@ -1,5 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection";
-import PropertyGrid from "@/components/property/PropertyGrid";
+import PropertyCarousel from "@/components/property/PropertyCarousel";
 import { getSaleProperties, getRentProperties } from "@/lib/properties";
 import Link from "next/link";
 import { Section, Container, LinkButton, Card, FeatureCard } from "@/components/ui";
@@ -74,14 +74,14 @@ function MobileLink({ href, children }) {
 export default async function Home() {
   const allSaleProperties = await getSaleProperties();
   const allRentProperties = await getRentProperties();
-  const saleProperties = allSaleProperties.slice(0, 3);
-  const rentProperties = allRentProperties.slice(0, 3);
+  const salePropertiesForCarousel = allSaleProperties.slice(0, 12);
+  const rentPropertiesForCarousel = allRentProperties.slice(0, 12);
 
   return (
     <>
       <HeroSection />
 
-      {/* Featured Sale Properties */}
+      {/* Featured Sale Properties - карусел по 3, стрелки, авто 3s */}
       <Section background="white">
         <Container>
           <SectionHeader
@@ -89,12 +89,12 @@ export default async function Home() {
             subtitle="Разгледайте нашите най-нови оферти"
             href="/sales"
           />
-          <PropertyGrid properties={saleProperties} />
+          <PropertyCarousel properties={salePropertiesForCarousel} />
           <MobileLink href="/sales">Виж всички оферти за продажба</MobileLink>
         </Container>
       </Section>
 
-      {/* Featured Rent Properties */}
+      {/* Featured Rent Properties - карусел по 3, стрелки, авто 3s (или статична мрежа при ≤3) */}
       <Section background="light">
         <Container>
           <SectionHeader
@@ -102,7 +102,7 @@ export default async function Home() {
             subtitle="Намерете перфектния имот за вас"
             href="/rent"
           />
-          <PropertyGrid properties={rentProperties} />
+          <PropertyCarousel properties={rentPropertiesForCarousel} />
           <MobileLink href="/rent">Виж всички оферти под наем</MobileLink>
         </Container>
       </Section>

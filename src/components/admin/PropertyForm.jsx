@@ -8,7 +8,6 @@ import {
   propertyStatuses,
   cities,
   PROPERTY_STATUS,
-  CURRENCY,
 } from '@/data/properties';
 import { createProperty, updateProperty } from '@/lib/properties';
 import ImageUpload from './ImageUpload';
@@ -24,7 +23,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     type: property?.type || 'apartment',
     status: property?.status || PROPERTY_STATUS.ACTIVE,
     price: property?.price || '',
-    currency: property?.currency || CURRENCY.EUR,
+    currency: 'EUR',
     area: property?.area || '',
     rooms: property?.rooms || '',
     floor: property?.floor || '',
@@ -52,16 +51,34 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     }));
   };
 
+  const transliterateBgToLatin = (str) => {
+    const map = {
+      а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ж: 'zh', з: 'z',
+      и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p',
+      р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'ts', ч: 'ch',
+      ш: 'sh', щ: 'sht', ъ: 'a', ь: '', ю: 'yu', я: 'ya',
+    };
+    return str
+      .toLowerCase()
+      .split('')
+      .map((char) => map[char] ?? char)
+      .join('');
+  };
+
   const generateSlug = () => {
-    const slug = formData.title
+    const title = formData.title?.trim() || '';
+    if (!title) return;
+    const latin = transliterateBgToLatin(title);
+    const slug = latin
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
       .trim();
-    setFormData(prev => ({ ...prev, slug }));
+    setFormData(prev => ({ ...prev, slug: slug || 'imot' }));
   };
 
   const handleSubmit = async (e) => {
@@ -76,6 +93,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     // Prepare data
     const propertyData = {
       ...formData,
+      currency: 'EUR',
       price: Number(formData.price) || 0,
       area: Number(formData.area) || 0,
       rooms: formData.rooms ? Number(formData.rooms) : null,
@@ -177,8 +195,19 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
           <div className="flex gap-4">
             <div className="flex-1">
-              <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="slug" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 mb-1">
                 Slug (URL) *
+                <span className="relative group inline-flex shrink-0">
+                  <span
+                    className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-300 text-gray-600 text-xs font-bold cursor-help hover:bg-gray-400"
+                    aria-label="Какво е slug?"
+                  >
+                    i
+                  </span>
+                  <span className="absolute left-0 top-full mt-1.5 px-3 py-2 w-72 text-left text-xs font-normal bg-gray-800 text-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 pointer-events-none">
+                    Slug е краткото име на страницата в адреса. Показва се горе в клиента (в адресната лента), когато някой отвори този апартамент — напр. …/properties/<strong className="text-white">tristaen-apartament-lozenets</strong>. Само латински букви, цифри и тирета.
+                  </span>
+                </span>
               </label>
               <input
                 type="text"
@@ -280,22 +309,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="185000"
             />
-          </div>
-
-          <div>
-            <label htmlFor="currency" className="block text-sm font-medium text-gray-700 mb-1">
-              Валута
-            </label>
-            <select
-              id="currency"
-              name="currency"
-              value={formData.currency}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="EUR">EUR</option>
-              <option value="BGN">BGN</option>
-            </select>
+            <p className="mt-1 text-xs text-gray-500">Цената се въвежда в евро (EUR).</p>
           </div>
 
           <div>

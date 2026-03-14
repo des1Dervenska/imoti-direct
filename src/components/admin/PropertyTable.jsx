@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { formatPrice, getTypeLabel, getCategoryLabel } from '@/data/properties';
+import { formatPriceEurAndBgn } from '@/lib/constants';
+import { getTypeLabel, getCategoryLabel } from '@/data/properties';
 
 const statusLabels = {
   active: { label: 'Активна', className: 'bg-green-100 text-green-800' },
@@ -81,8 +82,16 @@ export default function PropertyTable({ properties, isDemo = false }) {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {getCategoryLabel(property.category)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                  {formatPrice(property.price, property.currency, property.category)}
+                <td className="px-6 py-4 text-sm">
+                  {(() => {
+                    const { eurText, bgnText } = formatPriceEurAndBgn(property.price, property.category);
+                    return (
+                      <span>
+                        <span className="font-medium text-gray-900">{eurText}</span>
+                        <span className="block text-xs text-gray-500">{bgnText}</span>
+                      </span>
+                    );
+                  })()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {property.city}

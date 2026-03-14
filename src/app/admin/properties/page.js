@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import PropertyTable from '@/components/admin/PropertyTable';
+import AdminPropertiesToolbar from '@/components/admin/AdminPropertiesToolbar';
 import { getAllPropertiesAdmin } from '@/lib/properties';
 
 export const metadata = {
@@ -30,7 +30,7 @@ export default async function AdminPropertiesPage() {
       )}
 
       <div className="bg-white rounded-lg shadow-sm border">
-        <PropertyTable properties={properties} isDemo={isDemo} />
+        <AdminPropertiesToolbar properties={properties} isDemo={isDemo} />
       </div>
     </div>
   );

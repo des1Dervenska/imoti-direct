@@ -19,7 +19,6 @@ import {
   ClockIcon,
   CheckCircleIcon,
   PaperAirplaneIcon,
-  MapIcon,
   ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/outline';
 import { FacebookIcon, InstagramIcon } from '@/components/icons';
@@ -300,23 +299,28 @@ export default function ContactPage() {
             <p className="text-graphite-light">{CONTACT_ADDRESS_SHORT}</p>
           </div>
 
-          {/* Map placeholder */}
-          <div className="bg-gray-200 rounded-2xl h-80 md:h-96 flex items-center justify-center">
-            <div className="text-center text-gray-500">
-              <MapIcon className="w-16 h-16 mx-auto mb-4" />
-              <p className="text-lg font-medium">Google Maps</p>
-              <p className="text-sm">{CONTACT_ADDRESS_SHORT}</p>
-              <a
-                href={GOOGLE_MAPS_SEARCH_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center mt-4 text-graphite hover:text-graphite-dark font-medium"
-              >
-                Отвори в Google Maps
-                <ArrowTopRightOnSquareIcon className="w-4 h-4 ml-1" />
-              </a>
-            </div>
+          {/* Вградена карта на локацията */}
+          <div className="rounded-2xl overflow-hidden h-80 md:h-96 bg-gray-200">
+            <iframe
+              src={`https://www.google.com/maps?q=${encodeURIComponent(CONTACT_ADDRESS_SHORT)}&output=embed`}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Локация на офиса"
+            />
           </div>
+          <a
+            href={GOOGLE_MAPS_SEARCH_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center mt-4 text-graphite hover:text-graphite-dark font-medium"
+          >
+            Отвори в Google Maps
+            <ArrowTopRightOnSquareIcon className="w-4 h-4 ml-1" />
+          </a>
         </Container>
       </Section>
     </>

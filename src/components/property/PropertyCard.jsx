@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { DEFAULT_PROPERTY_IMAGE } from '@/lib/constants';
+import { DEFAULT_PROPERTY_IMAGE, formatPriceEurAndBgn } from '@/lib/constants';
 import { ArrowsPointingOutIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { RoomsIcon } from '@/components/icons';
 import { Badge, LinkButton } from '@/components/ui';
@@ -8,13 +8,6 @@ import { Badge, LinkButton } from '@/components/ui';
 const cardStyle = 'bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full';
 const featureStyle = 'flex items-center';
 const featureIconStyle = 'w-4 h-4 mr-1';
-
-// Helpers
-const formatPrice = (price, currency, category) => {
-  const formatted = new Intl.NumberFormat('bg-BG').format(price);
-  const suffix = category === 'rent' ? '/месец' : '';
-  return `${formatted} ${currency}${suffix}`;
-};
 
 const truncateText = (text, maxLength = 100) => {
   if (!text) return '';
@@ -28,7 +21,6 @@ export default function PropertyCard({ property }) {
     type,
     category,
     price,
-    currency,
     area,
     rooms,
     city,
@@ -85,8 +77,16 @@ export default function PropertyCard({ property }) {
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
-        <div className="text-2xl font-bold text-graphite mb-2">
-          {formatPrice(price, currency, category)}
+        <div className="mb-2">
+          {(() => {
+            const { eurText, bgnText } = formatPriceEurAndBgn(price, category);
+            return (
+              <>
+                <span className="text-2xl font-bold text-graphite">{eurText}</span>
+                <span className="block text-sm font-normal text-graphite-light">{bgnText}</span>
+              </>
+            );
+          })()}
         </div>
 
         <Link href={propertyUrl}>

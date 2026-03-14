@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import AdminLogout from '@/components/admin/AdminLogout';
 
 export const metadata = {
   title: 'Admin | ART HOUSE 94',
@@ -24,12 +25,15 @@ export default function AdminLayout({ children }) {
                 </Link>
               </nav>
             </div>
-            <Link
-              href="/"
-              className="text-sm text-gray-500 hover:text-gray-700"
-            >
-              ← Към сайта
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/"
+                className="text-sm text-gray-500 hover:text-gray-700"
+              >
+                ← Към сайта
+              </Link>
+              <AdminLogout />
+            </div>
           </div>
         </div>
       </header>

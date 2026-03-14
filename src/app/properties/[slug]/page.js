@@ -8,6 +8,7 @@ import {
   CONTACT_PHONE,
   CONTACT_PHONE_LINK,
   CONTACT_EMAIL,
+  formatPriceEurAndBgn,
 } from '@/lib/constants';
 import { Section, Container, Badge, Card, LinkButton } from '@/components/ui';
 import {
@@ -33,12 +34,6 @@ const TYPE_LABELS = { apartment: 'Апартамент', house: 'Къща', land
 const CATEGORY_LABELS = { sale: 'Продажба', rent: 'Наем' };
 
 // Helpers: Formatters
-const formatPrice = (price, currency, category) => {
-  const formatted = new Intl.NumberFormat('bg-BG').format(price);
-  const suffix = category === 'rent' ? '/месец' : '';
-  return `${formatted} ${currency}${suffix}`;
-};
-
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('bg-BG', {
     year: 'numeric',
@@ -160,7 +155,7 @@ export default async function PropertyDetailPage({ params }) {
   }
 
   const {
-    title, type, category, price, currency, area, rooms, floor,
+    title, type, category, price, area, rooms, floor,
     totalFloors, yearBuilt, description, features, images,
     address, city, neighborhood, mapUrl, createdAt,
   } = property;
@@ -203,8 +198,9 @@ export default async function PropertyDetailPage({ params }) {
               <div className="lg:hidden">
                 <LocationText neighborhood={neighborhood} city={city} />
                 <h1 className="text-2xl font-bold text-graphite mb-3 mt-2">{title}</h1>
-                <div className="text-3xl font-bold text-graphite">
-                  {formatPrice(price, currency, category)}
+                <div className="text-graphite">
+                  <span className="text-3xl font-bold">{formatPriceEurAndBgn(price, category).eurText}</span>
+                  <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
                 </div>
               </div>
 
@@ -275,8 +271,9 @@ export default async function PropertyDetailPage({ params }) {
                 <Card className="hidden lg:block p-6">
                   <LocationText neighborhood={neighborhood} city={city} />
                   <h1 className="text-xl font-bold text-graphite mb-4 mt-2">{title}</h1>
-                  <div className="text-3xl font-bold text-graphite mb-4">
-                    {formatPrice(price, currency, category)}
+                  <div className="mb-4">
+                    <span className="text-3xl font-bold text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
+                    <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
                   </div>
                   <div className="text-sm text-gray-500">
                     Публикувано: {formatDate(createdAt)}

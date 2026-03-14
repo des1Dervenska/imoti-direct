@@ -103,7 +103,7 @@ export default function Navbar() {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-gray-200/80 bg-white/95 backdrop-blur-sm">
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-gray-200/80 bg-[#fbf7f4] backdrop-blur-sm">
       <div className="mx-auto flex max-w-screen-xl items-center justify-between px-5 py-3">
         <Link
           href="/"
@@ -154,7 +154,7 @@ export default function Navbar() {
       {isMenuOpen && (
         <div
           id="navbar-menu"
-          className="border-t border-gray-200 bg-white md:hidden"
+          className="border-t border-gray-200 bg-[#fbf7f4] md:hidden"
         >
           <div className="mx-auto max-w-screen-xl px-5 py-3">
             <ul className="space-y-1">
