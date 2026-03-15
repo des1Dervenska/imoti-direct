@@ -1,388 +1,66 @@
-'use client';
+import { Suspense } from 'react';
+import ContactContent from './ContactContent';
+import { Section, Container, Card } from '@/components/ui';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import {
-  CONTACT_ADDRESS,
-  CONTACT_CITY,
-  CONTACT_PHONE,
-  CONTACT_PHONE_LINK,
-  CONTACT_EMAIL,
-  CONTACT_ADDRESS_SHORT,
-  WORKING_HOURS,
-  GOOGLE_MAPS_SEARCH_URL,
-} from '@/lib/constants';
-import { Section, Container, Card, Button, AnimateOnScroll } from '@/components/ui';
-import {
-  MapPinIcon,
-  PhoneIcon,
-  EnvelopeIcon,
-  ClockIcon,
-  CheckCircleIcon,
-  PaperAirplaneIcon,
-  ArrowTopRightOnSquareIcon,
-} from '@heroicons/react/24/outline';
-import { FacebookIcon } from '@/components/icons';
-
-// Config: Contact info items
-const CONTACT_INFO = [
-  {
-    icon: MapPinIcon,
-    title: 'Адрес',
-    content: (
-      <>
-        {CONTACT_ADDRESS}<br />
-        {CONTACT_CITY}
-      </>
-    ),
-  },
-  {
-    icon: PhoneIcon,
-    title: 'Телефон',
-    content: (
-      <a href={`tel:${CONTACT_PHONE_LINK}`} className="hover:text-graphite transition-colors">
-        {CONTACT_PHONE}
-      </a>
-    ),
-  },
-  {
-    icon: EnvelopeIcon,
-    title: 'Имейл',
-    content: (
-      <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-graphite transition-colors">
-        {CONTACT_EMAIL}
-      </a>
-    ),
-  },
-  {
-    icon: ClockIcon,
-    title: 'Работно време',
-    content: (
-      <>
-        <span className="block">{WORKING_HOURS.weekdays}</span>
-        <span className="block">{WORKING_HOURS.saturday}</span>
-        <span className="block">{WORKING_HOURS.sunday}</span>
-      </>
-    ),
-  },
-];
-
-// Config: Social links
-const SOCIAL_LINKS = [
-  { icon: FacebookIcon, href: 'https://www.facebook.com/profile.php?id=61580202105400', label: 'Facebook' },
-];
-
-// Config: Subject options
-const SUBJECT_OPTIONS = [
-  { value: '', label: 'Изберете тема' },
-  { value: 'buy', label: 'Искам да купя имот' },
-  { value: 'sell', label: 'Искам да продам имот' },
-  { value: 'rent', label: 'Търся имот под наем' },
-  { value: 'rent-out', label: 'Искам да отдам имот под наем' },
-  { value: 'evaluation', label: 'Оценка на имот' },
-  { value: 'consultation', label: 'Консултация' },
-  { value: 'other', label: 'Друго' },
-];
-
-// Styles
-const inputStyle = 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite text-graphite';
-const labelStyle = 'block text-sm font-medium text-gray-700 mb-2';
-
-// Helper: Contact info item
-function ContactInfoItem({ icon: Icon, title, content }) {
+function LoadingFallback() {
   return (
-    <div className="flex items-start space-x-4 group">
-      <div className="w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300 group-hover:bg-cadetblue/25">
-        <Icon className="w-6 h-6 text-graphite" />
-      </div>
-      <div>
-        <h3 className="font-semibold text-graphite mb-1">{title}</h3>
-        <p className="text-graphite-light">{content}</p>
-      </div>
-    </div>
-  );
-}
+    <>
+      <Section background="white" padding="md" className="pt-8">
+        <Container>
+          <div className="text-center animate-pulse">
+            <div className="h-10 bg-gray-200 rounded w-48 mx-auto mb-3"></div>
+            <div className="h-5 bg-gray-200 rounded w-96 max-w-full mx-auto"></div>
+          </div>
+        </Container>
+      </Section>
 
-// Helper: Social link button (зелено-синьо при hover)
-function SocialLink({ icon: Icon, href, label }) {
-  return (
-    <a
-      href={href}
-      aria-label={label}
-      className="w-10 h-10 bg-cadetblue/15 rounded-lg flex items-center justify-center text-graphite transition-colors duration-300 hover:bg-cadetblue/25 hover:text-cadetblue-dark"
-    >
-      <Icon className="w-5 h-5" />
-    </a>
-  );
-}
+      <Section background="light">
+        <Container>
+          <div className="grid lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-1 animate-pulse">
+              <div className="h-7 bg-gray-200 rounded w-48 mb-6"></div>
+              <div className="space-y-6">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex items-start space-x-4">
+                    <div className="w-14 h-14 bg-gray-200 rounded-lg"></div>
+                    <div className="flex-1">
+                      <div className="h-5 bg-gray-200 rounded w-24 mb-2"></div>
+                      <div className="h-4 bg-gray-200 rounded w-full"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-// Helper: Success message
-function SuccessMessage() {
-  return (
-    <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center">
-      <CheckCircleIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
-      <span className="text-green-800">
-        Благодарим ви! Вашето съобщение беше изпратено успешно. Ще се свържем с вас скоро.
-      </span>
-    </div>
+            <div className="lg:col-span-2">
+              <Card className="p-8 animate-pulse">
+                <div className="h-7 bg-gray-200 rounded w-56 mb-2"></div>
+                <div className="h-5 bg-gray-200 rounded w-80 mb-6"></div>
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="h-12 bg-gray-200 rounded"></div>
+                    <div className="h-12 bg-gray-200 rounded"></div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="h-12 bg-gray-200 rounded"></div>
+                    <div className="h-12 bg-gray-200 rounded"></div>
+                  </div>
+                  <div className="h-32 bg-gray-200 rounded"></div>
+                  <div className="h-12 bg-gray-200 rounded w-48"></div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </>
   );
 }
 
 export default function ContactPage() {
-  const searchParams = useSearchParams();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
-    privacyConsent: false,
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  useEffect(() => {
-    const subject = searchParams.get('subject');
-    const propertyPath = searchParams.get('propertyPath');
-    if (subject || propertyPath) {
-      setFormData((prev) => {
-        let message = prev.message;
-        if (propertyPath && typeof window !== 'undefined') {
-          const path = propertyPath.startsWith('/') ? propertyPath : `/${propertyPath}`;
-          const fullUrl = `${window.location.origin}${path}`;
-          message = `Имот: ${fullUrl}\n\nЖелая да проведем оглед на гореспоменатия обект`;
-        }
-        return {
-          ...prev,
-          ...(subject ? { subject } : {}),
-          ...(message ? { message } : {}),
-        };
-      });
-    }
-  }, [searchParams]);
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.privacyConsent) return;
-    setIsSubmitted(true);
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: '',
-      privacyConsent: false,
-    });
-    setTimeout(() => setIsSubmitted(false), 5000);
-  };
-
   return (
-    <>
-      {/* Page Header */}
-      <Section background="white" padding="md" className="pt-8">
-        <Container>
-          <AnimateOnScroll direction="down" className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-cadetblue mb-3 tracking-wide [text-shadow:0_1px_2px_rgba(95,158,160,0.25)]">Контакти</h1>
-            <p className="text-graphite-light max-w-xl mx-auto">
-              Свържете се с нас - ще се радваме да отговорим на вашите въпроси
-            </p>
-          </AnimateOnScroll>
-        </Container>
-      </Section>
-
-      {/* Contact Section */}
-      <Section background="light">
-        <Container>
-          <AnimateOnScroll direction="up">
-          <div className="grid lg:grid-cols-3 gap-12">
-            {/* Contact Info */}
-            <div className="lg:col-span-1">
-              <h2 className="text-2xl font-bold text-graphite mb-6">Информация за контакт</h2>
-
-              <div className="space-y-6">
-                {CONTACT_INFO.map((item) => (
-                  <ContactInfoItem key={item.title} {...item} />
-                ))}
-              </div>
-
-              {/* Social Links */}
-              <div className="mt-8 pt-8 border-t">
-                <h3 className="font-semibold text-graphite mb-4">Последвайте ни</h3>
-                <div className="flex space-x-4">
-                  {SOCIAL_LINKS.map((link) => (
-                    <SocialLink key={link.label} {...link} />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Contact Form */}
-            <div className="lg:col-span-2">
-              <Card className="p-8">
-                <h2 className="text-2xl font-bold text-graphite mb-2">Изпратете запитване</h2>
-                <p className="text-graphite-light mb-6">
-                  Попълнете формата и ние ще се свържем с вас възможно най-скоро.
-                </p>
-
-                {isSubmitted && <SuccessMessage />}
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="name" className={labelStyle}>Вашето име *</label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className={inputStyle}
-                        placeholder="Иван Иванов"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className={labelStyle}>Имейл адрес *</label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className={inputStyle}
-                        placeholder="ivan@example.com"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="phone" className={labelStyle}>Телефон</label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className={inputStyle}
-                        placeholder="+359 888 123 456"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="subject" className={labelStyle}>Относно *</label>
-                      <select
-                        id="subject"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        required
-                        className={`${inputStyle} bg-white`}
-                      >
-                        {SUBJECT_OPTIONS.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className={labelStyle}>Вашето съобщение *</label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      rows={5}
-                      className={`${inputStyle} resize-none`}
-                      placeholder="Опишете какво търсите или с какво можем да ви помогнем..."
-                    />
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      id="privacyConsent"
-                      name="privacyConsent"
-                      checked={formData.privacyConsent}
-                      onChange={handleChange}
-                      required
-                      className="mt-1 w-4 h-4 rounded border-gray-300 text-graphite focus:ring-graphite shrink-0"
-                      aria-describedby="privacyConsent-desc"
-                    />
-                    <label id="privacyConsent-desc" htmlFor="privacyConsent" className="text-sm text-gray-700">
-                      Съгласен/а съм личните ми данни (име, имейл, телефон и съобщение) да бъдат обработвани за отговор на запитването ми, съгласно{' '}
-                      <Link href="/privacy" className="text-graphite font-medium hover:underline">Политиката за поверителност</Link>
-                      {' '}и Регламент (ЕС) 2016/679 (GDPR). Разбирам, че имам право на достъп, поправка и изтриване на данните си. *
-                    </label>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <Button
-                      type="submit"
-                      variant="accent"
-                      className="w-full md:w-auto"
-                      disabled={!formData.privacyConsent}
-                    >
-                      <PaperAirplaneIcon className="w-5 h-5 mr-2" />
-                      Изпрати съобщението
-                    </Button>
-                  </div>
-                </form>
-              </Card>
-            </div>
-          </div>
-          </AnimateOnScroll>
-        </Container>
-      </Section>
-
-      {/* Map Section */}
-      <Section background="white">
-        <Container>
-          <AnimateOnScroll direction="down">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-graphite mb-2">Къде да ни намерите</h2>
-            <p className="text-graphite-light">{CONTACT_ADDRESS_SHORT}</p>
-          </div>
-          </AnimateOnScroll>
-
-          <AnimateOnScroll direction="up">
-          {/* Вградена карта на локацията */}
-          <div className="rounded-2xl overflow-hidden h-80 md:h-96 bg-gray-200">
-            <iframe
-              src={`https://www.google.com/maps?q=${encodeURIComponent(CONTACT_ADDRESS_SHORT)}&output=embed`}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Локация на офиса"
-            />
-          </div>
-          <a
-            href={GOOGLE_MAPS_SEARCH_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center mt-4 text-graphite hover:text-graphite-dark font-medium"
-          >
-            Отвори в Google Maps
-            <ArrowTopRightOnSquareIcon className="w-4 h-4 ml-1" />
-          </a>
-          </AnimateOnScroll>
-        </Container>
-      </Section>
-    </>
+    <Suspense fallback={<LoadingFallback />}>
+      <ContactContent />
+    </Suspense>
   );
 }
