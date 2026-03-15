@@ -1,7 +1,7 @@
 import PropertyFilters from "@/components/property/PropertyFilters";
 import { getRentProperties } from "@/lib/properties";
 import { BRAND_NAME } from "@/lib/constants";
-import { Section, Container, LinkButton, Card, FeatureCard } from "@/components/ui";
+import { Section, Container, LinkButton, Card, FeatureCard, AnimateOnScroll } from "@/components/ui";
 import {
   CheckCircleIcon,
   LockClosedIcon,
@@ -41,44 +41,50 @@ export default async function RentPage() {
       {/* Page Header */}
       <Section background="white" padding="md" className="pt-8">
         <Container>
-          <div className="text-center">
+          <AnimateOnScroll className="text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-graphite mb-3">
               Имоти под наем
             </h1>
             <p className="text-graphite-light max-w-xl mx-auto">
               Намерете перфектния имот за вас сред нашите {properties.length} актуални оферти
             </p>
-          </div>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* Filters & Grid */}
-      <PropertyFilters
-        properties={properties}
-        category="rent"
-        emptyMessage="Няма намерени имоти под наем"
-      />
+      <AnimateOnScroll>
+        <PropertyFilters
+          properties={properties}
+          category="rent"
+          emptyMessage="Няма намерени имоти под наем"
+          animateCards
+        />
+      </AnimateOnScroll>
 
       {/* Info Section */}
       <Section background="white" padding="md">
         <Container>
-          <FeatureCard.Grid columns={3}>
-            {INFO_CARDS.map((card) => (
-              <FeatureCard
-                key={card.title}
-                background="light"
-                hoverEffect="lift"
-                {...card}
-              />
-            ))}
-          </FeatureCard.Grid>
+          <AnimateOnScroll>
+            <FeatureCard.Grid columns={3}>
+              {INFO_CARDS.map((card) => (
+                <FeatureCard
+                  key={card.title}
+                  background="light"
+                  hoverEffect="lift"
+                  {...card}
+                />
+              ))}
+            </FeatureCard.Grid>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* CTA Section */}
       <Section background="light" padding="md">
         <Container>
-          <Card variant="outlined" className="p-8 md:p-12 text-center">
+          <AnimateOnScroll>
+            <Card variant="outlined" className="p-8 md:p-12 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-graphite mb-4">
               Имате имот за отдаване под наем?
             </h2>
@@ -90,6 +96,7 @@ export default async function RentPage() {
               <ArrowRightIcon className="w-5 h-5" />
             </LinkButton>
           </Card>
+          </AnimateOnScroll>
         </Container>
       </Section>
     </>

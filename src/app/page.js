@@ -2,7 +2,7 @@ import HeroSection from "@/components/sections/HeroSection";
 import PropertyCarousel from "@/components/property/PropertyCarousel";
 import { getSaleProperties, getRentProperties } from "@/lib/properties";
 import Link from "next/link";
-import { Section, Container, LinkButton, Card, FeatureCard } from "@/components/ui";
+import { Section, Container, LinkButton, Card, FeatureCard, AnimateOnScroll } from "@/components/ui";
 import {
   ShieldCheckIcon,
   BoltIcon,
@@ -84,54 +84,61 @@ export default async function Home() {
       {/* Featured Sale Properties - карусел по 3, стрелки, авто 3s */}
       <Section background="white">
         <Container>
-          <SectionHeader
-            title="Имоти за продажба"
-            subtitle="Разгледайте нашите най-нови оферти"
-            href="/sales"
-          />
-          <PropertyCarousel properties={salePropertiesForCarousel} />
-          <MobileLink href="/sales">Виж всички оферти за продажба</MobileLink>
+          <AnimateOnScroll>
+            <SectionHeader
+              title="Имоти за продажба"
+              subtitle="Разгледайте нашите най-нови оферти"
+              href="/sales"
+            />
+            <PropertyCarousel properties={salePropertiesForCarousel} />
+            <MobileLink href="/sales">Виж всички оферти за продажба</MobileLink>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* Featured Rent Properties - карусел по 3, стрелки, авто 3s (или статична мрежа при ≤3) */}
       <Section background="light">
         <Container>
-          <SectionHeader
-            title="Имоти под наем"
-            subtitle="Намерете перфектния имот за вас"
-            href="/rent"
-          />
-          <PropertyCarousel properties={rentPropertiesForCarousel} />
-          <MobileLink href="/rent">Виж всички оферти под наем</MobileLink>
+          <AnimateOnScroll>
+            <SectionHeader
+              title="Имоти под наем"
+              subtitle="Намерете перфектния имот за вас"
+              href="/rent"
+            />
+            <PropertyCarousel properties={rentPropertiesForCarousel} />
+            <MobileLink href="/rent">Виж всички оферти под наем</MobileLink>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* Why Choose Us */}
       <Section background="white">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-graphite">Защо да изберете нас?</h2>
-            <p className="text-graphite-light mt-2">Нашите предимства</p>
-          </div>
+          <AnimateOnScroll>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-graphite">Защо да изберете нас?</h2>
+              <p className="text-graphite-light mt-2">Нашите предимства</p>
+            </div>
 
-          <FeatureCard.Grid columns={4}>
-            {FEATURES.map((feature) => (
-              <FeatureCard
-                key={feature.title}
-                background="transparent"
-                hoverEffect="none"
-                {...feature}
-              />
-            ))}
-          </FeatureCard.Grid>
+            <FeatureCard.Grid columns={4}>
+              {FEATURES.map((feature) => (
+                <FeatureCard
+                  key={feature.title}
+                  background="transparent"
+                  hoverEffect="none"
+                  {...feature}
+                />
+              ))}
+            </FeatureCard.Grid>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* CTA Section */}
       <Section background="light">
         <Container>
-          <Card variant="outlined" className="p-8 md:p-12 text-center">
+          <AnimateOnScroll>
+            <Card variant="outlined" className="p-8 md:p-12 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-graphite mb-4">
               Готови ли сте да намерите своя нов дом?
             </h2>
@@ -148,6 +155,7 @@ export default async function Home() {
               </LinkButton>
             </div>
           </Card>
+          </AnimateOnScroll>
         </Container>
       </Section>
     </>

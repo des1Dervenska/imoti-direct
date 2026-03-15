@@ -53,6 +53,7 @@ export default function PropertyFilters({
   properties,
   emptyMessage = 'Няма намерени имоти',
   category = 'sale',
+  animateCards = false,
 }) {
   const [filters, setFilters] = useState({
     type: '',
@@ -330,6 +331,7 @@ export default function PropertyFilters({
           <PropertyGrid
             properties={filteredProperties}
             emptyMessage={emptyMessage}
+            animateCards={animateCards}
           />
         </div>
       </section>

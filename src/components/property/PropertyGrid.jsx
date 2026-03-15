@@ -1,4 +1,5 @@
 import PropertyCard from './PropertyCard';
+import AnimateOnScroll from '@/components/ui/AnimateOnScroll';
 import { InboxIcon } from '@heroicons/react/24/outline';
 
 // Styles
@@ -22,16 +23,26 @@ function EmptyState({ message }) {
   );
 }
 
-export default function PropertyGrid({ properties, emptyMessage = 'Няма намерени имоти' }) {
+export default function PropertyGrid({
+  properties,
+  emptyMessage = 'Няма намерени имоти',
+  animateCards = false,
+}) {
   if (!properties?.length) {
     return <EmptyState message={emptyMessage} />;
   }
 
   return (
     <div className={gridStyle}>
-      {properties.map((property) => (
-        <PropertyCard key={property.id} property={property} />
-      ))}
+      {properties.map((property) =>
+        animateCards ? (
+          <AnimateOnScroll key={property.id} direction="up">
+            <PropertyCard property={property} />
+          </AnimateOnScroll>
+        ) : (
+          <PropertyCard key={property.id} property={property} />
+        )
+      )}
     </div>
   );
 }

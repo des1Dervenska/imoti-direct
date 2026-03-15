@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import {
   CONTACT_ADDRESS,
   CONTACT_CITY,
@@ -11,7 +12,7 @@ import {
   WORKING_HOURS,
   GOOGLE_MAPS_SEARCH_URL,
 } from '@/lib/constants';
-import { Section, Container, Card, Button } from '@/components/ui';
+import { Section, Container, Card, Button, AnimateOnScroll } from '@/components/ui';
 import {
   MapPinIcon,
   PhoneIcon,
@@ -21,7 +22,7 @@ import {
   PaperAirplaneIcon,
   ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/outline';
-import { FacebookIcon, InstagramIcon } from '@/components/icons';
+import { FacebookIcon } from '@/components/icons';
 
 // Config: Contact info items
 const CONTACT_INFO = [
@@ -68,8 +69,7 @@ const CONTACT_INFO = [
 
 // Config: Social links
 const SOCIAL_LINKS = [
-  { icon: FacebookIcon, href: '#', label: 'Facebook' },
-  { icon: InstagramIcon, href: '#', label: 'Instagram' },
+  { icon: FacebookIcon, href: 'https://www.facebook.com/profile.php?id=61580202105400', label: 'Facebook' },
 ];
 
 // Config: Subject options
@@ -135,18 +135,30 @@ export default function ContactPage() {
     phone: '',
     subject: '',
     message: '',
+    privacyConsent: false,
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.privacyConsent) return;
     setIsSubmitted(true);
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      subject: '',
+      message: '',
+      privacyConsent: false,
+    });
     setTimeout(() => setIsSubmitted(false), 5000);
   };
 
@@ -155,18 +167,19 @@ export default function ContactPage() {
       {/* Page Header */}
       <Section background="white" padding="md" className="pt-8">
         <Container>
-          <div className="text-center">
+          <AnimateOnScroll className="text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-graphite mb-3">Контакти</h1>
             <p className="text-graphite-light max-w-xl mx-auto">
               Свържете се с нас - ще се радваме да отговорим на вашите въпроси
             </p>
-          </div>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* Contact Section */}
       <Section background="light">
         <Container>
+          <AnimateOnScroll>
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Contact Info */}
             <div className="lg:col-span-1">
@@ -275,12 +288,30 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  <p className="text-sm text-gray-500">
-                    С изпращането на тази форма се съгласявате с нашата{' '}
-                    <a href="#" className="text-graphite hover:underline">политика за поверителност</a>.
-                  </p>
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="privacyConsent"
+                      name="privacyConsent"
+                      checked={formData.privacyConsent}
+                      onChange={handleChange}
+                      required
+                      className="mt-1 w-4 h-4 rounded border-gray-300 text-graphite focus:ring-graphite shrink-0"
+                      aria-describedby="privacyConsent-desc"
+                    />
+                    <label id="privacyConsent-desc" htmlFor="privacyConsent" className="text-sm text-gray-700">
+                      Съгласен/а съм личните ми данни (име, имейл, телефон и съобщение) да бъдат обработвани за отговор на запитването ми, съгласно{' '}
+                      <Link href="/privacy" className="text-graphite font-medium hover:underline">Политиката за поверителност</Link>
+                      {' '}и Регламент (ЕС) 2016/679 (GDPR). Разбирам, че имам право на достъп, поправка и изтриване на данните си. *
+                    </label>
+                  </div>
 
-                  <Button type="submit" variant="accent" className="w-full md:w-auto">
+                  <Button
+                    type="submit"
+                    variant="accent"
+                    className="w-full md:w-auto"
+                    disabled={!formData.privacyConsent}
+                  >
                     <PaperAirplaneIcon className="w-5 h-5 mr-2" />
                     Изпрати съобщението
                   </Button>
@@ -288,12 +319,14 @@ export default function ContactPage() {
               </Card>
             </div>
           </div>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* Map Section */}
       <Section background="white">
         <Container>
+          <AnimateOnScroll>
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-graphite mb-2">Къде да ни намерите</h2>
             <p className="text-graphite-light">{CONTACT_ADDRESS_SHORT}</p>
@@ -321,6 +354,7 @@ export default function ContactPage() {
             Отвори в Google Maps
             <ArrowTopRightOnSquareIcon className="w-4 h-4 ml-1" />
           </a>
+          </AnimateOnScroll>
         </Container>
       </Section>
     </>

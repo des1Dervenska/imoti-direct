@@ -14,7 +14,7 @@ import {
   EnvelopeIcon,
   ClockIcon,
 } from '@heroicons/react/24/outline';
-import { TwitterIcon, InstagramIcon, FacebookIcon } from '@/components/icons';
+import { FacebookIcon } from '@/components/icons';
 import Logo from '@/components/ui/Logo';
 
 // Styles
@@ -27,9 +27,7 @@ const borderStyle = 'border-white/20';
 
 // Social links config
 const SOCIAL_LINKS = [
-  { Icon: TwitterIcon, href: '#', label: 'Twitter' },
-  { Icon: InstagramIcon, href: '#', label: 'Instagram' },
-  { Icon: FacebookIcon, href: '#', label: 'Facebook' },
+  { Icon: FacebookIcon, href: 'https://www.facebook.com/profile.php?id=61580202105400', label: 'Facebook' },
 ];
 
 // Contact info config
@@ -40,10 +38,10 @@ const CONTACT_INFO = [
   { Icon: ClockIcon, value: 'Пон-Пет: 9:00 - 18:00', iconClass: iconStyle },
 ];
 
-// Bottom links config
+// Bottom links config (вътрешни страници)
 const BOTTOM_LINKS = [
-  { label: 'Политика за поверителност', href: '#' },
-  { label: 'Условия за ползване', href: '#' },
+  { label: 'Политика за поверителност', href: '/privacy' },
+  { label: 'Условия за ползване', href: '/terms' },
 ];
 
 export default function Footer() {
@@ -124,9 +122,9 @@ export default function Footer() {
             </p>
             <div className="flex space-x-6 text-sm">
               {BOTTOM_LINKS.map(({ label, href }) => (
-                <a key={label} href={href} className={linkStyle}>
+                <Link key={label} href={href} className={linkStyle}>
                   {label}
-                </a>
+                </Link>
               ))}
             </div>
           </div>

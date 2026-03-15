@@ -4,7 +4,7 @@ import {
   BRAND_TAGLINE,
   CONTACT_PERSON,
 } from '@/lib/constants';
-import { Section, Container, Card, LinkButton, FeatureCard } from '@/components/ui';
+import { Section, Container, Card, LinkButton, FeatureCard, AnimateOnScroll } from '@/components/ui';
 import {
   HomeIcon,
   KeyIcon,
@@ -12,8 +12,6 @@ import {
   CurrencyDollarIcon,
   UserGroupIcon,
   ArrowTrendingUpIcon,
-  UserIcon,
-  BuildingOfficeIcon,
 } from '@heroicons/react/24/outline';
 
 export const metadata = {
@@ -55,13 +53,17 @@ const SERVICES = [
   },
 ];
 
-// Helper: Owner card
+// Helper: Owner card с портрет (face.png – центриран в кръг, object-cover за добър изглед)
 function OwnerCard({ name, brandName }) {
   return (
     <div className="mt-8 p-6 bg-graphite/5 rounded-xl">
       <div className="flex items-center space-x-4">
-        <div className="w-16 h-16 bg-graphite/10 rounded-full flex items-center justify-center">
-          <UserIcon className="w-8 h-8 text-graphite" />
+        <div className="relative w-20 h-20 shrink-0 rounded-full overflow-hidden bg-graphite/10 ring-2 ring-white shadow-md">
+          <img
+            src="/images/face.png"
+            alt={name}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
         </div>
         <div>
           <div className="text-lg font-semibold text-graphite">{name}</div>
@@ -72,17 +74,6 @@ function OwnerCard({ name, brandName }) {
   );
 }
 
-// Helper: Image placeholder
-function ImagePlaceholder({ text }) {
-  return (
-    <div className="bg-gray-200 rounded-2xl h-80 lg:h-96 flex items-center justify-center">
-      <div className="text-center text-gray-400">
-        <BuildingOfficeIcon className="w-24 h-24 mx-auto mb-4" />
-        <p>{text}</p>
-      </div>
-    </div>
-  );
-}
 
 export default function AboutPage() {
   return (
@@ -90,20 +81,27 @@ export default function AboutPage() {
       {/* Page Header */}
       <Section background="white" padding="md" className="pt-8">
         <Container>
-          <div className="text-center">
+          <AnimateOnScroll className="text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-graphite mb-3">За нас</h1>
             <p className="text-graphite-light max-w-xl mx-auto">
               Вашият надежден партньор в света на недвижимите имоти
             </p>
-          </div>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* About Section */}
       <Section background="white">
         <Container>
+          <AnimateOnScroll>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <ImagePlaceholder text="Снимка на офиса" />
+            <div className="relative rounded-2xl overflow-hidden bg-gray-100 h-80 lg:h-96">
+              <img
+                src="/images/big_picture.jpg"
+                alt="Вашият надежден партньор в света на недвижимите имоти"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
 
             <div>
               <h2 className="text-3xl font-bold text-graphite mb-6">{BRAND_NAME}</h2>
@@ -122,12 +120,14 @@ export default function AboutPage() {
               <OwnerCard name={CONTACT_PERSON} brandName={BRAND_NAME} />
             </div>
           </div>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* Services Section */}
       <Section background="light">
         <Container>
+          <AnimateOnScroll>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-graphite mb-4">Нашите услуги</h2>
             <p className="text-graphite-light max-w-2xl mx-auto">
@@ -146,12 +146,14 @@ export default function AboutPage() {
               />
             ))}
           </FeatureCard.Grid>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* CTA Section */}
       <Section background="light">
         <Container>
+          <AnimateOnScroll>
           <Card variant="outlined" className="p-8 md:p-12 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-graphite mb-4">
               Готови да започнем?
@@ -168,6 +170,7 @@ export default function AboutPage() {
               </LinkButton>
             </div>
           </Card>
+          </AnimateOnScroll>
         </Container>
       </Section>
     </>

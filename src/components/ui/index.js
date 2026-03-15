@@ -7,6 +7,7 @@
  * import { Button, Badge, LinkButton, Card, Section, Container, Input } from '@/components/ui';
  */
 
+export { default as AnimateOnScroll } from './AnimateOnScroll';
 export { default as Badge } from './Badge';
 export { default as Button } from './Button';
 export { default as Card } from './Card';

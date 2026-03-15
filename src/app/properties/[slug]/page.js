@@ -10,7 +10,7 @@ import {
   CONTACT_EMAIL,
   formatPriceEurAndBgn,
 } from '@/lib/constants';
-import { Section, Container, Badge, Card, LinkButton } from '@/components/ui';
+import { Section, Container, Badge, Card, LinkButton, AnimateOnScroll } from '@/components/ui';
 import {
   ChevronRightIcon,
   ChevronLeftIcon,
@@ -27,7 +27,7 @@ import {
   ClipboardIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
-import { FacebookIcon, TwitterIcon } from '@/components/icons';
+import { FacebookIcon } from '@/components/icons';
 
 // Config: Labels
 const TYPE_LABELS = { apartment: 'Апартамент', house: 'Къща', land: 'Парцел' };
@@ -175,13 +175,16 @@ export default async function PropertyDetailPage({ params }) {
       {/* Breadcrumb */}
       <Section background="light" padding="sm">
         <Container>
-          <Breadcrumb category={category} title={title} />
+          <AnimateOnScroll>
+            <Breadcrumb category={category} title={title} />
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* Main Content */}
       <Section background="white" padding="md">
         <Container>
+          <AnimateOnScroll>
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Left Column - Main Content */}
             <div className="lg:col-span-2 space-y-8">
@@ -312,7 +315,6 @@ export default async function PropertyDetailPage({ params }) {
                   <h3 className="text-sm font-semibold text-graphite mb-3">Сподели обявата</h3>
                   <div className="flex space-x-3">
                     <ShareButton icon={FacebookIcon} hoverColor="hover:bg-graphite" />
-                    <ShareButton icon={TwitterIcon} hoverColor="hover:bg-graphite-light" />
                     <ShareButton icon={ClipboardIcon} hoverColor="hover:bg-gray-700" />
                   </div>
                 </Card>
@@ -332,12 +334,14 @@ export default async function PropertyDetailPage({ params }) {
               </div>
             </div>
           </div>
+          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* Back to listings */}
       <Section background="light" padding="sm" className="border-t">
         <Container>
+          <AnimateOnScroll>
           <Link
             href={category === 'sale' ? '/sales' : '/rent'}
             className="inline-flex items-center text-graphite hover:text-graphite-dark font-medium"
@@ -345,6 +349,7 @@ export default async function PropertyDetailPage({ params }) {
             <ChevronLeftIcon className="w-5 h-5 mr-2" />
             Обратно към {category === 'sale' ? 'имоти за продажба' : 'имоти под наем'}
           </Link>
+          </AnimateOnScroll>
         </Container>
       </Section>
     </>
