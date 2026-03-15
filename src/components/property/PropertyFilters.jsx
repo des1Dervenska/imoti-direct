@@ -14,6 +14,16 @@ import {
 const countStyle = 'text-graphite-light';
 const countNumber = 'font-semibold text-graphite';
 
+// Дропдауни във филтрите – в нашия стил, но леки (без тежки сенки)
+const filterSelectClass =
+  'w-full px-3.5 py-2.5 bg-white/90 border border-gray-200/80 rounded-lg text-graphite text-sm transition-colors duration-200 ' +
+  'hover:border-cadetblue/30 focus:border-cadetblue/70 focus:ring-2 focus:ring-cadetblue/15 focus:outline-none';
+const filterSelectDisabledClass =
+  'w-full px-3.5 py-2.5 border border-gray-200/80 rounded-lg bg-gray-50/80 text-gray-400 cursor-not-allowed text-sm';
+const filterInputClass =
+  'w-full px-3.5 py-2.5 bg-white/90 border border-gray-200/80 rounded-lg text-graphite text-sm transition-colors duration-200 ' +
+  'hover:border-cadetblue/30 focus:border-cadetblue/70 focus:ring-2 focus:ring-cadetblue/15 focus:outline-none placeholder:text-gray-400';
+
 function buildSortOptions(t) {
   return [
     { value: 'price-asc', label: t.priceAsc },
@@ -222,7 +232,7 @@ export default function PropertyFilters({
                 <button
                   type="button"
                   onClick={() => setSortOpen((v) => !v)}
-                  className={`inline-flex items-center gap-2 px-4 py-2.5 border rounded-lg transition-colors ${sortOpen ? 'border-graphite bg-gray-50' : 'border-gray-200 hover:border-graphite/50'} text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite`}
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 border rounded-xl transition-all duration-200 shadow-sm ${sortOpen ? 'border-cadetblue bg-cadetblue/5 shadow' : 'border-gray-200/90 hover:border-cadetblue/50 hover:shadow'} text-graphite bg-white focus:ring-2 focus:ring-cadetblue/20 focus:border-cadetblue focus:outline-none`}
                   aria-expanded={sortOpen}
                   aria-haspopup="listbox"
                 >
@@ -234,7 +244,7 @@ export default function PropertyFilters({
                 </button>
                 {sortOpen && (
                   <ul
-                    className="absolute right-0 top-full mt-1 min-w-[200px] py-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                    className="absolute right-0 top-full mt-1.5 min-w-[220px] py-1.5 bg-white border border-gray-200/90 rounded-xl shadow-xl z-50"
                     role="listbox"
                   >
                     {SORT_OPTIONS.map((opt) => (
@@ -247,7 +257,7 @@ export default function PropertyFilters({
                             setSortBy(opt.value);
                             setSortOpen(false);
                           }}
-                          className={`w-full text-left px-4 py-2 text-sm ${sortBy === opt.value ? 'bg-graphite/10 text-graphite font-medium' : 'text-graphite hover:bg-gray-50'}`}
+                          className={`w-full text-left px-4 py-2.5 text-sm rounded-lg mx-1 ${sortBy === opt.value ? 'bg-cadetblue/10 text-cadetblue-dark font-medium' : 'text-graphite hover:bg-cadetblue/5 hover:text-graphite-dark'}`}
                         >
                           {opt.label}
                         </button>
@@ -262,21 +272,21 @@ export default function PropertyFilters({
                 <button
                   type="button"
                   onClick={() => setExtraFiltersOpen((v) => !v)}
-                  className={`inline-flex items-center gap-2 px-4 py-2.5 border rounded-lg transition-colors ${extraFiltersOpen || hasExtraFilters ? 'border-graphite bg-gray-50' : 'border-gray-200 hover:border-graphite/50'} text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite`}
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 border rounded-xl transition-all duration-200 shadow-sm ${extraFiltersOpen || hasExtraFilters ? 'border-cadetblue bg-cadetblue/5 shadow' : 'border-gray-200/90 hover:border-cadetblue/50 hover:shadow'} text-graphite bg-white focus:ring-2 focus:ring-cadetblue/20 focus:border-cadetblue focus:outline-none`}
                   aria-expanded={extraFiltersOpen}
                 >
                   <FunnelIcon className="w-5 h-5 shrink-0" />
                   <span className="hidden sm:inline">{t.filters}</span>
                   {hasExtraFilters && (
-                    <span className="flex items-center justify-center min-w-[18px] h-[18px] px-1 text-xs font-medium rounded-full bg-graphite text-white">
+                    <span className="flex items-center justify-center min-w-[18px] h-[18px] px-1 text-xs font-medium rounded-full bg-cadetblue text-white">
                       !
                     </span>
                   )}
                   <ChevronDownIcon className={`w-4 h-4 shrink-0 transition-transform ${extraFiltersOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {extraFiltersOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-96 rounded-xl border border-gray-200 bg-white shadow-xl z-50 overflow-hidden max-h-[90vh] flex flex-col">
-                    <div className="p-4 bg-gray-50/80 border-b border-gray-100">
+                  <div className="absolute right-0 top-full mt-2 w-96 rounded-2xl border border-gray-200/90 bg-white shadow-xl z-50 overflow-hidden max-h-[90vh] flex flex-col">
+                    <div className="p-4 bg-gradient-to-b from-cadetblue/5 to-transparent border-b border-gray-100">
                       <h3 className="text-sm font-semibold text-graphite">{t.filters}</h3>
                       <p className="text-xs text-graphite-light mt-0.5">{t.filtersSubtitle}</p>
                     </div>
@@ -284,11 +294,11 @@ export default function PropertyFilters({
                       {/* Първи: Тип, Град, Квартал (ако има град), Цена */}
                       <div className="space-y-3 pb-4 border-b border-gray-100">
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.type}</label>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.type}</label>
                           <select
                             value={filters.type ?? ''}
                             onChange={(e) => updateFilter('type', e.target.value)}
-                            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
+                            className={filterSelectClass}
                           >
                             <option value="">{t.allTypes}</option>
                             {propertyTypes.map((t) => (
@@ -299,11 +309,11 @@ export default function PropertyFilters({
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.city}</label>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.city}</label>
                           <select
                             value={filters.city ?? ''}
                             onChange={(e) => updateFilter('city', e.target.value)}
-                            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
+                            className={filterSelectClass}
                           >
                             <option value="">{t.allCities}</option>
                             {cities.map((c) => (
@@ -314,18 +324,14 @@ export default function PropertyFilters({
                           </select>
                         </div>
                         <div>
-                            <label className={`block text-xs font-medium mb-1.5 ${filters.city ? 'text-gray-600' : 'text-gray-400'}`}>
+                            <label className={`block text-xs font-medium mb-1.5 ${filters.city ? 'text-gray-500' : 'text-gray-400'}`}>
                               {t.neighborhood}
                             </label>
                             <select
                               value={filters.neighborhood ?? ''}
                               onChange={(e) => updateFilter('neighborhood', e.target.value)}
                               disabled={!filters.city}
-                              className={`w-full px-3 py-2.5 border rounded-lg transition-colors ${
-                                filters.city
-                                  ? 'border-gray-200 text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite'
-                                  : 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
-                              }`}
+                              className={filters.city ? filterSelectClass : filterSelectDisabledClass}
                             >
                               <option value="">
                                 {filters.city ? t.allNeighborhoods : t.selectCityFirst}
@@ -338,11 +344,11 @@ export default function PropertyFilters({
                             </select>
                           </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.priceLabel}</label>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.priceLabel}</label>
                           <select
                             value={filters.priceRange ?? ''}
                             onChange={(e) => updateFilter('priceRange', e.target.value)}
-                            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
+                            className={filterSelectClass}
                           >
                             {priceRangesStatic.map((r) => (
                               <option key={r.value} value={r.value}>
@@ -353,11 +359,11 @@ export default function PropertyFilters({
                         </div>
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.rooms}</label>
+                        <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.rooms}</label>
                         <select
                           value={filters.rooms ?? ''}
                           onChange={(e) => updateFilter('rooms', e.target.value)}
-                          className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
+                          className={filterSelectClass}
                         >
                           {ROOMS_OPTIONS.map((o) => (
                             <option key={o.value} value={o.value}>
@@ -368,31 +374,31 @@ export default function PropertyFilters({
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.minArea}</label>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.minArea}</label>
                           <input
                             type="number"
                             min="0"
                             placeholder="мин"
                             value={filters.minArea ?? ''}
                             onChange={(e) => updateFilter('minArea', e.target.value)}
-                            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
+                            className={filterInputClass}
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.maxArea}</label>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.maxArea}</label>
                           <input
                             type="number"
                             min="0"
                             placeholder="макс"
                             value={filters.maxArea ?? ''}
                             onChange={(e) => updateFilter('maxArea', e.target.value)}
-                            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
+                            className={filterInputClass}
                           />
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.yearFrom}</label>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.yearFrom}</label>
                           <input
                             type="number"
                             min="1900"
@@ -400,11 +406,11 @@ export default function PropertyFilters({
                             placeholder="напр. 2015"
                             value={filters.yearFrom ?? ''}
                             onChange={(e) => updateFilter('yearFrom', e.target.value)}
-                            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
+                            className={filterInputClass}
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.yearTo}</label>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.yearTo}</label>
                           <input
                             type="number"
                             min="1900"
@@ -412,7 +418,7 @@ export default function PropertyFilters({
                             placeholder="2026"
                             value={filters.yearTo ?? ''}
                             onChange={(e) => updateFilter('yearTo', e.target.value)}
-                            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
+                            className={filterInputClass}
                           />
                         </div>
                       </div>
@@ -422,7 +428,7 @@ export default function PropertyFilters({
                           onClick={() => {
                             clearExtraFilters();
                           }}
-                          className="w-full inline-flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-graphite-light hover:text-graphite border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="w-full inline-flex items-center justify-center gap-2 py-3 text-sm font-medium text-graphite-light hover:text-cadetblue border border-gray-200/90 rounded-xl hover:bg-cadetblue/5 transition-all duration-200"
                         >
                           <XMarkIcon className="w-4 h-4" />
                           {t.clearFilters}

@@ -19,8 +19,22 @@ export default function HeroSection({ locale = 'bg' }) {
           alt={imageAlt}
           className="w-full h-full object-cover"
         />
-        {/* Subtle gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
+        {/* Лек оверлей с бранд цвят – по-ниска непрозрачност, снимката се вижда повече */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(135deg, rgba(0, 151, 178, 0.4) 0%, rgba(0, 120, 150, 0.35) 50%, rgba(0, 0, 0, 0.3) 100%)',
+          }}
+        />
+        {/* Лек контраст отгоре/отдолу за четимост на текста */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 0%, transparent 40%, transparent 60%, rgba(0, 0, 0, 0.15) 100%)',
+          }}
+        />
       </div>
 
       {/* Content - Centered */}

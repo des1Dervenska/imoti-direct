@@ -69,10 +69,21 @@ body {
    Custom Utilities
    =========================================== */
 
+/* Само основните заглавия (h1, h2) – Playfair */
 .font-playfair h1,
-.font-playfair h2,
-.font-playfair h3,
+.font-playfair h2 {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+/* Елементите p винаги с нормален (sans) шрифт */
 .font-playfair p {
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Текстове в навбара – Playfair */
+.font-playfair-nav,
+.font-playfair-nav a,
+.font-playfair-nav span {
   font-family: var(--font-playfair), Georgia, serif;
 }
 

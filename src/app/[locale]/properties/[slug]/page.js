@@ -24,7 +24,6 @@ import {
   MapIcon,
   PhoneIcon,
   EnvelopeIcon,
-  ChatBubbleLeftRightIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 
@@ -284,15 +283,12 @@ export default async function PropertyDetailPage({ params }) {
                       <ContactActionButton href={`tel:${CONTACT_PHONE_LINK}`} icon={PhoneIcon} variant="primary">
                         {CONTACT_PHONE}
                       </ContactActionButton>
-                      <ContactActionButton href={`mailto:${CONTACT_EMAIL}?subject=${contactSubject} ${title}`} icon={EnvelopeIcon} variant="secondary">
-                        {t.sendEmail}
-                      </ContactActionButton>
                       <ContactActionButton
                         href={`${prefix}/contact?subject=consultation&propertyPath=${encodeURIComponent(propertyPath)}`}
-                        icon={ChatBubbleLeftRightIcon}
-                        variant="tertiary"
+                        icon={EnvelopeIcon}
+                        variant="secondary"
                       >
-                        {t.requestViewing}
+                        {t.sendEmail}
                       </ContactActionButton>
                     </div>
                   </div>

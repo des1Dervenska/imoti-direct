@@ -136,7 +136,7 @@ export default function Navbar({ locale = "bg" }) {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-gray-200/80 bg-[#fbf7f4]/95 shadow-sm backdrop-blur-md">
+    <nav className="font-playfair-nav fixed inset-x-0 top-0 z-50 border-b border-gray-200/80 bg-[#fbf7f4]/95 shadow-sm backdrop-blur-md">
       <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-6 py-4">
         <Link
           href={`/${locale}`}

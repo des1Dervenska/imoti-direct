@@ -64,7 +64,7 @@ export default async function Home({ params }) {
   ];
 
   return (
-    <div className="font-playfair">
+    <>
       <HeroSection locale={locale} />
 
       <Section background="white">
@@ -145,6 +145,6 @@ export default async function Home({ params }) {
           </AnimateOnScroll>
         </Container>
       </Section>
-    </div>
+    </>
   );
 }

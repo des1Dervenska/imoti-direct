@@ -25,8 +25,8 @@ export const CONTACT_PERSON = 'Геновева Филева';
 export const CONTACT_PHONE = '0887 803 064';
 export const CONTACT_PHONE_LINK = '+359887803064';
 export const CONTACT_EMAIL = 'genoveva@arthouse94.com';
-export const CONTACT_ADDRESS = 'ж.к. Белите Брези, бл. 4, ап. 37';
-export const CONTACT_ADDRESS_SHORT = 'ж.к. Белите Брези, бл. 4, София';
+export const CONTACT_ADDRESS = 'Бул. България, ж.к. Белите Брези, бл. 4';
+export const CONTACT_ADDRESS_SHORT = 'Бул. България, ж.к. Белите Брези, бл. 4, София';
 export const CONTACT_CITY = 'София, България';
 
 // =============================================================================
@@ -35,7 +35,7 @@ export const CONTACT_CITY = 'София, България';
 
 export const WORKING_HOURS = {
   weekdays: 'Понеделник - Петък: 9:00 - 18:00',
-  saturday: 'Събота: 10:00 - 14:00',
+  saturday: 'Събота: 10:00 - 16:00',
   sunday: 'Неделя: Почивен ден',
 };
 
