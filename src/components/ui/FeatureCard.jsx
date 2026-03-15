@@ -15,7 +15,7 @@
 
 const hoverEffects = {
   lift: 'hover:-translate-y-2 hover:shadow-lg',
-  glow: 'hover:shadow-[0_0_20px_rgba(95,158,160,0.3)]',
+  glow: 'hover:shadow-[0_0_20px_rgba(0,151,178,0.3)]',
   border: 'hover:border-cadetblue',
   none: '',
 };

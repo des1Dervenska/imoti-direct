@@ -14,10 +14,10 @@
   --foreground-strong: #3d4654; /* Headings, emphasis */
   --foreground-muted: #6b7a8f;  /* Secondary text, descriptions */
 
-  /* Accent colors - Cadetblue palette */
-  --accent: #5F9EA0;            /* Buttons, links, badges */
-  --accent-hover: #4a8a8c;      /* Hover states */
-  --accent-light: #7ab8ba;      /* Light variant */
+  /* Accent colors - Teal/Cyan (#0097b2) */
+  --accent: #0097b2;             /* Buttons, links, badges */
+  --accent-hover: #007a91;      /* Hover states */
+  --accent-light: #33a8be;      /* Light variant */
 }
 
 /* Tailwind Theme Integration */
@@ -39,6 +39,7 @@
   /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-playfair: var(--font-playfair);
 }
 
 /* ===========================================
@@ -67,6 +68,13 @@ body {
 /* ===========================================
    Custom Utilities
    =========================================== */
+
+.font-playfair h1,
+.font-playfair h2,
+.font-playfair h3,
+.font-playfair p {
+  font-family: var(--font-playfair), Georgia, serif;
+}
 
 .line-clamp-2 {
   display: -webkit-box;

@@ -12,6 +12,8 @@
  * Sizes: sm, md, lg
  */
 
+import { getTranslations } from '@/lib/translations';
+
 const variants = {
   sale: 'bg-cadetblue text-white',
   rent: 'bg-graphite text-white',
@@ -51,11 +53,11 @@ export default function Badge({
 /**
  * Pre-configured badge for property categories
  */
-Badge.Category = function CategoryBadge({ category, size = 'md', className = '' }) {
-  const labels = {
-    sale: 'Продажба',
-    rent: 'Наем',
-  };
+Badge.Category = function CategoryBadge({ category, size = 'md', className = '', locale }) {
+  const t = locale ? getTranslations(locale)?.property : null;
+  const labels = t
+    ? { sale: t.sale, rent: t.rent }
+    : { sale: 'Продажба', rent: 'Наем' };
 
   return (
     <Badge variant={category} size={size} className={`font-semibold ${className}`}>
@@ -67,12 +69,11 @@ Badge.Category = function CategoryBadge({ category, size = 'md', className = '' 
 /**
  * Pre-configured badge for property types
  */
-Badge.Type = function TypeBadge({ type, size = 'md', className = '' }) {
-  const labels = {
-    apartment: 'Апартамент',
-    house: 'Къща',
-    land: 'Парцел',
-  };
+Badge.Type = function TypeBadge({ type, size = 'md', className = '', locale }) {
+  const t = locale ? getTranslations(locale)?.property : null;
+  const labels = t
+    ? { apartment: t.apartment, house: t.house, land: t.land }
+    : { apartment: 'Апартамент', house: 'Къща', land: 'Парцел' };
 
   return (
     <Badge variant="neutral" size={size} className={className}>

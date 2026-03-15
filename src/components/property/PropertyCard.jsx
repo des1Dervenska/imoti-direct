@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { DEFAULT_PROPERTY_IMAGE, formatPriceEurAndBgn } from '@/lib/constants';
+import { getTranslations } from '@/lib/translations';
 import { ArrowsPointingOutIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { RoomsIcon } from '@/components/icons';
 import { Badge, LinkButton } from '@/components/ui';
 
-// Styles
 const cardStyle = 'bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full';
 const featureStyle = 'flex items-center';
 const featureIconStyle = 'w-4 h-4 mr-1';
@@ -14,7 +14,7 @@ const truncateText = (text, maxLength = 100) => {
   return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
 };
 
-export default function PropertyCard({ property }) {
+export default function PropertyCard({ property, showDescription = true, locale = 'bg' }) {
   const {
     slug,
     title,
@@ -29,14 +29,14 @@ export default function PropertyCard({ property }) {
     images,
   } = property;
 
-  const propertyUrl = `/properties/${slug}`;
+  const t = getTranslations(locale)?.property ?? {};
+  const propertyUrl = locale ? `/${locale}/properties/${slug}` : `/properties/${slug}`;
   const imageUrl = images?.[0] || DEFAULT_PROPERTY_IMAGE;
   const location = neighborhood ? `${neighborhood}, ${city}` : city;
 
-  // Features config (dynamic based on property data)
   const features = [
     { Icon: ArrowsPointingOutIcon, value: `${area} м²`, show: true },
-    { Icon: RoomsIcon, value: `${rooms} стаи`, show: !!rooms },
+    { Icon: RoomsIcon, value: rooms ? `${rooms} ${t.roomsUnit ?? 'стаи'}` : '', show: !!rooms },
   ];
 
   return (
@@ -54,12 +54,12 @@ export default function PropertyCard({ property }) {
 
         {/* Category badge */}
         <div className="absolute top-3 left-3">
-          <Badge.Category category={category} />
+          <Badge.Category category={category} locale={locale} />
         </div>
 
         {/* Type badge */}
         <div className="absolute top-3 right-3">
-          <Badge.Type type={type} />
+          <Badge.Type type={type} locale={locale} />
         </div>
 
         {/* Features overlay */}
@@ -100,16 +100,18 @@ export default function PropertyCard({ property }) {
           <span className="font-medium">{location}</span>
         </div>
 
-        <p className="text-graphite-light text-sm leading-relaxed mb-4 flex-grow">
-          {truncateText(description)}
-        </p>
+        {showDescription && (
+          <p className="text-graphite-light text-sm leading-relaxed mb-4 flex-grow">
+            {truncateText(description)}
+          </p>
+        )}
 
         <LinkButton
           href={propertyUrl}
           variant="accent"
           className="mt-auto w-full justify-center"
         >
-          Виж имота
+          {t.viewProperty ?? 'Виж имота'}
         </LinkButton>
       </div>
     </div>

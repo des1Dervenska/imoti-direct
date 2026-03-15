@@ -76,110 +76,181 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { BRAND_NAME } from "@/lib/constants";
 import Logo from "@/components/ui/Logo";
+import { getTranslations } from "@/lib/translations";
+import { LOCALES } from "@/lib/i18n";
 
-const NAV_LINKS = [
-  { label: "Начало", href: "/" },
-  { label: "Продажби", href: "/sales" },
-  { label: "Наеми", href: "/rent" },
-  { label: "За нас", href: "/about" },
-  { label: "Контакти", href: "/contact" },
-];
+const LOCALE_COOKIE = "NEXT_LOCALE";
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
-const desktopLinkStyle =
-  "relative text-[15px] font-medium text-graphite/90 transition-colors duration-200 hover:text-cadetblue-dark";
+function getDesktopLinkClass(isActive) {
+  const base =
+    "relative py-2.5 text-[17px] font-semibold tracking-tight transition-all duration-300 ease-out";
+  const active =
+    "text-[#0097b2] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-[#0097b2] after:content-['']";
+  const inactive =
+    "text-graphite/85 hover:text-[#0097b2] after:absolute after:left-1/2 after:bottom-0 after:h-0.5 after:w-0 after:rounded-full after:bg-[#0097b2] after:content-[''] after:transition-all after:duration-300 after:ease-out hover:after:left-0 hover:after:right-0 hover:after:w-full";
+  return `${base} ${isActive ? active : inactive}`;
+}
 
-const mobileLinkStyle =
-  "block rounded-lg px-4 py-3 text-base font-medium text-graphite transition-colors hover:bg-gray-100 hover:text-cadetblue-dark";
+function getMobileLinkClass(isActive) {
+  const base = "block rounded-lg px-4 py-3 text-base font-medium transition-colors border-l-4";
+  const active = "border-[#0097b2] bg-[#0097b2]/10 text-[#0097b2]";
+  const inactive = "border-transparent text-graphite hover:bg-gray-100 hover:text-[#0097b2]";
+  return `${base} ${isActive ? active : inactive}`;
+}
 
 const mobileMenuBtnStyle =
   "inline-flex items-center justify-center rounded-lg p-2 text-graphite transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 md:hidden";
 
-export default function Navbar() {
+const navKeys = [
+  { key: "home", href: "" },
+  { key: "sales", href: "sales" },
+  { key: "rent", href: "rent" },
+  { key: "about", href: "about" },
+  { key: "contact", href: "contact" },
+];
+
+function setLocaleCookie(locale) {
+  if (typeof document === "undefined") return;
+  document.cookie = `${LOCALE_COOKIE}=${locale};path=/;max-age=${COOKIE_MAX_AGE};SameSite=Lax`;
+}
+
+export default function Navbar({ locale = "bg" }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const t = getTranslations(locale);
+
+  const navLinks = navKeys.map(({ key, href }) => ({
+    label: t.nav[key],
+    href: href ? `/${locale}/${href}` : `/${locale}`,
+  }));
+
+  const otherLocale = LOCALES.find((l) => l !== locale);
+  const pathWithoutLocale = pathname.replace(/^\/(bg|en)/, "") || "";
+  const switchHref = `/${otherLocale}${pathWithoutLocale}`;
 
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-gray-200/80 bg-[#fbf7f4] backdrop-blur-sm">
-      <div className="mx-auto flex max-w-screen-xl items-center justify-between px-5 py-3">
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-gray-200/80 bg-[#fbf7f4]/95 shadow-sm backdrop-blur-md">
+      <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-6 py-4">
         <Link
-          href="/"
-          className="flex shrink-0 items-center gap-3"
+          href={`/${locale}`}
+          className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-90"
           onClick={closeMenu}
         >
-          <Logo width={34} height={34} priority className="object-contain" />
+          <Logo width={38} height={38} priority className="object-contain" />
           <div className="flex flex-col leading-none">
-            <span className="text-[15px] font-semibold tracking-[0.01em] text-graphite sm:text-lg">
+            <span className="text-base font-semibold tracking-[0.02em] text-graphite sm:text-xl">
               {BRAND_NAME}
             </span>
             <span className="hidden text-[11px] uppercase tracking-[0.22em] text-graphite/55 sm:block">
-              Real Estate
+              {t.brand.taglineSub}
             </span>
           </div>
         </Link>
 
-        <button
-          type="button"
-          className={mobileMenuBtnStyle}
-          aria-controls="navbar-menu"
-          aria-expanded={isMenuOpen}
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-        >
-          <span className="sr-only">
-            {isMenuOpen ? "Затвори менюто" : "Отвори менюто"}
-          </span>
-          {isMenuOpen ? (
-            <XMarkIcon className="h-5 w-5" />
-          ) : (
-            <Bars3Icon className="h-5 w-5" />
-          )}
-        </button>
-
-        <div className="hidden md:block">
-          <ul className="flex items-center gap-8">
-            {NAV_LINKS.map(({ label, href }) => (
-              <li key={href}>
-                <Link href={href} className={desktopLinkStyle}>
-                  {label}
-                </Link>
-              </li>
-            ))}
+        {/* Desktop: nav links – по-големи, подчертаване и цвят #0097b2 при актив/ hover */}
+        <div className="hidden md:flex md:items-center">
+          <ul className="flex items-center gap-10">
+            {navLinks.map(({ label, href }) => {
+              const isActive = pathname === href;
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className={getDesktopLinkClass(isActive)}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
+        </div>
+
+        {/* Right: на тел първо език, най-вдясно иконата за спускане на менюто */}
+        <div className="flex shrink-0 items-center gap-3">
+          <div className="flex items-center gap-0.5 rounded-xl border border-gray-200 bg-white/90 shadow-sm p-1">
+            {LOCALES.map((l) =>
+              l === locale ? (
+                <span
+                  key={l}
+                  className="rounded-lg px-3 py-2 text-sm font-semibold bg-[#0097b2] text-white shadow-sm"
+                  aria-label={l === "bg" ? "Български" : "English"}
+                  aria-current="true"
+                >
+                  {l.toUpperCase()}
+                </span>
+              ) : (
+                <Link
+                  key={l}
+                  href={`/${l}${pathWithoutLocale}`}
+                  onClick={() => setLocaleCookie(l)}
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-graphite/80 hover:bg-[#0097b2]/10 hover:text-[#0097b2] transition-colors duration-200"
+                  aria-label={l === "bg" ? "Български" : "English"}
+                >
+                  {l.toUpperCase()}
+                </Link>
+              )
+            )}
+          </div>
+
+          <button
+            type="button"
+            className={mobileMenuBtnStyle}
+            aria-controls="navbar-menu"
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+          >
+            <span className="sr-only">
+              {isMenuOpen ? t.nav.closeMenu : t.nav.openMenu}
+            </span>
+            {isMenuOpen ? (
+              <XMarkIcon className="h-5 w-5" />
+            ) : (
+              <Bars3Icon className="h-5 w-5" />
+            )}
+          </button>
         </div>
       </div>
 
-      {/* Mobile menu – винаги в DOM за плавна анимация; спуска отгоре надолу / прибира от долу нагоре */}
+      {/* Mobile menu – само навигационни линкове, без избор на език */}
+      <div
+        id="navbar-menu"
+        className={`absolute left-0 right-0 top-full overflow-hidden border-t border-gray-200/80 bg-[#fbf7f4] md:hidden transition-[max-height] duration-300 ease-in-out ${
+          isMenuOpen ? "max-h-[70vh]" : "max-h-0"
+        }`}
+      >
         <div
-          id="navbar-menu"
-          className={`absolute left-0 right-0 top-full overflow-hidden border-t border-gray-200/80 bg-[#fbf7f4] md:hidden transition-[max-height] duration-300 ease-in-out ${
-            isMenuOpen ? "max-h-[70vh]" : "max-h-0"
+          className={`transition-transform duration-300 ease-in-out ${
+            isMenuOpen ? "translate-y-0" : "-translate-y-full"
           }`}
         >
-          <div
-            className={`transition-transform duration-300 ease-in-out ${
-              isMenuOpen ? "translate-y-0" : "-translate-y-full"
-            }`}
-          >
-            <div className="mx-auto max-w-screen-xl px-5 py-3">
-              <ul className="space-y-1">
-                {NAV_LINKS.map(({ label, href }) => (
+          <div className="mx-auto max-w-screen-xl px-5 py-3">
+            <ul className="space-y-1">
+              {navLinks.map(({ label, href }) => {
+                const isActive = pathname === href;
+                return (
                   <li key={href}>
                     <Link
                       href={href}
-                      className={mobileLinkStyle}
+                      className={getMobileLinkClass(isActive)}
                       onClick={closeMenu}
                     >
                       {label}
                     </Link>
                   </li>
-                ))}
-              </ul>
-            </div>
+                );
+              })}
+            </ul>
           </div>
         </div>
+      </div>
     </nav>
   );
 }

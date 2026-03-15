@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import ContactContent from './ContactContent';
+import ContactContent from '@/app/contact/ContactContent';
 import { Section, Container, Card } from '@/components/ui';
 
 function LoadingFallback() {
@@ -57,10 +57,11 @@ function LoadingFallback() {
   );
 }
 
-export default function ContactPage() {
+export default async function ContactPage({ params }) {
+  const { locale } = await params;
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ContactContent />
+      <ContactContent locale={locale} />
     </Suspense>
   );
 }

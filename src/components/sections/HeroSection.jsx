@@ -1,10 +1,14 @@
 'use client';
 
 import { heroConfig } from '@/lib/hero.config';
+import { getTranslations } from '@/lib/translations';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
 
-export default function HeroSection() {
+export default function HeroSection({ locale = 'bg' }) {
   const { image, content } = heroConfig;
+  const t = getTranslations(locale)?.hero;
+  const tagline = t?.tagline ?? content.tagline;
+  const imageAlt = t?.imageAlt ?? image.alt;
 
   return (
     <section className="relative h-[90vh] min-h-[600px] max-h-[900px]">
@@ -12,7 +16,7 @@ export default function HeroSection() {
       <div className="absolute inset-0">
         <img
           src={image.src}
-          alt={image.alt}
+          alt={imageAlt}
           className="w-full h-full object-cover"
         />
         {/* Subtle gradient overlay for text readability */}
@@ -32,7 +36,7 @@ export default function HeroSection() {
 
           {/* Tagline */}
           <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-[0.15em] drop-shadow-md">
-            {content.tagline.join(' ')}
+            {Array.isArray(tagline) ? tagline.join(' ') : content.tagline.join(' ')}
           </p>
         </div>
       </div>

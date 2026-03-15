@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import PropertyGrid from './PropertyGrid';
 import { propertyTypes, cities } from '@/data/properties';
+import { getTranslations } from '@/lib/translations';
 import {
   FunnelIcon,
   ArrowsUpDownIcon,
@@ -10,51 +11,64 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 
-const selectStyle =
-  'px-4 py-2.5 border border-gray-200 rounded-lg text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite cursor-pointer transition-colors hover:border-graphite/50';
 const countStyle = 'text-graphite-light';
 const countNumber = 'font-semibold text-graphite';
 
-const SALE_PRICE_RANGES = [
-  { value: '', label: 'Всички цени' },
-  { value: '0-50000', label: 'До 50 000 EUR', min: 0, max: 50000 },
-  { value: '50000-100000', label: '50 000 - 100 000 EUR', min: 50000, max: 100000 },
-  { value: '100000-200000', label: '100 000 - 200 000 EUR', min: 100000, max: 200000 },
-  { value: '200000+', label: 'Над 200 000 EUR', min: 200000, max: Infinity },
-];
+function buildSortOptions(t) {
+  return [
+    { value: 'price-asc', label: t.priceAsc },
+    { value: 'price-desc', label: t.priceDesc },
+    { value: 'area-asc', label: t.areaAsc },
+    { value: 'area-desc', label: t.areaDesc },
+    { value: 'date-desc', label: t.dateDesc },
+    { value: 'date-asc', label: t.dateAsc },
+    { value: 'title-asc', label: t.titleAsc },
+  ];
+}
 
-const RENT_PRICE_RANGES = [
-  { value: '', label: 'Всички цени' },
-  { value: '0-500', label: 'До 500 EUR/месец', min: 0, max: 500 },
-  { value: '500-1000', label: '500 - 1000 EUR/месец', min: 500, max: 1000 },
-  { value: '1000-2000', label: '1000 - 2000 EUR/месец', min: 1000, max: 2000 },
-  { value: '2000+', label: 'Над 2000 EUR/месец', min: 2000, max: Infinity },
-];
+function buildRoomsOptions(t) {
+  return [
+    { value: '', label: t.roomsAny },
+    { value: '1', label: t.rooms1 },
+    { value: '2', label: t.rooms2 },
+    { value: '3', label: t.rooms3 },
+    { value: '4', label: t.rooms4 },
+  ];
+}
 
-const SORT_OPTIONS = [
-  { value: 'price-asc', label: 'По цена (възходящо)' },
-  { value: 'price-desc', label: 'По цена (низходящо)' },
-  { value: 'area-asc', label: 'По площ (възходящо)' },
-  { value: 'area-desc', label: 'По площ (низходящо)' },
-  { value: 'date-desc', label: 'По дата (най-нови)' },
-  { value: 'date-asc', label: 'По дата (най-стари)' },
-  { value: 'title-asc', label: 'По име (А-Я)' },
-];
+function buildSalePriceRanges(t) {
+  return [
+    { value: '', label: t.allPrices },
+    { value: '0-50000', label: t.priceUpTo50k, min: 0, max: 50000 },
+    { value: '50000-100000', label: t.price50to100, min: 50000, max: 100000 },
+    { value: '100000-200000', label: t.price100to200, min: 100000, max: 200000 },
+    { value: '200000+', label: t.price200plus, min: 200000, max: Infinity },
+  ];
+}
 
-const ROOMS_OPTIONS = [
-  { value: '', label: 'Няма значение' },
-  { value: '1', label: '1 стая' },
-  { value: '2', label: '2 стаи' },
-  { value: '3', label: '3 стаи' },
-  { value: '4', label: '4+ стаи' },
-];
+function buildRentPriceRanges(t) {
+  return [
+    { value: '', label: t.allPrices },
+    { value: '0-500', label: t.rentUpTo500, min: 0, max: 500 },
+    { value: '500-1000', label: t.rent500to1000, min: 500, max: 1000 },
+    { value: '1000-2000', label: t.rent1000to2000, min: 1000, max: 2000 },
+    { value: '2000+', label: t.rent2000plus, min: 2000, max: Infinity },
+  ];
+}
 
 export default function PropertyFilters({
   properties,
   emptyMessage = 'Няма намерени имоти',
   category = 'sale',
   animateCards = false,
+  locale = 'bg',
 }) {
+  const t = getTranslations(locale).filters;
+  const SORT_OPTIONS = useMemo(() => buildSortOptions(t), [locale]);
+  const ROOMS_OPTIONS = useMemo(() => buildRoomsOptions(t), [locale]);
+  const SALE_PRICE_RANGES = useMemo(() => buildSalePriceRanges(t), [locale]);
+  const RENT_PRICE_RANGES = useMemo(() => buildRentPriceRanges(t), [locale]);
+  const priceRangesStatic = category === 'rent' ? RENT_PRICE_RANGES : SALE_PRICE_RANGES;
   const [filters, setFilters] = useState({
     type: '',
     city: '',
@@ -80,8 +94,6 @@ export default function PropertyFilters({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const priceRanges = category === 'rent' ? RENT_PRICE_RANGES : SALE_PRICE_RANGES;
 
   const updateFilter = (key, value) => {
     setFilters((prev) => {
@@ -132,7 +144,7 @@ export default function PropertyFilters({
       if (filters.city && property.city !== filters.city) return false;
       if (filters.neighborhood && property.neighborhood !== filters.neighborhood) return false;
       if (filters.priceRange) {
-        const range = priceRanges.find((r) => r.value === filters.priceRange);
+        const range = priceRangesStatic.find((r) => r.value === filters.priceRange);
         if (range && (property.price < range.min || property.price > range.max)) return false;
       }
       if (filters.rooms) {
@@ -191,9 +203,9 @@ export default function PropertyFilters({
     }
 
     return list;
-  }, [properties, filters, priceRanges, sortBy]);
+  }, [properties, filters, priceRangesStatic, sortBy]);
 
-  const currentSortLabel = SORT_OPTIONS.find((o) => o.value === sortBy)?.label ?? 'Сортиране';
+  const currentSortLabel = SORT_OPTIONS.find((o) => o.value === sortBy)?.label ?? t.sort;
 
   return (
     <>
@@ -202,7 +214,7 @@ export default function PropertyFilters({
           <div className="flex flex-wrap gap-4 items-center justify-end">
             <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
               <div className={`${countStyle} shrink-0`}>
-                <span className={countNumber}>{filteredProperties.length}</span> намерени имота
+                <span className={countNumber}>{filteredProperties.length}</span> {t.foundCount}
               </div>
               <div className="flex flex-wrap gap-3 items-center justify-end">
               {/* Сортиране – По дата (най-нови) */}
@@ -254,7 +266,7 @@ export default function PropertyFilters({
                   aria-expanded={extraFiltersOpen}
                 >
                   <FunnelIcon className="w-5 h-5 shrink-0" />
-                  <span className="hidden sm:inline">Филтри</span>
+                  <span className="hidden sm:inline">{t.filters}</span>
                   {hasExtraFilters && (
                     <span className="flex items-center justify-center min-w-[18px] h-[18px] px-1 text-xs font-medium rounded-full bg-graphite text-white">
                       !
@@ -265,20 +277,20 @@ export default function PropertyFilters({
                 {extraFiltersOpen && (
                   <div className="absolute right-0 top-full mt-2 w-96 rounded-xl border border-gray-200 bg-white shadow-xl z-50 overflow-hidden max-h-[90vh] flex flex-col">
                     <div className="p-4 bg-gray-50/80 border-b border-gray-100">
-                      <h3 className="text-sm font-semibold text-graphite">Филтри</h3>
-                      <p className="text-xs text-graphite-light mt-0.5">Тип, град, цена, стаи, площ и година</p>
+                      <h3 className="text-sm font-semibold text-graphite">{t.filters}</h3>
+                      <p className="text-xs text-graphite-light mt-0.5">{t.filtersSubtitle}</p>
                     </div>
                     <div className="p-4 space-y-4 overflow-y-auto">
                       {/* Първи: Тип, Град, Квартал (ако има град), Цена */}
                       <div className="space-y-3 pb-4 border-b border-gray-100">
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">Тип</label>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.type}</label>
                           <select
                             value={filters.type ?? ''}
                             onChange={(e) => updateFilter('type', e.target.value)}
                             className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
                           >
-                            <option value="">Всички типове</option>
+                            <option value="">{t.allTypes}</option>
                             {propertyTypes.map((t) => (
                               <option key={t.value} value={t.value}>
                                 {t.label}
@@ -287,13 +299,13 @@ export default function PropertyFilters({
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">Град</label>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.city}</label>
                           <select
                             value={filters.city ?? ''}
                             onChange={(e) => updateFilter('city', e.target.value)}
                             className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
                           >
-                            <option value="">Всички градове</option>
+                            <option value="">{t.allCities}</option>
                             {cities.map((c) => (
                               <option key={c.value} value={c.value}>
                                 {c.label}
@@ -303,7 +315,7 @@ export default function PropertyFilters({
                         </div>
                         <div>
                             <label className={`block text-xs font-medium mb-1.5 ${filters.city ? 'text-gray-600' : 'text-gray-400'}`}>
-                              Квартал
+                              {t.neighborhood}
                             </label>
                             <select
                               value={filters.neighborhood ?? ''}
@@ -316,7 +328,7 @@ export default function PropertyFilters({
                               }`}
                             >
                               <option value="">
-                                {filters.city ? 'Всички квартали' : 'Изберете град първо'}
+                                {filters.city ? t.allNeighborhoods : t.selectCityFirst}
                               </option>
                               {neighborhoodsInCity.map((nb) => (
                                 <option key={nb} value={nb}>
@@ -326,13 +338,13 @@ export default function PropertyFilters({
                             </select>
                           </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">Цена</label>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.priceLabel}</label>
                           <select
                             value={filters.priceRange ?? ''}
                             onChange={(e) => updateFilter('priceRange', e.target.value)}
                             className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-graphite bg-white focus:ring-2 focus:ring-graphite/20 focus:border-graphite transition-colors"
                           >
-                            {priceRanges.map((r) => (
+                            {priceRangesStatic.map((r) => (
                               <option key={r.value} value={r.value}>
                                 {r.label}
                               </option>
@@ -341,7 +353,7 @@ export default function PropertyFilters({
                         </div>
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Стаи</label>
+                        <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.rooms}</label>
                         <select
                           value={filters.rooms ?? ''}
                           onChange={(e) => updateFilter('rooms', e.target.value)}
@@ -356,7 +368,7 @@ export default function PropertyFilters({
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">Площ от (m²)</label>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.minArea}</label>
                           <input
                             type="number"
                             min="0"
@@ -367,7 +379,7 @@ export default function PropertyFilters({
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">Площ до (m²)</label>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.maxArea}</label>
                           <input
                             type="number"
                             min="0"
@@ -380,7 +392,7 @@ export default function PropertyFilters({
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">Година от</label>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.yearFrom}</label>
                           <input
                             type="number"
                             min="1900"
@@ -392,7 +404,7 @@ export default function PropertyFilters({
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1.5">Година до</label>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">{t.yearTo}</label>
                           <input
                             type="number"
                             min="1900"
@@ -413,7 +425,7 @@ export default function PropertyFilters({
                           className="w-full inline-flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-graphite-light hover:text-graphite border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                         >
                           <XMarkIcon className="w-4 h-4" />
-                          Изчисти филтри
+                          {t.clearFilters}
                         </button>
                       )}
                     </div>
@@ -432,6 +444,8 @@ export default function PropertyFilters({
             properties={filteredProperties}
             emptyMessage={emptyMessage}
             animateCards={animateCards}
+            showDescription={false}
+            locale={locale}
           />
         </div>
       </section>

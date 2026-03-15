@@ -36,7 +36,7 @@ function buildSlides(properties, isMobile) {
   return slides;
 }
 
-export default function PropertyCarousel({ properties = [] }) {
+export default function PropertyCarousel({ properties = [], locale = 'bg' }) {
   const isMobile = useIsMobile();
   const slides = buildSlides(properties, isMobile);
   const slideCount = Math.max(1, slides.length);
@@ -74,7 +74,7 @@ export default function PropertyCarousel({ properties = [] }) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {properties.map((property) => (
-          <PropertyCard key={property.id} property={property} />
+          <PropertyCard key={property.id} property={property} locale={locale} />
         ))}
       </div>
     );
@@ -120,7 +120,7 @@ export default function PropertyCarousel({ properties = [] }) {
             >
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-1">
                 {slideProperties.map((property) => (
-                  <PropertyCard key={property.id} property={property} />
+                  <PropertyCard key={property.id} property={property} locale={locale} />
                 ))}
               </div>
             </div>

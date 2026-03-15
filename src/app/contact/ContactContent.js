@@ -13,6 +13,7 @@ import {
   WORKING_HOURS,
   GOOGLE_MAPS_SEARCH_URL,
 } from '@/lib/constants';
+import { getTranslations } from '@/lib/translations';
 import { Section, Container, Card, Button, AnimateOnScroll } from '@/components/ui';
 import {
   MapPinIcon,
@@ -25,64 +26,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { FacebookIcon } from '@/components/icons';
 
-// Config: Contact info items
-const CONTACT_INFO = [
-  {
-    icon: MapPinIcon,
-    title: 'Адрес',
-    content: (
-      <>
-        {CONTACT_ADDRESS}<br />
-        {CONTACT_CITY}
-      </>
-    ),
-  },
-  {
-    icon: PhoneIcon,
-    title: 'Телефон',
-    content: (
-      <a href={`tel:${CONTACT_PHONE_LINK}`} className="hover:text-graphite transition-colors">
-        {CONTACT_PHONE}
-      </a>
-    ),
-  },
-  {
-    icon: EnvelopeIcon,
-    title: 'Имейл',
-    content: (
-      <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-graphite transition-colors">
-        {CONTACT_EMAIL}
-      </a>
-    ),
-  },
-  {
-    icon: ClockIcon,
-    title: 'Работно време',
-    content: (
-      <>
-        <span className="block">{WORKING_HOURS.weekdays}</span>
-        <span className="block">{WORKING_HOURS.saturday}</span>
-        <span className="block">{WORKING_HOURS.sunday}</span>
-      </>
-    ),
-  },
-];
-
-// Config: Social links
 const SOCIAL_LINKS = [
   { icon: FacebookIcon, href: 'https://www.facebook.com/profile.php?id=61580202105400', label: 'Facebook' },
-];
-
-// Config: Subject options
-const SUBJECT_OPTIONS = [
-  { value: '', label: 'Изберете тема' },
-  { value: 'buy', label: 'Искам да купя имот' },
-  { value: 'sell', label: 'Искам да продам имот' },
-  { value: 'rent', label: 'Търся имот под наем' },
-  { value: 'rent-out', label: 'Искам да отдам имот под наем' },
-  { value: 'evaluation', label: 'Оценка на имот' },
-  { value: 'consultation', label: 'Консултация' },
-  { value: 'other', label: 'Друго' },
 ];
 
 // Styles
@@ -117,19 +62,72 @@ function SocialLink({ icon: Icon, href, label }) {
   );
 }
 
-// Helper: Success message
-function SuccessMessage() {
+function SuccessMessage({ message }) {
   return (
     <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center">
       <CheckCircleIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
-      <span className="text-green-800">
-        Благодарим ви! Вашето съобщение беше изпратено успешно. Ще се свържем с вас скоро.
-      </span>
+      <span className="text-green-800">{message}</span>
     </div>
   );
 }
 
-export default function ContactContent() {
+export default function ContactContent({ locale = 'bg' }) {
+  const t = getTranslations(locale).contact;
+  const prefix = `/${locale}`;
+
+  const contactInfoItems = [
+    {
+      icon: MapPinIcon,
+      title: t.address,
+      content: (
+        <>
+          {CONTACT_ADDRESS}<br />
+          {CONTACT_CITY}
+        </>
+      ),
+    },
+    {
+      icon: PhoneIcon,
+      title: t.phone,
+      content: (
+        <a href={`tel:${CONTACT_PHONE_LINK}`} className="hover:text-graphite transition-colors">
+          {CONTACT_PHONE}
+        </a>
+      ),
+    },
+    {
+      icon: EnvelopeIcon,
+      title: t.email,
+      content: (
+        <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-graphite transition-colors">
+          {CONTACT_EMAIL}
+        </a>
+      ),
+    },
+    {
+      icon: ClockIcon,
+      title: t.workingHours,
+      content: (
+        <>
+          <span className="block">{WORKING_HOURS.weekdays}</span>
+          <span className="block">{WORKING_HOURS.saturday}</span>
+          <span className="block">{WORKING_HOURS.sunday}</span>
+        </>
+      ),
+    },
+  ];
+
+  const subjectOptions = [
+    { value: '', label: t.selectSubject },
+    { value: 'buy', label: t.subjectBuy },
+    { value: 'sell', label: t.subjectSell },
+    { value: 'rent', label: t.subjectRent },
+    { value: 'rent-out', label: t.subjectRentOut },
+    { value: 'evaluation', label: t.subjectEvaluation },
+    { value: 'consultation', label: t.subjectConsultation },
+    { value: 'other', label: t.subjectOther },
+  ];
+
   const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     name: '',
@@ -140,6 +138,8 @@ export default function ContactContent() {
     privacyConsent: false,
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   useEffect(() => {
     const subject = searchParams.get('subject');
@@ -150,7 +150,7 @@ export default function ContactContent() {
         if (propertyPath && typeof window !== 'undefined') {
           const path = propertyPath.startsWith('/') ? propertyPath : `/${propertyPath}`;
           const fullUrl = `${window.location.origin}${path}`;
-          message = `Имот: ${fullUrl}\n\nЖелая да проведем оглед на гореспоменатия обект`;
+          message = `${t.propertyInquiry} ${fullUrl}\n\n${t.propertyInquirySuffix}`;
         }
         return {
           ...prev,
@@ -159,7 +159,7 @@ export default function ContactContent() {
         };
       });
     }
-  }, [searchParams]);
+  }, [searchParams, locale]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -169,19 +169,43 @@ export default function ContactContent() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.privacyConsent) return;
-    setIsSubmitted(true);
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: '',
-      privacyConsent: false,
-    });
-    setTimeout(() => setIsSubmitted(false), 5000);
+    setSubmitError(null);
+    setIsSending(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || '',
+          subject: formData.subject || '',
+          message: formData.message,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setSubmitError(data.error || (locale === 'en' ? 'Failed to send. Try again.' : 'Неуспешно изпращане. Опитайте отново.'));
+        return;
+      }
+      setIsSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: '',
+        privacyConsent: false,
+      });
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } catch {
+      setSubmitError(locale === 'en' ? 'Network error. Try again.' : 'Грешка при изпращане. Опитайте отново.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -190,9 +214,9 @@ export default function ContactContent() {
       <Section background="white" padding="md" className="pt-8">
         <Container>
           <AnimateOnScroll direction="down" className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-cadetblue mb-3 tracking-wide [text-shadow:0_1px_2px_rgba(95,158,160,0.25)]">Контакти</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-cadetblue mb-3 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{t.title}</h1>
             <p className="text-graphite-light max-w-xl mx-auto">
-              Свържете се с нас - ще се радваме да отговорим на вашите въпроси
+              {t.subtitle}
             </p>
           </AnimateOnScroll>
         </Container>
@@ -205,17 +229,17 @@ export default function ContactContent() {
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Contact Info */}
             <div className="lg:col-span-1">
-              <h2 className="text-2xl font-bold text-graphite mb-6">Информация за контакт</h2>
+              <h2 className="text-2xl font-bold text-graphite mb-6">{t.contactInfoTitle}</h2>
 
               <div className="space-y-6">
-                {CONTACT_INFO.map((item) => (
+                {contactInfoItems.map((item) => (
                   <ContactInfoItem key={item.title} {...item} />
                 ))}
               </div>
 
               {/* Social Links */}
               <div className="mt-8 pt-8 border-t">
-                <h3 className="font-semibold text-graphite mb-4">Последвайте ни</h3>
+                <h3 className="font-semibold text-graphite mb-4">{t.followUs}</h3>
                 <div className="flex space-x-4">
                   {SOCIAL_LINKS.map((link) => (
                     <SocialLink key={link.label} {...link} />
@@ -227,17 +251,22 @@ export default function ContactContent() {
             {/* Contact Form */}
             <div className="lg:col-span-2">
               <Card className="p-8">
-                <h2 className="text-2xl font-bold text-graphite mb-2">Изпратете запитване</h2>
+                <h2 className="text-2xl font-bold text-graphite mb-2">{t.formTitle}</h2>
                 <p className="text-graphite-light mb-6">
-                  Попълнете формата и ние ще се свържем с вас възможно най-скоро.
+                  {t.formSubtitle}
                 </p>
 
-                {isSubmitted && <SuccessMessage />}
+                {isSubmitted && <SuccessMessage message={t.successMessage} />}
+                {submitError && (
+                  <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center text-red-800 text-sm">
+                    {submitError}
+                  </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="name" className={labelStyle}>Вашето име *</label>
+                      <label htmlFor="name" className={labelStyle}>{t.yourName}</label>
                       <input
                         type="text"
                         id="name"
@@ -246,11 +275,11 @@ export default function ContactContent() {
                         onChange={handleChange}
                         required
                         className={inputStyle}
-                        placeholder="Иван Иванов"
+                        placeholder={t.placeholderName}
                       />
                     </div>
                     <div>
-                      <label htmlFor="email" className={labelStyle}>Имейл адрес *</label>
+                      <label htmlFor="email" className={labelStyle}>{t.emailAddress}</label>
                       <input
                         type="email"
                         id="email"
@@ -259,14 +288,14 @@ export default function ContactContent() {
                         onChange={handleChange}
                         required
                         className={inputStyle}
-                        placeholder="ivan@example.com"
+                        placeholder={t.placeholderEmail}
                       />
                     </div>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="phone" className={labelStyle}>Телефон</label>
+                      <label htmlFor="phone" className={labelStyle}>{t.phone}</label>
                       <input
                         type="tel"
                         id="phone"
@@ -274,11 +303,11 @@ export default function ContactContent() {
                         value={formData.phone}
                         onChange={handleChange}
                         className={inputStyle}
-                        placeholder="+359 888 123 456"
+                        placeholder={t.placeholderPhone}
                       />
                     </div>
                     <div>
-                      <label htmlFor="subject" className={labelStyle}>Относно *</label>
+                      <label htmlFor="subject" className={labelStyle}>{t.subject}</label>
                       <select
                         id="subject"
                         name="subject"
@@ -287,7 +316,7 @@ export default function ContactContent() {
                         required
                         className={`${inputStyle} bg-white`}
                       >
-                        {SUBJECT_OPTIONS.map((option) => (
+                        {subjectOptions.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
                           </option>
@@ -297,7 +326,7 @@ export default function ContactContent() {
                   </div>
 
                   <div>
-                    <label htmlFor="message" className={labelStyle}>Вашето съобщение *</label>
+                    <label htmlFor="message" className={labelStyle}>{t.yourMessage}</label>
                     <textarea
                       id="message"
                       name="message"
@@ -306,7 +335,7 @@ export default function ContactContent() {
                       required
                       rows={5}
                       className={`${inputStyle} resize-none`}
-                      placeholder="Опишете какво търсите или с какво можем да ви помогнем..."
+                      placeholder={t.placeholderMessage}
                     />
                   </div>
 
@@ -322,9 +351,9 @@ export default function ContactContent() {
                       aria-describedby="privacyConsent-desc"
                     />
                     <label id="privacyConsent-desc" htmlFor="privacyConsent" className="text-sm text-gray-700">
-                      Съгласен/а съм личните ми данни (име, имейл, телефон и съобщение) да бъдат обработвани за отговор на запитването ми, съгласно{' '}
-                      <Link href="/privacy" className="text-graphite font-medium hover:underline">Политиката за поверителност</Link>
-                      {' '}и Регламент (ЕС) 2016/679 (GDPR). Разбирам, че имам право на достъп, поправка и изтриване на данните си. *
+                      {t.privacyConsent}{' '}
+                      <Link href={`${prefix}/privacy`} className="text-graphite font-medium hover:underline">{t.privacyPolicy}</Link>
+                      {' '}{t.andGdpr}
                     </label>
                   </div>
 
@@ -333,10 +362,10 @@ export default function ContactContent() {
                       type="submit"
                       variant="accent"
                       className="w-full md:w-auto"
-                      disabled={!formData.privacyConsent}
+                      disabled={!formData.privacyConsent || isSending}
                     >
                       <PaperAirplaneIcon className="w-5 h-5 mr-2" />
-                      Изпрати съобщението
+                      {isSending ? (locale === 'en' ? 'Sending…' : 'Изпращане…') : t.sendMessage}
                     </Button>
                   </div>
                 </form>
@@ -352,7 +381,7 @@ export default function ContactContent() {
         <Container>
           <AnimateOnScroll direction="down">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-graphite mb-2">Къде да ни намерите</h2>
+            <h2 className="text-2xl font-bold text-graphite mb-2">{t.whereToFind}</h2>
             <p className="text-graphite-light">{CONTACT_ADDRESS_SHORT}</p>
           </div>
           </AnimateOnScroll>
@@ -368,7 +397,7 @@ export default function ContactContent() {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Локация на офиса"
+              title={t.mapTitle}
             />
           </div>
           <a
@@ -377,7 +406,7 @@ export default function ContactContent() {
             rel="noopener noreferrer"
             className="inline-flex items-center mt-4 text-graphite hover:text-graphite-dark font-medium"
           >
-            Отвори в Google Maps
+            {t.openInMaps}
             <ArrowTopRightOnSquareIcon className="w-4 h-4 ml-1" />
           </a>
           </AnimateOnScroll>
