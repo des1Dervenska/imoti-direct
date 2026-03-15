@@ -4,9 +4,9 @@ import { HomeIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 export default function PropertyNotFound() {
   return (
     <section className="min-h-[60vh] flex items-center justify-center bg-gray-50">
-      <div className="text-center px-4">
-        <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-          <HomeIcon className="w-12 h-12 text-gray-400" />
+      <div className="text-center px-4 group">
+        <div className="w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center mx-auto mb-6 transition-colors duration-300 group-hover:bg-cadetblue/25">
+          <HomeIcon className="w-6 h-6 text-graphite" />
         </div>
 
         <h1 className="text-3xl font-bold text-gray-900 mb-4">

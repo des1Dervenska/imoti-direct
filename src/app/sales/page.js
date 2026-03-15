@@ -17,8 +17,8 @@ export default async function SalesPage() {
       {/* Page Header */}
       <Section background="white" padding="md" className="pt-8">
         <Container>
-          <AnimateOnScroll className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-graphite mb-3">
+          <AnimateOnScroll direction="down" className="text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-cadetblue mb-3 tracking-wide [text-shadow:0_1px_2px_rgba(95,158,160,0.25)]">
               Имоти за продажба
             </h1>
             <p className="text-graphite-light max-w-xl mx-auto">
@@ -28,19 +28,17 @@ export default async function SalesPage() {
         </Container>
       </Section>
 
-      {/* Filters & Grid */}
-      <AnimateOnScroll>
-        <PropertyFilters
-          properties={properties}
-          emptyMessage="Няма намерени имоти за продажба"
-          animateCards
-        />
-      </AnimateOnScroll>
+      {/* Filters & Grid – без AnimateOnScroll, за да работи sticky тулбарът при скрол */}
+      <PropertyFilters
+        properties={properties}
+        emptyMessage="Няма намерени имоти за продажба"
+        animateCards
+      />
 
       {/* CTA Section */}
       <Section background="white" padding="md">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="up">
             <Card variant="outlined" className="bg-gray-50 p-8 md:p-12 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-graphite mb-4">
               Не намирате подходящ имот?

@@ -24,10 +24,8 @@ import {
   PhoneIcon,
   EnvelopeIcon,
   ChatBubbleLeftRightIcon,
-  ClipboardIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
-import { FacebookIcon } from '@/components/icons';
 
 // Config: Labels
 const TYPE_LABELS = { apartment: 'Апартамент', house: 'Къща', land: 'Парцел' };
@@ -63,8 +61,8 @@ function Breadcrumb({ category, title }) {
 // Helper: Key detail item
 function KeyDetailItem({ icon: Icon, value, label }) {
   return (
-    <div className="text-center">
-      <div className="w-12 h-12 bg-graphite/10 rounded-full flex items-center justify-center mx-auto mb-2">
+    <div className="text-center group">
+      <div className="w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors duration-300 group-hover:bg-cadetblue/25">
         <Icon className="w-6 h-6 text-graphite" />
       </div>
       <div className="text-xl font-bold text-graphite">{value}</div>
@@ -103,15 +101,6 @@ function ContactActionButton({ href, icon: Icon, children, variant = 'primary' }
       <Icon className="w-5 h-5 mr-2" />
       {children}
     </Component>
-  );
-}
-
-// Helper: Share button
-function ShareButton({ icon: Icon, hoverColor = 'hover:bg-graphite' }) {
-  return (
-    <button className={`w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-graphite-light ${hoverColor} hover:text-white transition-colors`}>
-      <Icon className="w-5 h-5" />
-    </button>
   );
 }
 
@@ -169,13 +158,14 @@ export default async function PropertyDetailPage({ params }) {
   ].filter(item => item.show);
 
   const location = neighborhood ? `${neighborhood}, ${city}` : city;
+  const mapQuery = [address, neighborhood, city].filter(Boolean).join(', ');
 
   return (
     <>
       {/* Breadcrumb */}
       <Section background="light" padding="sm">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="down">
             <Breadcrumb category={category} title={title} />
           </AnimateOnScroll>
         </Container>
@@ -184,7 +174,7 @@ export default async function PropertyDetailPage({ params }) {
       {/* Main Content */}
       <Section background="white" padding="md">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="up">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Left Column - Main Content */}
             <div className="lg:col-span-2 space-y-8">
@@ -200,7 +190,7 @@ export default async function PropertyDetailPage({ params }) {
               {/* Title and Price - Mobile */}
               <div className="lg:hidden">
                 <LocationText neighborhood={neighborhood} city={city} />
-                <h1 className="text-2xl font-bold text-graphite mb-3 mt-2">{title}</h1>
+                <h1 className="text-2xl font-bold text-cadetblue mb-3 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(95,158,160,0.25)]">{title}</h1>
                 <div className="text-graphite">
                   <span className="text-3xl font-bold">{formatPriceEurAndBgn(price, category).eurText}</span>
                   <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
@@ -249,16 +239,36 @@ export default async function PropertyDetailPage({ params }) {
                     </div>
                   </div>
 
-                  {/* Map Placeholder */}
-                  <div className="bg-gray-200 rounded-lg h-48 flex items-center justify-center mb-4">
-                    <div className="text-center text-gray-500">
-                      <MapIcon className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                      <p>Карта на местоположението</p>
+                  {/* Карта на местоположението */}
+                  {mapQuery ? (
+                    <div className="rounded-lg overflow-hidden h-48 md:h-64 bg-gray-200 mb-4">
+                      <iframe
+                        src={`https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Местоположение на имота"
+                      />
                     </div>
-                  </div>
+                  ) : (
+                    <div className="bg-gray-200 rounded-lg h-48 flex items-center justify-center mb-4">
+                      <div className="text-center text-gray-500">
+                        <MapIcon className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                        <p>Карта на местоположението</p>
+                      </div>
+                    </div>
+                  )}
 
-                  {mapUrl && (
-                    <LinkButton href={mapUrl} variant="primary" target="_blank">
+                  {(mapUrl || mapQuery) && (
+                    <LinkButton
+                      href={mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`}
+                      variant="primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <MapIcon className="w-5 h-5 mr-2" />
                       Виж на картата
                     </LinkButton>
@@ -273,7 +283,7 @@ export default async function PropertyDetailPage({ params }) {
                 {/* Price Card - Desktop */}
                 <Card className="hidden lg:block p-6">
                   <LocationText neighborhood={neighborhood} city={city} />
-                  <h1 className="text-xl font-bold text-graphite mb-4 mt-2">{title}</h1>
+                  <h1 className="text-xl font-bold text-cadetblue mb-4 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(95,158,160,0.25)]">{title}</h1>
                   <div className="mb-4">
                     <span className="text-3xl font-bold text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
                     <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
@@ -284,12 +294,12 @@ export default async function PropertyDetailPage({ params }) {
                 </Card>
 
                 {/* Contact Card */}
-                <div className="bg-graphite/5 border border-graphite/10 rounded-2xl p-6">
+                <div className="bg-graphite/5 border border-graphite/10 rounded-2xl p-6 group">
                   <h3 className="text-lg font-semibold text-graphite mb-4">Свържете се с нас</h3>
 
                   <div className="flex items-center space-x-4 mb-6">
-                    <div className="w-14 h-14 bg-graphite/20 rounded-full flex items-center justify-center">
-                      <BuildingOfficeIcon className="w-8 h-8 text-graphite" />
+                    <div className="w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300 group-hover:bg-cadetblue/25">
+                      <BuildingOfficeIcon className="w-6 h-6 text-graphite" />
                     </div>
                     <div>
                       <p className="font-semibold text-graphite">{CONTACT_PERSON}</p>
@@ -304,20 +314,15 @@ export default async function PropertyDetailPage({ params }) {
                     <ContactActionButton href={`mailto:${CONTACT_EMAIL}?subject=Запитване за: ${title}`} icon={EnvelopeIcon} variant="secondary">
                       Изпрати имейл
                     </ContactActionButton>
-                    <ContactActionButton href="/contact" icon={ChatBubbleLeftRightIcon} variant="tertiary">
+                    <ContactActionButton
+                      href={`/contact?subject=consultation&propertyPath=${encodeURIComponent(`/${category === 'sale' ? 'sales' : 'rent'}/${slug}`)}`}
+                      icon={ChatBubbleLeftRightIcon}
+                      variant="tertiary"
+                    >
                       Заяви оглед
                     </ContactActionButton>
                   </div>
                 </div>
-
-                {/* Share Card */}
-                <Card className="p-6">
-                  <h3 className="text-sm font-semibold text-graphite mb-3">Сподели обявата</h3>
-                  <div className="flex space-x-3">
-                    <ShareButton icon={FacebookIcon} hoverColor="hover:bg-graphite" />
-                    <ShareButton icon={ClipboardIcon} hoverColor="hover:bg-gray-700" />
-                  </div>
-                </Card>
 
                 {/* Safety Tips */}
                 <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6">
@@ -341,7 +346,7 @@ export default async function PropertyDetailPage({ params }) {
       {/* Back to listings */}
       <Section background="light" padding="sm" className="border-t">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="up">
           <Link
             href={category === 'sale' ? '/sales' : '/rent'}
             className="inline-flex items-center text-graphite hover:text-graphite-dark font-medium"

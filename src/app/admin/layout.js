@@ -13,7 +13,7 @@ export default function AdminLayout({ children }) {
         <div className="max-w-screen-xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <Link href="/admin" className="text-xl font-bold text-gray-900">
+              <Link href="/admin/properties" className="text-xl font-bold text-gray-900">
                 Admin Panel
               </Link>
               <nav className="flex gap-4">

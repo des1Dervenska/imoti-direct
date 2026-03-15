@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { createSignedCookie, getCookieName, getMaxAge } from '@/lib/auth-server';
+import { createSignedCookie, getCookieName } from '@/lib/auth-server';
 
 export async function POST(request) {
   try {
@@ -23,11 +23,11 @@ export async function POST(request) {
 
     const cookieStore = await cookies();
     const value = createSignedCookie();
+    // Без maxAge = session cookie – при затваряне на браузъра сесията изтича, винаги се иска парола при ново отваряне
     cookieStore.set(getCookieName(), value, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: getMaxAge(),
       path: '/',
     });
 

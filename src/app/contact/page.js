@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   CONTACT_ADDRESS,
   CONTACT_CITY,
@@ -91,8 +92,8 @@ const labelStyle = 'block text-sm font-medium text-gray-700 mb-2';
 // Helper: Contact info item
 function ContactInfoItem({ icon: Icon, title, content }) {
   return (
-    <div className="flex items-start space-x-4">
-      <div className="w-12 h-12 bg-graphite/10 rounded-lg flex items-center justify-center flex-shrink-0">
+    <div className="flex items-start space-x-4 group">
+      <div className="w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300 group-hover:bg-cadetblue/25">
         <Icon className="w-6 h-6 text-graphite" />
       </div>
       <div>
@@ -103,13 +104,13 @@ function ContactInfoItem({ icon: Icon, title, content }) {
   );
 }
 
-// Helper: Social link button
+// Helper: Social link button (зелено-синьо при hover)
 function SocialLink({ icon: Icon, href, label }) {
   return (
     <a
       href={href}
       aria-label={label}
-      className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-graphite-light hover:bg-graphite hover:text-white transition-colors"
+      className="w-10 h-10 bg-cadetblue/15 rounded-lg flex items-center justify-center text-graphite transition-colors duration-300 hover:bg-cadetblue/25 hover:text-cadetblue-dark"
     >
       <Icon className="w-5 h-5" />
     </a>
@@ -129,6 +130,7 @@ function SuccessMessage() {
 }
 
 export default function ContactPage() {
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -138,6 +140,26 @@ export default function ContactPage() {
     privacyConsent: false,
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    const subject = searchParams.get('subject');
+    const propertyPath = searchParams.get('propertyPath');
+    if (subject || propertyPath) {
+      setFormData((prev) => {
+        let message = prev.message;
+        if (propertyPath && typeof window !== 'undefined') {
+          const path = propertyPath.startsWith('/') ? propertyPath : `/${propertyPath}`;
+          const fullUrl = `${window.location.origin}${path}`;
+          message = `Имот: ${fullUrl}\n\nЖелая да проведем оглед на гореспоменатия обект`;
+        }
+        return {
+          ...prev,
+          ...(subject ? { subject } : {}),
+          ...(message ? { message } : {}),
+        };
+      });
+    }
+  }, [searchParams]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -167,8 +189,8 @@ export default function ContactPage() {
       {/* Page Header */}
       <Section background="white" padding="md" className="pt-8">
         <Container>
-          <AnimateOnScroll className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-graphite mb-3">Контакти</h1>
+          <AnimateOnScroll direction="down" className="text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-cadetblue mb-3 tracking-wide [text-shadow:0_1px_2px_rgba(95,158,160,0.25)]">Контакти</h1>
             <p className="text-graphite-light max-w-xl mx-auto">
               Свържете се с нас - ще се радваме да отговорим на вашите въпроси
             </p>
@@ -179,7 +201,7 @@ export default function ContactPage() {
       {/* Contact Section */}
       <Section background="light">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="up">
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Contact Info */}
             <div className="lg:col-span-1">
@@ -306,15 +328,17 @@ export default function ContactPage() {
                     </label>
                   </div>
 
-                  <Button
-                    type="submit"
-                    variant="accent"
-                    className="w-full md:w-auto"
-                    disabled={!formData.privacyConsent}
-                  >
-                    <PaperAirplaneIcon className="w-5 h-5 mr-2" />
-                    Изпрати съобщението
-                  </Button>
+                  <div className="flex justify-end">
+                    <Button
+                      type="submit"
+                      variant="accent"
+                      className="w-full md:w-auto"
+                      disabled={!formData.privacyConsent}
+                    >
+                      <PaperAirplaneIcon className="w-5 h-5 mr-2" />
+                      Изпрати съобщението
+                    </Button>
+                  </div>
                 </form>
               </Card>
             </div>
@@ -326,12 +350,14 @@ export default function ContactPage() {
       {/* Map Section */}
       <Section background="white">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="down">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-graphite mb-2">Къде да ни намерите</h2>
             <p className="text-graphite-light">{CONTACT_ADDRESS_SHORT}</p>
           </div>
+          </AnimateOnScroll>
 
+          <AnimateOnScroll direction="up">
           {/* Вградена карта на локацията */}
           <div className="rounded-2xl overflow-hidden h-80 md:h-96 bg-gray-200">
             <iframe

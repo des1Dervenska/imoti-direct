@@ -58,7 +58,7 @@ function OwnerCard({ name, brandName }) {
   return (
     <div className="mt-8 p-6 bg-graphite/5 rounded-xl">
       <div className="flex items-center space-x-4">
-        <div className="relative w-20 h-20 shrink-0 rounded-full overflow-hidden bg-graphite/10 ring-2 ring-white shadow-md">
+        <div className="relative w-20 h-20 shrink-0 rounded-full overflow-hidden bg-cadetblue/15 ring-2 ring-white shadow-md">
           <img
             src="/images/face.png"
             alt={name}
@@ -81,8 +81,8 @@ export default function AboutPage() {
       {/* Page Header */}
       <Section background="white" padding="md" className="pt-8">
         <Container>
-          <AnimateOnScroll className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-graphite mb-3">За нас</h1>
+          <AnimateOnScroll direction="down" className="text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-cadetblue mb-3 tracking-wide [text-shadow:0_1px_2px_rgba(95,158,160,0.25)]">За нас</h1>
             <p className="text-graphite-light max-w-xl mx-auto">
               Вашият надежден партньор в света на недвижимите имоти
             </p>
@@ -93,17 +93,16 @@ export default function AboutPage() {
       {/* About Section */}
       <Section background="white">
         <Container>
-          <AnimateOnScroll>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative rounded-2xl overflow-hidden bg-gray-100 h-80 lg:h-96">
+            <AnimateOnScroll direction="up" className="relative rounded-2xl overflow-hidden bg-gray-100 h-80 lg:h-96">
               <img
                 src="/images/big_picture.jpg"
                 alt="Вашият надежден партньор в света на недвижимите имоти"
                 className="absolute inset-0 w-full h-full object-cover"
               />
-            </div>
+            </AnimateOnScroll>
 
-            <div>
+            <AnimateOnScroll direction="up">
               <h2 className="text-3xl font-bold text-graphite mb-6">{BRAND_NAME}</h2>
               <div className="space-y-4 text-graphite-light">
                 <p>
@@ -116,44 +115,41 @@ export default function AboutPage() {
                   Работим с индивидуален подход към всеки клиент, като се стремим да разберем вашите нужди и да намерим най-доброто решение за вас. Нашата цел е всяка сделка да премине гладко и безпроблемно.
                 </p>
               </div>
-
               <OwnerCard name={CONTACT_PERSON} brandName={BRAND_NAME} />
-            </div>
+            </AnimateOnScroll>
           </div>
-          </AnimateOnScroll>
         </Container>
       </Section>
 
       {/* Services Section */}
       <Section background="light">
         <Container>
-          <AnimateOnScroll>
-          <div className="text-center mb-12">
+          <AnimateOnScroll direction="down" className="text-center mb-12">
             <h2 className="text-3xl font-bold text-graphite mb-4">Нашите услуги</h2>
             <p className="text-graphite-light max-w-2xl mx-auto">
               Предлагаме пълен спектър от услуги в сферата на недвижимите имоти
             </p>
-          </div>
-
-          <FeatureCard.Grid columns={3}>
-            {SERVICES.map((service) => (
-              <FeatureCard
-                key={service.title}
-                iconShape="square"
-                hoverEffect="lift"
-                centered={false}
-                {...service}
-              />
-            ))}
-          </FeatureCard.Grid>
           </AnimateOnScroll>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {SERVICES.map((service) => (
+              <AnimateOnScroll key={service.title} direction="up">
+                <FeatureCard
+                  iconShape="square"
+                  hoverEffect="lift"
+                  centered={false}
+                  {...service}
+                />
+              </AnimateOnScroll>
+            ))}
+          </div>
         </Container>
       </Section>
 
       {/* CTA Section */}
       <Section background="light">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="up">
           <Card variant="outlined" className="p-8 md:p-12 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-graphite mb-4">
               Готови да започнем?

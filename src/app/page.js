@@ -84,12 +84,14 @@ export default async function Home() {
       {/* Featured Sale Properties - карусел по 3, стрелки, авто 3s */}
       <Section background="white">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="down">
             <SectionHeader
               title="Имоти за продажба"
               subtitle="Разгледайте нашите най-нови оферти"
               href="/sales"
             />
+          </AnimateOnScroll>
+          <AnimateOnScroll direction="up">
             <PropertyCarousel properties={salePropertiesForCarousel} />
             <MobileLink href="/sales">Виж всички оферти за продажба</MobileLink>
           </AnimateOnScroll>
@@ -99,12 +101,14 @@ export default async function Home() {
       {/* Featured Rent Properties - карусел по 3, стрелки, авто 3s (или статична мрежа при ≤3) */}
       <Section background="light">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="down">
             <SectionHeader
               title="Имоти под наем"
               subtitle="Намерете перфектния имот за вас"
               href="/rent"
             />
+          </AnimateOnScroll>
+          <AnimateOnScroll direction="up">
             <PropertyCarousel properties={rentPropertiesForCarousel} />
             <MobileLink href="/rent">Виж всички оферти под наем</MobileLink>
           </AnimateOnScroll>
@@ -114,30 +118,30 @@ export default async function Home() {
       {/* Why Choose Us */}
       <Section background="white">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="down">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-graphite">Защо да изберете нас?</h2>
               <p className="text-graphite-light mt-2">Нашите предимства</p>
             </div>
-
-            <FeatureCard.Grid columns={4}>
-              {FEATURES.map((feature) => (
+          </AnimateOnScroll>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {FEATURES.map((feature) => (
+              <AnimateOnScroll key={feature.title} direction="up">
                 <FeatureCard
-                  key={feature.title}
                   background="transparent"
                   hoverEffect="none"
                   {...feature}
                 />
-              ))}
-            </FeatureCard.Grid>
-          </AnimateOnScroll>
+              </AnimateOnScroll>
+            ))}
+          </div>
         </Container>
       </Section>
 
       {/* CTA Section */}
       <Section background="light">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="up">
             <Card variant="outlined" className="p-8 md:p-12 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-graphite mb-4">
               Готови ли сте да намерите своя нов дом?

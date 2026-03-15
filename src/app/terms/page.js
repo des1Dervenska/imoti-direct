@@ -11,14 +11,16 @@ export default function TermsPage() {
     <>
       <Section background="white" padding="md" className="pt-8">
         <Container>
-          <AnimateOnScroll>
-          <h1 className="text-3xl md:text-4xl font-bold text-graphite mb-2">
+          <AnimateOnScroll direction="down">
+          <h1 className="text-3xl md:text-4xl font-bold text-cadetblue mb-2 tracking-wide [text-shadow:0_1px_2px_rgba(95,158,160,0.25)]">
             Условия за ползване
           </h1>
           <p className="text-graphite-light mb-8">
             Последна актуализация: {new Date().toLocaleDateString('bg-BG', { year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
+          </AnimateOnScroll>
 
+          <AnimateOnScroll direction="up">
           <div className="prose prose-graphite max-w-none space-y-8 text-graphite-light">
             <section>
               <h2 className="text-xl font-semibold text-graphite mb-3">1. Общи положения</h2>

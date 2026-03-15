@@ -151,28 +151,35 @@ export default function Navbar() {
         </div>
       </div>
 
-      {isMenuOpen && (
+      {/* Mobile menu – винаги в DOM за плавна анимация; спуска отгоре надолу / прибира от долу нагоре */}
         <div
           id="navbar-menu"
-          className="border-t border-gray-200 bg-[#fbf7f4] md:hidden"
+          className={`absolute left-0 right-0 top-full overflow-hidden border-t border-gray-200/80 bg-[#fbf7f4] md:hidden transition-[max-height] duration-300 ease-in-out ${
+            isMenuOpen ? "max-h-[70vh]" : "max-h-0"
+          }`}
         >
-          <div className="mx-auto max-w-screen-xl px-5 py-3">
-            <ul className="space-y-1">
-              {NAV_LINKS.map(({ label, href }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className={mobileLinkStyle}
-                    onClick={closeMenu}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div
+            className={`transition-transform duration-300 ease-in-out ${
+              isMenuOpen ? "translate-y-0" : "-translate-y-full"
+            }`}
+          >
+            <div className="mx-auto max-w-screen-xl px-5 py-3">
+              <ul className="space-y-1">
+                {NAV_LINKS.map(({ label, href }) => (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      className={mobileLinkStyle}
+                      onClick={closeMenu}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-      )}
     </nav>
   );
 }

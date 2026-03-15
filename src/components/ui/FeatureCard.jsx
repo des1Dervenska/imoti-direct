@@ -27,7 +27,7 @@ const backgroundStyles = {
 };
 
 const iconContainerStyles = {
-  rounded: 'rounded-full',
+  rounded: 'rounded-lg',
   square: 'rounded-lg',
 };
 
@@ -41,7 +41,7 @@ export default function FeatureCard({
   centered = true,
   className = '',
 }) {
-  const baseStyles = 'p-6 transition-all duration-300';
+  const baseStyles = 'p-6 transition-all duration-300 group';
   const alignmentStyles = centered ? 'text-center' : '';
   const iconAlignment = centered ? 'mx-auto' : '';
 
@@ -49,11 +49,11 @@ export default function FeatureCard({
     <div className={`${baseStyles} ${backgroundStyles[background]} ${hoverEffects[hoverEffect]} ${alignmentStyles} ${className}`}>
       {/* Icon */}
       <div
-        className={`w-14 h-14 bg-graphite/10 ${iconContainerStyles[iconShape]} flex items-center justify-center mb-4 ${iconAlignment} transition-colors duration-300 group-hover:bg-cadetblue/20`}
+        className={`w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center mb-4 ${iconAlignment} transition-colors duration-300 group-hover:bg-cadetblue/25`}
       >
         {typeof icon === 'string' ? (
           <svg
-            className="w-7 h-7 text-graphite"
+            className="w-6 h-6 text-graphite"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

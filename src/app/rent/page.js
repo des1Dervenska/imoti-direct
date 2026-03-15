@@ -41,8 +41,8 @@ export default async function RentPage() {
       {/* Page Header */}
       <Section background="white" padding="md" className="pt-8">
         <Container>
-          <AnimateOnScroll className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-graphite mb-3">
+          <AnimateOnScroll direction="down" className="text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-cadetblue mb-3 tracking-wide [text-shadow:0_1px_2px_rgba(95,158,160,0.25)]">
               Имоти под наем
             </h1>
             <p className="text-graphite-light max-w-xl mx-auto">
@@ -52,20 +52,18 @@ export default async function RentPage() {
         </Container>
       </Section>
 
-      {/* Filters & Grid */}
-      <AnimateOnScroll>
-        <PropertyFilters
-          properties={properties}
-          category="rent"
-          emptyMessage="Няма намерени имоти под наем"
-          animateCards
-        />
-      </AnimateOnScroll>
+      {/* Filters & Grid – без AnimateOnScroll, за да работи sticky тулбарът при скрол */}
+      <PropertyFilters
+        properties={properties}
+        category="rent"
+        emptyMessage="Няма намерени имоти под наем"
+        animateCards
+      />
 
       {/* Info Section */}
       <Section background="white" padding="md">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="up">
             <FeatureCard.Grid columns={3}>
               {INFO_CARDS.map((card) => (
                 <FeatureCard
@@ -83,7 +81,7 @@ export default async function RentPage() {
       {/* CTA Section */}
       <Section background="light" padding="md">
         <Container>
-          <AnimateOnScroll>
+          <AnimateOnScroll direction="up">
             <Card variant="outlined" className="p-8 md:p-12 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-graphite mb-4">
               Имате имот за отдаване под наем?
