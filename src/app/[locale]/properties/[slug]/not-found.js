@@ -36,13 +36,13 @@ export default function PropertyNotFound() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href={`${prefix}/sales`}
-            className="inline-flex items-center justify-center px-6 py-3 bg-graphite hover:bg-graphite-dark text-white font-medium rounded-lg transition-colors"
+            className="inline-flex items-center justify-center px-6 py-3 bg-graphite hover:bg-graphite-dark text-white rounded-lg transition-colors"
           >
             {t.sales?.title ?? (locale === 'en' ? 'Properties for sale' : 'Имоти за продажба')}
           </Link>
           <Link
             href={`${prefix}/rent`}
-            className="inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-gray-100 text-gray-700 font-medium rounded-lg border border-gray-300 transition-colors"
+            className="inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-gray-100 text-gray-700 rounded-lg border border-gray-300 transition-colors"
           >
             {t.rent?.title ?? (locale === 'en' ? 'Properties for rent' : 'Имоти под наем')}
           </Link>

@@ -34,7 +34,7 @@ export default async function TermsPage({ params }) {
               {t.terms.title}
             </h1>
             <p className="text-graphite-light mb-8">
-              {t.terms.lastUpdated} <span className="font-sans-nums">{lastUpdated}</span>
+              {t.terms.lastUpdated} <span>{lastUpdated}</span>
             </p>
           </AnimateOnScroll>
 

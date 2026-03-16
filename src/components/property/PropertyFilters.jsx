@@ -12,7 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const countStyle = 'text-graphite-light';
-const countNumber = 'font-semibold text-graphite';
+const countNumber = 'text-graphite';
 
 // Дропдауни във филтрите – в нашия стил, но леки (без тежки сенки)
 const filterSelectClass =
@@ -261,7 +261,7 @@ export default function PropertyFilters({
           <div className="flex flex-wrap gap-4 items-center justify-end">
             <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
               <div className={`${countStyle} shrink-0`}>
-                <span className={`${countNumber} font-sans-nums`}>{filteredProperties.length}</span> {t.foundCount}
+                <span className={countNumber}>{filteredProperties.length}</span> {t.foundCount}
               </div>
               <div className="flex flex-wrap gap-3 items-center justify-end">
               {/* Сортиране – По дата (най-нови) */}
@@ -294,7 +294,7 @@ export default function PropertyFilters({
                             setSortBy(opt.value);
                             setSortOpen(false);
                           }}
-                          className={`w-full text-left px-4 py-2.5 text-sm rounded-lg mx-1 ${sortBy === opt.value ? 'bg-cadetblue/10 text-cadetblue-dark font-medium' : 'text-graphite hover:bg-cadetblue/5 hover:text-graphite-dark'}`}
+                          className={`w-full text-left px-4 py-2.5 text-sm rounded-lg mx-1 ${sortBy === opt.value ? 'bg-cadetblue/10 text-cadetblue-dark' : 'text-graphite hover:bg-cadetblue/5 hover:text-graphite-dark'}`}
                         >
                           {opt.label}
                         </button>
@@ -315,7 +315,7 @@ export default function PropertyFilters({
                   <FunnelIcon className="w-5 h-5 shrink-0" />
                   <span className="hidden sm:inline">{t.filters}</span>
                   {hasExtraFilters && (
-                    <span className="flex items-center justify-center min-w-[18px] h-[18px] px-1 text-xs font-medium rounded-full bg-cadetblue text-white">
+                    <span className="flex items-center justify-center min-w-[18px] h-[18px] px-1 text-xs rounded-full bg-cadetblue text-white">
                       !
                     </span>
                   )}
@@ -324,14 +324,14 @@ export default function PropertyFilters({
                 {extraFiltersOpen && (
                   <div className="absolute right-0 top-full mt-2 w-96 rounded-2xl border border-gray-200/90 bg-white shadow-xl z-50 overflow-hidden max-h-[90vh] flex flex-col">
                     <div className="p-4 bg-gradient-to-b from-cadetblue/5 to-transparent border-b border-gray-100">
-                      <h3 className="text-sm font-semibold text-graphite">{t.filters}</h3>
+                      <h3 className="text-sm text-graphite">{t.filters}</h3>
                       <p className="text-xs text-graphite-light mt-0.5">{t.filtersSubtitle}</p>
                     </div>
                     <div className="p-4 space-y-4 overflow-y-auto">
                       {/* Първи: Тип, Град, Квартал (ако има град), Цена */}
                       <div className="space-y-3 pb-4 border-b border-gray-100">
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.type}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.type}</label>
                           <select
                             value={filters.type ?? ''}
                             onChange={(e) => updateFilter('type', e.target.value)}
@@ -346,7 +346,7 @@ export default function PropertyFilters({
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.city}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.city}</label>
                           <select
                             value={filters.city ?? ''}
                             onChange={(e) => updateFilter('city', e.target.value)}
@@ -361,7 +361,7 @@ export default function PropertyFilters({
                           </select>
                         </div>
                         <div>
-                            <label className={`block text-xs font-medium mb-1.5 ${filters.city ? 'text-gray-500' : 'text-gray-400'}`}>
+                            <label className={`block text-xs mb-1.5 ${filters.city ? 'text-gray-500' : 'text-gray-400'}`}>
                               {t.neighborhood}
                             </label>
                             <select
@@ -382,7 +382,7 @@ export default function PropertyFilters({
                           </div>
                         <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceFrom}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceFrom}</label>
                           <input
                             type="number"
                             min="0"
@@ -394,7 +394,7 @@ export default function PropertyFilters({
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceTo}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceTo}</label>
                           <input
                             type="number"
                             min="0"
@@ -408,7 +408,7 @@ export default function PropertyFilters({
                       </div>
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.rooms}</label>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.rooms}</label>
                         <select
                           value={filters.rooms ?? ''}
                           onChange={(e) => updateFilter('rooms', e.target.value)}
@@ -423,7 +423,7 @@ export default function PropertyFilters({
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.areaFrom}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.areaFrom}</label>
                           <input
                             type="number"
                             min="0"
@@ -434,7 +434,7 @@ export default function PropertyFilters({
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.areaTo}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.areaTo}</label>
                           <input
                             type="number"
                             min="0"
@@ -447,7 +447,7 @@ export default function PropertyFilters({
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.floorFrom}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.floorFrom}</label>
                           <input
                             type="number"
                             min="0"
@@ -458,7 +458,7 @@ export default function PropertyFilters({
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.floorTo}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.floorTo}</label>
                           <input
                             type="number"
                             min="0"
@@ -471,7 +471,7 @@ export default function PropertyFilters({
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.minPricePerSqm}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.minPricePerSqm}</label>
                           <input
                             type="number"
                             min="0"
@@ -483,7 +483,7 @@ export default function PropertyFilters({
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.maxPricePerSqm}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.maxPricePerSqm}</label>
                           <input
                             type="number"
                             min="0"
@@ -497,7 +497,7 @@ export default function PropertyFilters({
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.yearFrom}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.yearFrom}</label>
                           <input
                             type="number"
                             min="1900"
@@ -509,7 +509,7 @@ export default function PropertyFilters({
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.yearTo}</label>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.yearTo}</label>
                           <input
                             type="number"
                             min="1900"
@@ -527,7 +527,7 @@ export default function PropertyFilters({
                           onClick={() => {
                             clearExtraFilters();
                           }}
-                          className="w-full inline-flex items-center justify-center gap-2 py-3 text-sm font-medium text-graphite-light hover:text-cadetblue border border-gray-200/90 rounded-xl hover:bg-cadetblue/5 transition-all duration-200"
+                          className="w-full inline-flex items-center justify-center gap-2 py-3 text-sm text-graphite-light hover:text-cadetblue border border-gray-200/90 rounded-xl hover:bg-cadetblue/5 transition-all duration-200"
                         >
                           <XMarkIcon className="w-4 h-4" />
                           {t.clearFilters}

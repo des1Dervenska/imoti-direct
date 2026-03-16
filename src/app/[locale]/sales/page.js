@@ -35,7 +35,7 @@ export default async function SalesPage({ params }) {
               {(() => {
                 const [before, ...rest] = t.sales.subtitleWithCount.split('{count}');
                 const after = rest.join('{count}');
-                return <>{before}<span className="font-sans-nums">{properties.length}</span>{after}</>;
+                return <>{before}<span>{properties.length}</span>{after}</>;
               })()}
             </p>
           </AnimateOnScroll>

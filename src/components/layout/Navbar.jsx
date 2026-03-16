@@ -145,7 +145,7 @@ export default function Navbar({ locale = "bg" }) {
         >
           <Logo width={38} height={38} priority className="object-contain" />
           <div className="flex flex-col leading-none">
-            <span className="text-base font-semibold tracking-[0.02em] text-graphite sm:text-xl">
+            <span className="text-base tracking-[0.02em] text-graphite sm:text-xl">
               {BRAND_NAME}
             </span>
             <span className="hidden text-[11px] uppercase tracking-[0.22em] text-graphite/55 sm:block">

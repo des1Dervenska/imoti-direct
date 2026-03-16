@@ -216,12 +216,12 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
       {/* Basic Info */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Основна информация</h3>
+        <h3 className="text-lg text-gray-900 mb-4">Основна информация</h3>
 
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="title" className="block text-sm text-gray-700 mb-1">
                 Заглавие * (БГ)
               </label>
               <input
@@ -236,7 +236,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               />
             </div>
             <div>
-              <label htmlFor="titleEn" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="titleEn" className="block text-sm text-gray-700 mb-1">
                 Заглавие (EN)
               </label>
               <input
@@ -253,7 +253,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
           <div className="flex gap-4">
             <div className="flex-1">
-              <label htmlFor="slug" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="slug" className="flex items-center gap-1.5 text-sm text-gray-700 mb-1">
                 Slug (URL) *
                 <span className="relative group inline-flex shrink-0">
                   <span
@@ -291,7 +291,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="category" className="block text-sm text-gray-700 mb-1">
                 Категория *
               </label>
               <select
@@ -309,7 +309,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             </div>
 
             <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="type" className="block text-sm text-gray-700 mb-1">
                 Тип имот *
               </label>
               <select
@@ -327,7 +327,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             </div>
 
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="status" className="block text-sm text-gray-700 mb-1">
                 Статус *
               </label>
               <select
@@ -349,11 +349,11 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
       {/* Price & Area */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Цена и площ</h3>
+        <h3 className="text-lg text-gray-900 mb-4">Цена и площ</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="price" className="block text-sm text-gray-700 mb-1">
               Цена *
             </label>
             <input
@@ -371,7 +371,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
           </div>
 
           <div>
-            <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="area" className="block text-sm text-gray-700 mb-1">
               Площ (m²) *
             </label>
             <input
@@ -404,11 +404,11 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
       {/* Property Details */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Детайли</h3>
+        <h3 className="text-lg text-gray-900 mb-4">Детайли</h3>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
-            <label htmlFor="rooms" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="rooms" className="block text-sm text-gray-700 mb-1">
               Стаи
             </label>
             <input
@@ -424,7 +424,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
           </div>
 
           <div>
-            <label htmlFor="floor" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="floor" className="block text-sm text-gray-700 mb-1">
               Етаж
             </label>
             <select
@@ -443,7 +443,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
           </div>
 
           <div>
-            <label htmlFor="totalFloors" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="totalFloors" className="block text-sm text-gray-700 mb-1">
               Общо етажи
             </label>
             <input
@@ -459,7 +459,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm text-gray-700 mb-2">
               Година на строителство
             </label>
             <div className="space-y-2">
@@ -479,7 +479,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             </div>
             {(formData.yearBuiltStatus === 'completed' || formData.yearBuiltStatus === 'under_construction') && (
               <div className="mt-3">
-                <label htmlFor="yearBuilt" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="yearBuilt" className="block text-sm text-gray-700 mb-1">
                   {formData.yearBuiltStatus === 'completed' ? 'Година на въвеждане в експлоатация' : 'Очаквана година на въвеждане'}
                 </label>
                 <input
@@ -498,7 +498,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
           </div>
 
           <div>
-            <label htmlFor="constructionType" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="constructionType" className="block text-sm text-gray-700 mb-1">
               Тип строителство
             </label>
             <select
@@ -542,12 +542,12 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
       {/* Location */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Локация</h3>
+        <h3 className="text-lg text-gray-900 mb-4">Локация</h3>
 
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="city" className="block text-sm text-gray-700 mb-1">
                 Град * (БГ)
               </label>
               <input
@@ -569,7 +569,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               </datalist>
             </div>
             <div>
-              <label htmlFor="cityEn" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="cityEn" className="block text-sm text-gray-700 mb-1">
                 Град (EN)
               </label>
               <input
@@ -593,7 +593,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="neighborhood" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="neighborhood" className="block text-sm text-gray-700 mb-1">
                 Квартал (БГ)
               </label>
               <input
@@ -614,7 +614,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               </datalist>
             </div>
             <div>
-              <label htmlFor="neighborhoodEn" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="neighborhoodEn" className="block text-sm text-gray-700 mb-1">
                 Квартал (EN)
               </label>
               <input
@@ -638,7 +638,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="address" className="block text-sm text-gray-700 mb-1">
                 Адрес * (БГ)
               </label>
               <input
@@ -653,7 +653,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               />
             </div>
             <div>
-              <label htmlFor="addressEn" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="addressEn" className="block text-sm text-gray-700 mb-1">
                 Адрес (EN)
               </label>
               <input
@@ -669,7 +669,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
           </div>
 
           <div>
-            <label htmlFor="mapUrl" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="mapUrl" className="block text-sm text-gray-700 mb-1">
               Google Maps URL
             </label>
             <input
@@ -684,7 +684,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
           </div>
 
           <div>
-            <label htmlFor="videoUrl" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="videoUrl" className="block text-sm text-gray-700 mb-1">
               Видео (YouTube) – линк
             </label>
             <input
@@ -703,12 +703,12 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
       {/* Description & Features */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Описание</h3>
+        <h3 className="text-lg text-gray-900 mb-4">Описание</h3>
 
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="description" className="block text-sm text-gray-700 mb-1">
                 Описание (БГ)
               </label>
               <textarea
@@ -722,7 +722,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               />
             </div>
             <div>
-              <label htmlFor="descriptionEn" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="descriptionEn" className="block text-sm text-gray-700 mb-1">
                 Описание (EN)
               </label>
               <textarea
@@ -739,7 +739,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="features" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="features" className="flex items-center gap-1.5 text-sm text-gray-700 mb-1">
                 Удобства (БГ, разделени със запетая)
                 <span className="relative group inline-flex shrink-0">
                   <span
@@ -764,7 +764,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               />
             </div>
             <div>
-              <label htmlFor="featuresEn" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="featuresEn" className="flex items-center gap-1.5 text-sm text-gray-700 mb-1">
                 Удобства (EN, разделени със запетая)
                 <span className="relative group inline-flex shrink-0">
                   <span
@@ -792,7 +792,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
           {/* Image Upload */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm text-gray-700 mb-2">
               Снимки
             </label>
             <ImageUpload

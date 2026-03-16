@@ -35,31 +35,31 @@ export default function PropertyTable({ properties, isDemo = false }) {
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Имот
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Тип
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Категория
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Цена
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Град
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Тип строит.
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Газ / ТЕЦ
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Статус
             </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs text-gray-500 uppercase tracking-wider">
               Действия
             </th>
           </tr>
@@ -73,7 +73,7 @@ export default function PropertyTable({ properties, isDemo = false }) {
                 <td className="px-6 py-4">
                   <div className="flex items-center">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm text-gray-900">
                         {property.title}
                       </div>
                       <div className="text-sm text-gray-500">
@@ -94,7 +94,7 @@ export default function PropertyTable({ properties, isDemo = false }) {
                     const vatLabel = property.priceIncludesVat ? 'с ДДС' : 'без ДДС';
                     return (
                       <span>
-                        <span className="font-medium text-gray-900">{eurText}</span>
+                        <span className="text-gray-900">{eurText}</span>
                         <span className="block text-xs text-gray-500">{bgnText}</span>
                         <span className="block text-xs text-gray-500">{vatLabel}</span>
                       </span>

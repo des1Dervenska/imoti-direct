@@ -38,7 +38,7 @@ export default function Badge({
   className = '',
   ...props
 }) {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-full';
+  const baseStyles = 'inline-flex items-center justify-center rounded-full';
 
   return (
     <span
@@ -60,7 +60,7 @@ Badge.Category = function CategoryBadge({ category, size = 'md', className = '',
     : { sale: 'Продажба', rent: 'Наем' };
 
   return (
-    <Badge variant={category} size={size} className={`font-semibold ${className}`}>
+    <Badge variant={category} size={size} className={className}>
       {labels[category] || category}
     </Badge>
   );

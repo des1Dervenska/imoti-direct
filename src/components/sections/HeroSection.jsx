@@ -41,7 +41,7 @@ export default function HeroSection({ locale = 'bg' }) {
       <div className="relative h-full flex items-center justify-center">
         <div className="text-center px-4">
           {/* Brand Title */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-[0.3em] md:tracking-[0.4em] mb-6 drop-shadow-lg">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl text-white tracking-[0.3em] md:tracking-[0.4em] mb-6 drop-shadow-lg">
             {content.title.split(' ').join('   ')}
           </h1>
 
@@ -49,7 +49,7 @@ export default function HeroSection({ locale = 'bg' }) {
           <div className="w-24 h-px bg-white/60 mx-auto mb-6" />
 
           {/* Tagline */}
-          <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-[0.15em] drop-shadow-md">
+          <p className="text-lg md:text-xl lg:text-2xl text-white/90 tracking-[0.15em] drop-shadow-md">
             {Array.isArray(tagline) ? tagline.join(' ') : content.tagline.join(' ')}
           </p>
         </div>

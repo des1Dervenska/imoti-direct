@@ -22,7 +22,7 @@ function SectionHeader({ title, subtitle, href, linkText }) {
       {href && (
         <Link
           href={href}
-          className="hidden sm:flex items-center text-graphite hover:text-graphite-dark font-medium"
+          className="hidden sm:flex items-center text-graphite hover:text-graphite-dark"
         >
           {linkText}
           <ChevronRightIcon className="w-5 h-5 ml-1" />
@@ -37,7 +37,7 @@ function MobileLink({ href, children }) {
     <div className="mt-8 text-center sm:hidden">
       <Link
         href={href}
-        className="inline-flex items-center text-graphite hover:text-graphite-dark font-medium"
+        className="inline-flex items-center text-graphite hover:text-graphite-dark"
       >
         {children}
         <ChevronRightIcon className="w-5 h-5 ml-1" />

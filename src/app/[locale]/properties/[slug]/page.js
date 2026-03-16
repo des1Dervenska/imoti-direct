@@ -53,7 +53,7 @@ function Breadcrumb({ category, title, locale }) {
         {category === 'sale' ? t.sales : t.rent}
       </Link>
       <ChevronRightIcon className="w-4 h-4 text-gray-400" />
-      <span className="text-graphite font-medium truncate max-w-xs">{title}</span>
+      <span className="text-graphite truncate max-w-xs">{title}</span>
     </nav>
   );
 }
@@ -64,7 +64,7 @@ function KeyDetailItem({ icon: Icon, value, label }) {
       <div className="w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors duration-300 group-hover:bg-cadetblue/25">
         <Icon className="w-6 h-6 text-graphite" />
       </div>
-      <div className="font-sans-nums text-xl font-bold text-graphite">{value}</div>
+      <div className="text-xl text-graphite">{value}</div>
       <div className="text-sm text-gray-500">{label}</div>
     </div>
   );
@@ -90,7 +90,7 @@ function ContactActionButton({ href, icon: Icon, children, variant = 'primary' }
   return (
     <Component
       href={href}
-      className={`flex items-center justify-center w-full px-4 py-3 font-medium rounded-lg transition-colors ${variants[variant]}`}
+      className={`flex items-center justify-center w-full px-4 py-3 rounded-lg transition-colors ${variants[variant]}`}
       {...extraProps}
     >
       <Icon className="w-5 h-5 mr-2" />
@@ -188,7 +188,7 @@ export default async function PropertyDetailPage({ params }) {
                       className="absolute inset-0 flex items-center justify-center z-10 bg-black/50 pointer-events-none"
                       aria-hidden
                     >
-                      <span className="text-white font-bold text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase drop-shadow-lg">
+                      <span className="text-white text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase drop-shadow-lg">
                         {unavailableOverlayText}
                       </span>
                     </div>
@@ -215,17 +215,17 @@ export default async function PropertyDetailPage({ params }) {
 
                 <div className="lg:hidden">
                   <LocationText neighborhood={neighborhood} city={city} />
-                  <h1 className="text-2xl font-bold text-cadetblue mb-3 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
+                  <h1 className="text-2xl text-cadetblue mb-3 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
                   <div className="text-graphite">
-                    <span className="font-sans-nums text-3xl font-bold">{formatPriceEurAndBgn(price, category).eurText}</span>
-                    <span className="font-sans-nums block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
+                    <span className="text-3xl">{formatPriceEurAndBgn(price, category).eurText}</span>
+                    <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
                     <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
                   </div>
                 </div>
 
                 <Card className="p-6" variant="light">
                   <h2 className="text-lg font-semibold text-graphite mb-4">{t.keyDetails}</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 lg:gap-6">
                     {keyDetails.map((detail) => (
                       <KeyDetailItem key={detail.label} {...detail} />
                     ))}
@@ -256,7 +256,7 @@ export default async function PropertyDetailPage({ params }) {
                     <div className="flex items-start space-x-3 mb-4">
                       <MapPinIcon className="w-6 h-6 text-graphite flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-graphite">{address}</p>
+                        <p className="text-graphite">{address}</p>
                         <p className="text-gray-500">{location}</p>
                       </div>
                     </div>
@@ -302,26 +302,26 @@ export default async function PropertyDetailPage({ params }) {
                 <div className="sticky top-24 space-y-6">
                   <Card className="hidden lg:block p-6">
                     <LocationText neighborhood={neighborhood} city={city} />
-                    <h1 className="text-xl font-bold text-cadetblue mb-4 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
+                    <h1 className="text-xl text-cadetblue mb-4 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
                     <div className="mb-4">
-                      <span className="font-sans-nums text-3xl font-bold text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
-                      <span className="font-sans-nums block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
+                      <span className="text-3xl text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
+                      <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
                       <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
                     </div>
-                    <div className="font-sans-nums text-sm text-gray-500">
+                    <div className="text-sm text-gray-500">
                       {t.published}: {formatDate(createdAt, locale)}
                     </div>
                   </Card>
 
                   <div className="bg-graphite/5 border border-graphite/10 rounded-2xl p-6 group">
-                    <h3 className="text-lg font-semibold text-graphite mb-4">{t.contactUs}</h3>
+                    <h3 className="text-lg text-graphite mb-4">{t.contactUs}</h3>
 
                     <div className="flex items-center space-x-4 mb-6">
                       <div className="w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300 group-hover:bg-cadetblue/25">
                         <BuildingOfficeIcon className="w-6 h-6 text-graphite" />
                       </div>
                       <div>
-                        <p className="font-semibold text-graphite">{CONTACT_PERSON}</p>
+                        <p className="text-graphite">{CONTACT_PERSON}</p>
                         <p className="text-sm text-gray-500">{BRAND_NAME}</p>
                       </div>
                     </div>
@@ -344,7 +344,7 @@ export default async function PropertyDetailPage({ params }) {
                     <div className="flex items-start space-x-3">
                       <ExclamationTriangleIcon className="w-6 h-6 text-yellow-600 flex-shrink-0" />
                       <div>
-                        <h4 className="font-semibold text-yellow-800 mb-1">{t.safetyTip}</h4>
+                        <h4 className="text-yellow-800 mb-1">{t.safetyTip}</h4>
                         <p className="text-sm text-yellow-700">
                           {t.safetyTipBody}
                         </p>
@@ -363,7 +363,7 @@ export default async function PropertyDetailPage({ params }) {
           <AnimateOnScroll direction="up">
             <Link
               href={category === 'sale' ? `${prefix}/sales` : `${prefix}/rent`}
-              className="inline-flex items-center text-graphite hover:text-graphite-dark font-medium"
+              className="inline-flex items-center text-graphite hover:text-graphite-dark"
             >
               <ChevronLeftIcon className="w-5 h-5 mr-2" />
               {t.backTo} {category === 'sale' ? getTranslations(locale).sales.title : getTranslations(locale).rent.title}

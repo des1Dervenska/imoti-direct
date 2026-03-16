@@ -34,7 +34,7 @@ export default async function PrivacyPage({ params }) {
               {t.privacy.title}
             </h1>
             <p className="text-graphite-light mb-8">
-              {t.privacy.lastUpdated} <span className="font-sans-nums">{lastUpdated}</span>
+              {t.privacy.lastUpdated} <span>{lastUpdated}</span>
             </p>
           </AnimateOnScroll>
 

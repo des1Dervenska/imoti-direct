@@ -18,7 +18,7 @@ import Logo from '@/components/ui/Logo';
 
 const footerBg = 'bg-gradient-to-b from-cadetblue to-cadetblue-dark text-white';
 const linkStyle = 'text-white/70 hover:text-white transition-colors';
-const sectionTitle = 'text-lg font-bold mb-4 text-white';
+const sectionTitle = 'text-lg mb-4 text-white';
 const iconStyle = 'w-5 h-5 text-white/80 flex-shrink-0';
 const contactText = 'text-white/70 text-sm';
 const borderStyle = 'border-white/20';
@@ -57,7 +57,7 @@ export default function Footer({ locale = 'bg' }) {
           <div className="space-y-4">
             <Link href={prefix} className="flex items-center space-x-3">
               <Logo width={40} height={40} className="rounded bg-white/90 p-1" />
-              <span className="text-xl font-bold text-white">{BRAND_NAME}</span>
+              <span className="text-xl text-white">{BRAND_NAME}</span>
             </Link>
             <p className={contactText}>
               {t.brand.description}. {t.brand.tagline}.
@@ -108,7 +108,7 @@ export default function Footer({ locale = 'bg' }) {
               {contactInfo.map(({ Icon, value, iconClass }) => (
                 <li key={value} className="flex items-center space-x-3">
                   <Icon className={iconClass} />
-                  <span className={`${contactText} font-sans-nums`}>{value}</span>
+                  <span className={contactText}>{value}</span>
                 </li>
               ))}
             </ul>
@@ -118,7 +118,7 @@ export default function Footer({ locale = 'bg' }) {
         <div className={`pt-8 border-t ${borderStyle}`}>
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className={contactText}>
-              &copy; <span className="font-sans-nums">{new Date().getFullYear()}</span> {BRAND_NAME}. {t.footer.allRightsReserved}.
+              &copy; <span>{new Date().getFullYear()}</span> {BRAND_NAME}. {t.footer.allRightsReserved}.
             </p>
             <div className="flex space-x-6 text-sm">
               {bottomLinks.map(({ label, href }) => (

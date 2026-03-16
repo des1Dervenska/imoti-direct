@@ -72,7 +72,7 @@ export default function PropertyCard({ property, showDescription = true, locale 
             {features.filter(f => f.show).map(({ Icon, value }, idx) => (
               <div key={`${value}-${idx}`} className={featureStyle}>
                 <Icon className={featureIconStyle} />
-                <span className="font-sans-nums">{value}</span>
+                <span>{value}</span>
               </div>
             ))}
           </div>
@@ -89,9 +89,9 @@ export default function PropertyCard({ property, showDescription = true, locale 
             const perSqmText = pricePerSqm != null ? `${Math.round(pricePerSqm)} EUR/м²${category === 'rent' ? '/мес' : ''}` : null;
             return (
               <>
-                <span className="font-sans-nums text-2xl font-bold text-graphite">{eurText}</span>
-                <span className="font-sans-nums block text-sm font-normal text-graphite-light">{bgnText}</span>
-                {perSqmText && <span className="font-sans-nums block text-xs text-graphite-light">{perSqmText}</span>}
+                <span className="text-2xl font-bold text-graphite">{eurText}</span>
+                <span className="block text-sm font-normal text-graphite-light">{bgnText}</span>
+                {perSqmText && <span className="block text-xs text-graphite-light">{perSqmText}</span>}
                 <span className="block text-xs text-graphite-light">{vatLabel}</span>
               </>
             );
