@@ -524,7 +524,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
                 onChange={handleChange}
                 className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm font-medium text-gray-700">Газ</span>
+              <span className="text-sm text-gray-700">Газ</span>
             </label>
             <label className="inline-flex items-center gap-2 cursor-pointer">
               <input
