@@ -10,7 +10,7 @@
  * =============================================================================
  */
 
-import { supabase, isSupabaseConfigured } from './supabase';
+import { supabase, supabaseAdmin, isSupabaseConfigured } from './supabase';
 import {
   properties as mockProperties,
   PROPERTY_STATUS,
@@ -416,10 +416,22 @@ export async function deleteProperty(id) {
     };
   }
 
-  const { error } = await supabase
+  const client = supabaseAdmin || supabase;
+  if (!client) {
+    return {
+      error: 'За изтриване добавете SUPABASE_SERVICE_ROLE_KEY в .env.local (минава през RLS).',
+      isDemo: false
+    };
+  }
+
+  const idVal = id === undefined || id === null ? null : (typeof id === 'number' ? id : Number(id));
+  if (idVal === null || (typeof idVal === 'number' && isNaN(idVal))) {
+    return { error: 'Невалиден id на имот', isDemo: false };
+  }
+  const { error } = await client
     .from('properties')
     .delete()
-    .eq('id', id);
+    .eq('id', idVal);
 
   if (error) {
     return { error: error.message, isDemo: false };

@@ -23,16 +23,21 @@ export default function PropertyTable({ properties, isDemo = false }) {
 
   async function handleDelete(property) {
     if (!window.confirm(CONFIRM_DELETE_MESSAGE)) return;
+    const id = property.id;
+    if (id == null || id === '') {
+      setDeleteError('Липсва id на имот');
+      return;
+    }
     setDeleteError(null);
-    setDeletingId(property.id);
+    setDeletingId(id);
     try {
-      const res = await fetch(`/api/admin/properties/${property.id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/properties/${String(id)}`, { method: 'DELETE' });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setDeleteError(data.error || 'Грешка при изтриване');
         return;
       }
-      router.refresh();
+      window.location.href = '/admin/properties';
     } catch (err) {
       setDeleteError('Грешка при изтриване на имота');
     } finally {
@@ -50,6 +55,11 @@ export default function PropertyTable({ properties, isDemo = false }) {
 
   return (
     <div className="overflow-x-auto">
+      {deleteError && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-800 text-sm">{deleteError}</p>
+        </div>
+      )}
       {isDemo && (
         <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
           <p className="text-yellow-800 text-sm">
@@ -59,34 +69,34 @@ export default function PropertyTable({ properties, isDemo = false }) {
         </div>
       )}
 
-      <table className="min-w-full divide-y divide-gray-200">
+      <table className="min-w-full divide-y divide-gray-200" style={{ minWidth: '1100px' }}>
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Имот
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
-              Тип
-            </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
               Категория
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Цена
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Град
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
               Тип строит.
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
               Газ / ТЕЦ
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
               Статус
             </th>
-            <th className="px-6 py-3 text-right text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
+              Тип
+            </th>
+            <th className="px-4 py-3 text-right text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
               Действия
             </th>
           </tr>
@@ -97,10 +107,10 @@ export default function PropertyTable({ properties, isDemo = false }) {
 
             return (
               <tr key={property.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4">
-                  <div className="flex items-center">
-                    <div>
-                      <div className="text-sm text-gray-900">
+                <td className="px-4 py-4 min-w-[140px]">
+                  <div className="flex items-center min-w-0">
+                    <div className="min-w-0">
+                      <div className="text-sm text-gray-900 truncate max-w-[200px]" title={property.title}>
                         {property.title}
                       </div>
                       <div className="text-sm text-gray-500">
@@ -109,13 +119,10 @@ export default function PropertyTable({ properties, isDemo = false }) {
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {getTypeLabel(property.type)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                   {getCategoryLabel(property.category)}
                 </td>
-                <td className="px-6 py-4 text-sm">
+                <td className="px-4 py-4 text-sm whitespace-nowrap">
                   {(() => {
                     const { eurText, bgnText } = formatPriceEurAndBgn(property.price, property.category);
                     const vatLabel = property.priceIncludesVat ? 'с ДДС' : 'без ДДС';
@@ -128,21 +135,24 @@ export default function PropertyTable({ properties, isDemo = false }) {
                     );
                   })()}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                   {property.city}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                   {getConstructionTypeLabel(property.constructionType) || '—'}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                   {[property.gaz && 'Газ', property.tec && 'ТЕЦ'].filter(Boolean).join(' / ') || '—'}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4 whitespace-nowrap">
                   <span className={`inline-flex px-2 py-1 text-xs rounded-full ${status.className}`}>
                     {status.label}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {getTypeLabel(property.type)}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-right text-sm">
                   <Link
                     href={`/properties/${property.slug}`}
                     className="text-gray-600 hover:text-gray-900 mr-4"

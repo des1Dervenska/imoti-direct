@@ -6,6 +6,8 @@ export const metadata = {
   title: 'Имоти | Admin',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminPropertiesPage() {
   const { data: properties, error, isDemo } = await getAllPropertiesAdmin();
 

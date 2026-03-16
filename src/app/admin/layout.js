@@ -10,7 +10,7 @@ export default function AdminLayout({ children }) {
     <div className="min-h-screen bg-gray-100">
       {/* Admin Header */}
       <header className="bg-white border-b">
-        <div className="max-w-screen-xl mx-auto px-4 py-4">
+        <div className="max-w-[1600px] mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <Link href="/admin/properties" className="text-xl text-gray-900">
@@ -39,7 +39,7 @@ export default function AdminLayout({ children }) {
       </header>
 
       {/* Admin Content */}
-      <main className="max-w-screen-xl mx-auto px-4 py-8">
+      <main className="max-w-[1600px] mx-auto px-4 py-8">
         {children}
       </main>
     </div>
