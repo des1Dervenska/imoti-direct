@@ -60,7 +60,7 @@ function KeyDetailItem({ icon: Icon, value, label }) {
       <div className="w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors duration-300 group-hover:bg-cadetblue/25">
         <Icon className="w-6 h-6 text-graphite" />
       </div>
-      <div className="text-xl font-bold text-graphite">{value}</div>
+      <div className="font-sans-nums text-xl font-bold text-graphite">{value}</div>
       <div className="text-sm text-gray-500">{label}</div>
     </div>
   );
@@ -172,8 +172,8 @@ export default async function PropertyDetailPage({ params }) {
                   <LocationText neighborhood={neighborhood} city={city} />
                   <h1 className="text-2xl font-bold text-cadetblue mb-3 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
                   <div className="text-graphite">
-                    <span className="text-3xl font-bold">{formatPriceEurAndBgn(price, category).eurText}</span>
-                    <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
+                    <span className="font-sans-nums text-3xl font-bold">{formatPriceEurAndBgn(price, category).eurText}</span>
+                    <span className="font-sans-nums block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
                   </div>
                 </div>
 
@@ -258,10 +258,10 @@ export default async function PropertyDetailPage({ params }) {
                     <LocationText neighborhood={neighborhood} city={city} />
                     <h1 className="text-xl font-bold text-cadetblue mb-4 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
                     <div className="mb-4">
-                      <span className="text-3xl font-bold text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
-                      <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
+                      <span className="font-sans-nums text-3xl font-bold text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
+                      <span className="font-sans-nums block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="font-sans-nums text-sm text-gray-500">
                       {t.published}: {formatDate(createdAt, locale)}
                     </div>
                   </Card>

@@ -108,7 +108,7 @@ export default function Footer({ locale = 'bg' }) {
               {contactInfo.map(({ Icon, value, iconClass }) => (
                 <li key={value} className="flex items-center space-x-3">
                   <Icon className={iconClass} />
-                  <span className={contactText}>{value}</span>
+                  <span className={`${contactText} font-sans-nums`}>{value}</span>
                 </li>
               ))}
             </ul>
@@ -118,7 +118,7 @@ export default function Footer({ locale = 'bg' }) {
         <div className={`pt-8 border-t ${borderStyle}`}>
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className={contactText}>
-              &copy; {new Date().getFullYear()} {BRAND_NAME}. {t.footer.allRightsReserved}.
+              &copy; <span className="font-sans-nums">{new Date().getFullYear()}</span> {BRAND_NAME}. {t.footer.allRightsReserved}.
             </p>
             <div className="flex space-x-6 text-sm">
               {bottomLinks.map(({ label, href }) => (

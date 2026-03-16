@@ -43,7 +43,11 @@ export default async function RentPage({ params }) {
               {t.rent.title}
             </h1>
             <p className="text-graphite-light max-w-xl mx-auto">
-              {t.rent.subtitleWithCount.replace("{count}", String(properties.length))}
+              {(() => {
+                const [before, ...rest] = t.rent.subtitleWithCount.split('{count}');
+                const after = rest.join('{count}');
+                return <>{before}<span className="font-sans-nums">{properties.length}</span>{after}</>;
+              })()}
             </p>
           </AnimateOnScroll>
         </Container>

@@ -68,7 +68,7 @@ export default function PropertyCard({ property, showDescription = true, locale 
             {features.filter(f => f.show).map(({ Icon, value }) => (
               <div key={value} className={featureStyle}>
                 <Icon className={featureIconStyle} />
-                <span>{value}</span>
+                <span className="font-sans-nums">{value}</span>
               </div>
             ))}
           </div>
@@ -82,8 +82,8 @@ export default function PropertyCard({ property, showDescription = true, locale 
             const { eurText, bgnText } = formatPriceEurAndBgn(price, category);
             return (
               <>
-                <span className="text-2xl font-bold text-graphite">{eurText}</span>
-                <span className="block text-sm font-normal text-graphite-light">{bgnText}</span>
+                <span className="font-sans-nums text-2xl font-bold text-graphite">{eurText}</span>
+                <span className="font-sans-nums block text-sm font-normal text-graphite-light">{bgnText}</span>
               </>
             );
           })()}

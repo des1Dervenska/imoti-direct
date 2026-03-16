@@ -224,7 +224,7 @@ export default function PropertyFilters({
           <div className="flex flex-wrap gap-4 items-center justify-end">
             <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
               <div className={`${countStyle} shrink-0`}>
-                <span className={countNumber}>{filteredProperties.length}</span> {t.foundCount}
+                <span className={`${countNumber} font-sans-nums`}>{filteredProperties.length}</span> {t.foundCount}
               </div>
               <div className="flex flex-wrap gap-3 items-center justify-end">
               {/* Сортиране – По дата (най-нови) */}

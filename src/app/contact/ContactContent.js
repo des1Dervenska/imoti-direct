@@ -43,7 +43,7 @@ function ContactInfoItem({ icon: Icon, title, content }) {
       </div>
       <div>
         <h3 className="font-semibold text-graphite mb-1">{title}</h3>
-        <p className="text-graphite-light">{content}</p>
+        <p className="text-graphite-light"><span className="font-sans-nums">{content}</span></p>
       </div>
     </div>
   );
