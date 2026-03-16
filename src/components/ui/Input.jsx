@@ -34,7 +34,7 @@ const Input = forwardRef(function Input(
   return (
     <div className={containerClassName}>
       {label && (
-        <label className="block text-sm font-medium text-graphite mb-2">
+        <label className="block text-sm text-graphite mb-2">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>

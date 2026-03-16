@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import PropertyGrid from './PropertyGrid';
-import { propertyTypes, cities } from '@/data/properties';
+import { propertyTypes, cities, constructionTypes, yearBuiltStatuses } from '@/data/properties';
 import { getTranslations } from '@/lib/translations';
 import {
   FunnelIcon,
@@ -81,6 +81,9 @@ export default function PropertyFilters({
     maxPricePerSqm: '',
     yearFrom: '',
     yearTo: '',
+    tec: '',
+    constructionType: '',
+    yearBuiltStatus: '',
   });
   const [sortBy, setSortBy] = useState('date-desc');
   const [sortOpen, setSortOpen] = useState(false);
@@ -131,6 +134,9 @@ export default function PropertyFilters({
       maxPricePerSqm: '',
       yearFrom: '',
       yearTo: '',
+      tec: '',
+      constructionType: '',
+      yearBuiltStatus: '',
     }));
   };
 
@@ -148,7 +154,10 @@ export default function PropertyFilters({
     filters.minPricePerSqm ||
     filters.maxPricePerSqm ||
     filters.yearFrom ||
-    filters.yearTo;
+    filters.yearTo ||
+    filters.tec ||
+    filters.constructionType ||
+    filters.yearBuiltStatus;
 
   const filteredProperties = useMemo(() => {
     let list = properties.filter((property) => {
@@ -204,6 +213,10 @@ export default function PropertyFilters({
         const to = Number(filters.yearTo);
         if (!isNaN(to) && (property.yearBuilt ?? 0) > to) return false;
       }
+      if (filters.tec === 'yes' && !property.tec) return false;
+      if (filters.tec === 'no' && property.tec) return false;
+      if (filters.constructionType && (property.constructionType ?? '') !== filters.constructionType) return false;
+      if (filters.yearBuiltStatus && (property.yearBuiltStatus ?? '') !== filters.yearBuiltStatus) return false;
       return true;
     });
 
@@ -520,6 +533,48 @@ export default function PropertyFilters({
                             className={filterInputClass}
                           />
                         </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.tec}</label>
+                        <select
+                          value={filters.tec ?? ''}
+                          onChange={(e) => updateFilter('tec', e.target.value)}
+                          className={filterSelectClass}
+                        >
+                          <option value="">{t.tecAny}</option>
+                          <option value="yes">{t.tecYes}</option>
+                          <option value="no">{t.tecNo}</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.constructionType}</label>
+                        <select
+                          value={filters.constructionType ?? ''}
+                          onChange={(e) => updateFilter('constructionType', e.target.value)}
+                          className={filterSelectClass}
+                        >
+                          <option value="">{t.constructionTypeAny}</option>
+                          {constructionTypes.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {getTranslations(locale)?.property?.[`constructionType_${opt.value}`] ?? opt.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.yearBuiltStatus}</label>
+                        <select
+                          value={filters.yearBuiltStatus ?? ''}
+                          onChange={(e) => updateFilter('yearBuiltStatus', e.target.value)}
+                          className={filterSelectClass}
+                        >
+                          <option value="">{t.yearBuiltStatusAny}</option>
+                          {yearBuiltStatuses.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {getTranslations(locale)?.property?.[`yearBuiltStatus_${opt.value}`] ?? opt.label}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                       {hasExtraFilters && (
                         <button

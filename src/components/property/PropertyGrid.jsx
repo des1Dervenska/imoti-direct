@@ -7,7 +7,7 @@ const gridStyle = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
 const emptyContainer = 'text-center py-16';
 const emptyIconWrapper = 'inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4';
 const emptyIconStyle = 'w-10 h-10 text-gray-400';
-const emptyTitle = 'text-xl font-semibold text-graphite mb-2';
+const emptyTitle = 'text-xl text-graphite mb-2';
 const emptyText = 'text-graphite-light';
 
 function EmptyState({ message, tryChangeCriteria }) {

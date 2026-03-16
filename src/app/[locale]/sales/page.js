@@ -5,6 +5,9 @@ import { getTranslations } from "@/lib/translations";
 import { Section, Container, LinkButton, Card, AnimateOnScroll } from "@/components/ui";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
+/** Винаги свежи данни от Supabase – нови обяви се показват веднага (без кеш на страницата). */
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const t = getTranslations(locale);

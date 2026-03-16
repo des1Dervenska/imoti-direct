@@ -20,7 +20,7 @@ const NAV_BUTTONS = [
   { Icon: ChevronRightIcon, position: 'right-3', label: 'Следваща снимка', direction: 1 },
 ];
 
-export default function PropertyGallery({ images = [], title = 'Имот' }) {
+export default function PropertyGallery({ images = [], title = 'Имот', isUnavailable = false, unavailableOverlayText = null }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const displayImages = images?.length > 0 ? images : [DEFAULT_PROPERTY_IMAGE];
@@ -38,13 +38,25 @@ export default function PropertyGallery({ images = [], title = 'Имот' }) {
 
   return (
     <div className="space-y-3">
-      {/* Main Image */}
+      {/* Main Image – затъмняването е само тук, не върху миниатюрите */}
       <div className={mainImageContainer}>
         <img
           src={displayImages[activeIndex]}
           alt={`${title} - снимка ${activeIndex + 1}`}
           className={imageStyle}
         />
+
+        {/* Sold/Rented overlay – само върху голямата снимка */}
+        {isUnavailable && unavailableOverlayText && (
+          <div
+            className="absolute inset-0 flex items-center justify-center z-10 bg-black/50 pointer-events-none"
+            aria-hidden
+          >
+            <span className="text-white text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase drop-shadow-lg">
+              {unavailableOverlayText}
+            </span>
+          </div>
+        )}
 
         {/* Image counter */}
         {hasMultipleImages && (

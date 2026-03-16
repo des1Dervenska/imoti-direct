@@ -90,7 +90,7 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
         <div className="flex flex-wrap items-end gap-4">
           {/* Търсене по име */}
           <div className="min-w-[200px] flex-1">
-            <label htmlFor="admin-search" className="mb-1 block text-xs font-medium text-gray-600">
+            <label htmlFor="admin-search" className="mb-1 block text-xs text-gray-600">
               Търсене по име / адрес
             </label>
             <div className="relative">
@@ -108,7 +108,7 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
 
           {/* Сортиране */}
           <div className="w-48">
-            <label htmlFor="admin-sort" className="mb-1 block text-xs font-medium text-gray-600">
+            <label htmlFor="admin-sort" className="mb-1 block text-xs text-gray-600">
               Сортиране
             </label>
             <select
@@ -127,7 +127,7 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
 
           {/* Категория */}
           <div className="w-36">
-            <label htmlFor="admin-category" className="mb-1 block text-xs font-medium text-gray-600">
+            <label htmlFor="admin-category" className="mb-1 block text-xs text-gray-600">
               Категория
             </label>
             <select
@@ -147,7 +147,7 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
 
           {/* Тип */}
           <div className="w-36">
-            <label htmlFor="admin-type" className="mb-1 block text-xs font-medium text-gray-600">
+            <label htmlFor="admin-type" className="mb-1 block text-xs text-gray-600">
               Тип
             </label>
             <select
@@ -167,7 +167,7 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
 
           {/* Статус */}
           <div className="w-36">
-            <label htmlFor="admin-status" className="mb-1 block text-xs font-medium text-gray-600">
+            <label htmlFor="admin-status" className="mb-1 block text-xs text-gray-600">
               Статус
             </label>
             <select
@@ -187,7 +187,7 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
 
           {/* Град */}
           <div className="w-36">
-            <label htmlFor="admin-city" className="mb-1 block text-xs font-medium text-gray-600">
+            <label htmlFor="admin-city" className="mb-1 block text-xs text-gray-600">
               Град
             </label>
             <select

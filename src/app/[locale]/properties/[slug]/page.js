@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getPropertyBySlug, getDisplayText } from '@/lib/properties';
 import { notFound } from 'next/navigation';
 import PropertyGallery from '@/components/property/PropertyGallery';
+import YouTubeVideoThumbnail from '@/components/property/YouTubeVideoThumbnail';
 import {
   BRAND_NAME,
   CONTACT_PERSON,
@@ -28,8 +29,10 @@ import {
   PhoneIcon,
   EnvelopeIcon,
   ExclamationTriangleIcon,
-  FilmIcon,
 } from '@heroicons/react/24/outline';
+
+/** Винаги свежи данни – нови обяви се отварят веднага. */
+export const dynamic = 'force-dynamic';
 
 function formatDate(dateString, locale) {
   return new Date(dateString).toLocaleDateString(locale === 'en' ? 'en-GB' : 'bg-BG', {
@@ -37,6 +40,19 @@ function formatDate(dateString, locale) {
     month: 'long',
     day: 'numeric',
   });
+}
+
+function getYoutubeVideoId(url) {
+  if (!url || typeof url !== 'string') return null;
+  try {
+    const u = new URL(url.trim());
+    if (u.hostname === 'www.youtube.com' || u.hostname === 'youtube.com') {
+      return u.searchParams.get('v') || null;
+    }
+    if (u.hostname === 'youtu.be') return u.pathname.slice(1).split('/')[0] || null;
+    if (u.hostname === 'www.youtu.be') return u.pathname.slice(1).split('/')[0] || null;
+  } catch (_) {}
+  return null;
 }
 
 function Breadcrumb({ category, title, locale }) {
@@ -64,7 +80,7 @@ function KeyDetailItem({ icon: Icon, value, label }) {
       <div className="w-14 h-14 bg-cadetblue/15 rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors duration-300 group-hover:bg-cadetblue/25">
         <Icon className="w-6 h-6 text-graphite" />
       </div>
-      <div className="text-xl text-graphite">{value}</div>
+      <div className="text-xl text-graphite" style={{ fontWeight: 400 }}>{value}</div>
       <div className="text-sm text-gray-500">{label}</div>
     </div>
   );
@@ -101,7 +117,7 @@ function ContactActionButton({ href, icon: Icon, children, variant = 'primary' }
 
 function LocationText({ neighborhood, city }) {
   return (
-    <div className="flex items-center gap-2 text-sm text-gray-500">
+    <div className="flex items-center gap-2 text-sm text-gray-500" style={{ fontWeight: 400 }}>
       <MapPinIcon className="w-4 h-4" />
       <span>{neighborhood ? `${neighborhood}, ${city}` : city}</span>
     </div>
@@ -150,16 +166,17 @@ export default async function PropertyDetailPage({ params }) {
       ? t[yearBuiltLabelKey]
       : `${t[yearBuiltLabelKey]}${yearBuilt ? `, ${yearBuilt}` : ''}`)
     : yearBuilt;
+  const noVal = t.noValue ?? 'няма';
   const keyDetails = [
-    { icon: ArrowsPointingOutIcon, value: `${area} м²`, label: t.area, show: true },
-    { icon: CurrencyDollarIcon, value: pricePerSqm != null ? `${pricePerSqm} EUR/m²${category === 'rent' ? t.pricePerSqmRentSuffix : ''}` : null, label: t.pricePerSqm, show: pricePerSqm != null },
-    { icon: HomeIcon, value: rooms, label: t.rooms, show: !!rooms },
-    { icon: BuildingOfficeIcon, value: totalFloors != null ? `${floor === 0 ? t.floorParter : floor} / ${totalFloors}` : (floor === 0 ? t.floorParter : String(floor)), label: t.floor, show: floor !== undefined && floor !== null && floor !== '' },
-    { icon: CalendarIcon, value: yearBuiltValue, label: yearBuiltStatus ? t.yearBuilt : t.year, show: !!yearBuiltStatus || !!yearBuilt },
-    { icon: BoltIcon, value: t.yes, label: t.gaz, show: !!gaz },
-    { icon: FireIcon, value: t.yes, label: t.tec, show: !!tec },
-    { icon: BuildingOfficeIcon, value: t[`constructionType_${constructionType}`] ?? constructionType, label: t.constructionType, show: !!constructionType },
-  ].filter((item) => item.show);
+    { icon: ArrowsPointingOutIcon, value: area != null && area !== '' ? `${area} м²` : noVal, label: t.area },
+    { icon: CurrencyDollarIcon, value: pricePerSqm != null ? `${pricePerSqm} EUR/m²${category === 'rent' ? t.pricePerSqmRentSuffix : ''}` : noVal, label: t.pricePerSqm },
+    { icon: HomeIcon, value: rooms != null && rooms !== '' ? String(rooms) : noVal, label: t.rooms },
+    { icon: BuildingOfficeIcon, value: floor !== undefined && floor !== null && floor !== '' ? (totalFloors != null ? `${floor === 0 ? t.floorParter : floor} / ${totalFloors}` : (floor === 0 ? t.floorParter : String(floor))) : noVal, label: t.floor },
+    { icon: BoltIcon, value: gaz ? t.yes : noVal, label: t.gaz },
+    { icon: FireIcon, value: tec ? t.yes : noVal, label: t.tec },
+    { icon: CalendarIcon, value: yearBuiltStatus || yearBuilt ? yearBuiltValue : noVal, label: yearBuiltStatus ? t.yearBuilt : t.year },
+    { icon: BuildingOfficeIcon, value: constructionType ? (t[`constructionType_${constructionType}`] ?? constructionType) : noVal, label: t.constructionType },
+  ];
 
   const location = neighborhood ? `${neighborhood}, ${city}` : city;
   const mapQuery = [address, neighborhood, city].filter(Boolean).join(', ');
@@ -182,38 +199,19 @@ export default async function PropertyDetailPage({ params }) {
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-8">
                 <div className="relative">
-                  <PropertyGallery images={images} title={title} />
-                  {isUnavailable && unavailableOverlayText && (
-                    <div
-                      className="absolute inset-0 flex items-center justify-center z-10 bg-black/50 pointer-events-none"
-                      aria-hidden
-                    >
-                      <span className="text-white text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase drop-shadow-lg">
-                        {unavailableOverlayText}
-                      </span>
-                    </div>
-                  )}
+                  <PropertyGallery
+                    images={images}
+                    title={title}
+                    isUnavailable={isUnavailable}
+                    unavailableOverlayText={unavailableOverlayText}
+                  />
                   <div className="absolute top-4 left-4 flex gap-2 z-20">
                     <Badge.Category category={category} size="lg" locale={locale} />
                     <Badge.Type type={type} size="lg" locale={locale} />
                   </div>
                 </div>
 
-                {videoUrl && (
-                  <div className="mt-4">
-                    <LinkButton
-                      href={videoUrl}
-                      variant="primary"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <FilmIcon className="w-5 h-5 mr-2" />
-                      {t.watchVideo}
-                    </LinkButton>
-                  </div>
-                )}
-
-                <div className="lg:hidden">
+                <div className="lg:hidden" style={{ fontWeight: 400 }}>
                   <LocationText neighborhood={neighborhood} city={city} />
                   <h1 className="text-2xl text-cadetblue mb-3 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
                   <div className="text-graphite">
@@ -224,16 +222,24 @@ export default async function PropertyDetailPage({ params }) {
                 </div>
 
                 <Card className="p-6" variant="light">
-                  <h2 className="text-lg font-semibold text-graphite mb-4">{t.keyDetails}</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 lg:gap-6">
+                  <h2 className="text-lg text-graphite mb-4">{t.keyDetails}</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
                     {keyDetails.map((detail) => (
                       <KeyDetailItem key={detail.label} {...detail} />
                     ))}
                   </div>
                 </Card>
 
+                {videoUrl && getYoutubeVideoId(videoUrl) && (
+                  <YouTubeVideoThumbnail
+                    videoId={getYoutubeVideoId(videoUrl)}
+                    videoUrl={videoUrl}
+                    watchVideoLabel={t.watchVideo}
+                  />
+                )}
+
                 <div>
-                  <h2 className="text-xl font-semibold text-graphite mb-4">{t.description}</h2>
+                  <h2 className="text-xl text-graphite mb-4">{t.description}</h2>
                   <p className="text-graphite-light leading-relaxed whitespace-pre-line">
                     {description}
                   </p>
@@ -241,7 +247,7 @@ export default async function PropertyDetailPage({ params }) {
 
                 {features?.length > 0 && (
                   <div>
-                    <h2 className="text-xl font-semibold text-graphite mb-4">{t.features}</h2>
+                    <h2 className="text-xl text-graphite mb-4">{t.features}</h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {features.map((feature, index) => (
                         <FeatureItem key={index} feature={feature} />
@@ -251,7 +257,7 @@ export default async function PropertyDetailPage({ params }) {
                 )}
 
                 <div>
-                  <h2 className="text-xl font-semibold text-graphite mb-4">{t.location}</h2>
+                  <h2 className="text-xl text-graphite mb-4">{t.location}</h2>
                   <Card className="p-6" variant="light">
                     <div className="flex items-start space-x-3 mb-4">
                       <MapPinIcon className="w-6 h-6 text-graphite flex-shrink-0 mt-0.5" />
@@ -300,7 +306,7 @@ export default async function PropertyDetailPage({ params }) {
 
               <div className="lg:col-span-1">
                 <div className="sticky top-24 space-y-6">
-                  <Card className="hidden lg:block p-6">
+                  <Card className="hidden lg:block p-6" style={{ fontWeight: 400 }}>
                     <LocationText neighborhood={neighborhood} city={city} />
                     <h1 className="text-xl text-cadetblue mb-4 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
                     <div className="mb-4">

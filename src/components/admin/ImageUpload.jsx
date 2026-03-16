@@ -148,7 +148,7 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
       {/* Uploaded Images */}
       {images.length > 0 && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm text-gray-700 mb-2">
             Качени снимки ({images.length})
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -218,7 +218,7 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
       {previews.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm text-gray-700">
               Избрани за качване ({previews.length})
             </label>
             <button
@@ -260,7 +260,7 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
               type="button"
               onClick={handleUpload}
               disabled={isUploading || previews.length === 0}
-              className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isUploading ? (
                 <span className="flex items-center">
@@ -302,7 +302,7 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
       {/* Errors */}
       {errors.length > 0 && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-800 text-sm font-medium mb-1">Грешки при качване:</p>
+          <p className="text-red-800 text-sm mb-1">Грешки при качване:</p>
           <ul className="text-red-700 text-sm list-disc list-inside">
             {errors.map((error, index) => (
               <li key={index}>{error}</li>

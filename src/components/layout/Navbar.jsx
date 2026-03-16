@@ -78,7 +78,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { BRAND_NAME } from "@/lib/constants";
+import { BRAND_NAME_WITHOUT_NUMBER, BRAND_NAME_NUMBER } from "@/lib/constants";
 import Logo from "@/components/ui/Logo";
 import { getTranslations } from "@/lib/translations";
 import { LOCALES } from "@/lib/i18n";
@@ -88,7 +88,7 @@ const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 function getDesktopLinkClass(isActive) {
   const base =
-    "relative py-2.5 text-[17px] font-semibold tracking-tight transition-all duration-300 ease-out";
+    "relative py-2.5 text-[17px] tracking-tight transition-all duration-300 ease-out";
   const active =
     "text-[#0097b2] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-[#0097b2] after:content-['']";
   const inactive =
@@ -97,7 +97,7 @@ function getDesktopLinkClass(isActive) {
 }
 
 function getMobileLinkClass(isActive) {
-  const base = "block rounded-lg px-4 py-3 text-base font-medium transition-colors border-l-4";
+  const base = "block rounded-lg px-4 py-3 text-base transition-colors border-l-4";
   const active = "border-[#0097b2] bg-[#0097b2]/10 text-[#0097b2]";
   const inactive = "border-transparent text-graphite hover:bg-gray-100 hover:text-[#0097b2]";
   return `${base} ${isActive ? active : inactive}`;
@@ -145,8 +145,8 @@ export default function Navbar({ locale = "bg" }) {
         >
           <Logo width={38} height={38} priority className="object-contain" />
           <div className="flex flex-col leading-none">
-            <span className="text-base tracking-[0.02em] text-graphite sm:text-xl">
-              {BRAND_NAME}
+            <span className="brand-name-sans text-base tracking-[0.02em] text-graphite sm:text-xl">
+              {BRAND_NAME_WITHOUT_NUMBER}{BRAND_NAME_NUMBER}
             </span>
             <span className="hidden text-[11px] uppercase tracking-[0.22em] text-graphite/55 sm:block">
               {t.brand.taglineSub}
@@ -180,7 +180,7 @@ export default function Navbar({ locale = "bg" }) {
               l === locale ? (
                 <span
                   key={l}
-                  className="rounded-lg px-3 py-2 text-sm font-semibold bg-[#0097b2] text-white shadow-sm"
+                  className="rounded-lg px-3 py-2 text-sm bg-[#0097b2] text-white shadow-sm"
                   aria-label={l === "bg" ? "Български" : "English"}
                   aria-current="true"
                 >
@@ -191,7 +191,7 @@ export default function Navbar({ locale = "bg" }) {
                   key={l}
                   href={`/${l}${pathWithoutLocale}`}
                   onClick={() => setLocaleCookie(l)}
-                  className="rounded-lg px-3 py-2 text-sm font-medium text-graphite/80 hover:bg-[#0097b2]/10 hover:text-[#0097b2] transition-colors duration-200"
+                  className="rounded-lg px-3 py-2 text-sm text-graphite/80 hover:bg-[#0097b2]/10 hover:text-[#0097b2] transition-colors duration-200"
                   aria-label={l === "bg" ? "Български" : "English"}
                 >
                   {l.toUpperCase()}

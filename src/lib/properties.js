@@ -122,7 +122,7 @@ export async function getSaleProperties() {
       .from('properties')
       .select('*')
       .eq('category', PROPERTY_CATEGORY.SALE)
-      .eq('status', PROPERTY_STATUS.ACTIVE)
+      .in('status', [PROPERTY_STATUS.ACTIVE, PROPERTY_STATUS.SOLD])
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -134,7 +134,7 @@ export async function getSaleProperties() {
   }
 
   return mockProperties.filter(
-    p => p.category === PROPERTY_CATEGORY.SALE && p.status === PROPERTY_STATUS.ACTIVE
+    p => p.category === PROPERTY_CATEGORY.SALE && (p.status === PROPERTY_STATUS.ACTIVE || p.status === PROPERTY_STATUS.SOLD)
   );
 }
 
@@ -148,7 +148,7 @@ export async function getRentProperties() {
       .from('properties')
       .select('*')
       .eq('category', PROPERTY_CATEGORY.RENT)
-      .eq('status', PROPERTY_STATUS.ACTIVE)
+      .in('status', [PROPERTY_STATUS.ACTIVE, PROPERTY_STATUS.RENTED])
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -160,7 +160,7 @@ export async function getRentProperties() {
   }
 
   return mockProperties.filter(
-    p => p.category === PROPERTY_CATEGORY.RENT && p.status === PROPERTY_STATUS.ACTIVE
+    p => p.category === PROPERTY_CATEGORY.RENT && (p.status === PROPERTY_STATUS.ACTIVE || p.status === PROPERTY_STATUS.RENTED)
   );
 }
 
@@ -402,6 +402,30 @@ export async function createProperty(propertyData) {
   }
 
   return { data: transformProperty(data), error: null, isDemo: false };
+}
+
+// =============================================================================
+// ADMIN: DELETE PROPERTY
+// =============================================================================
+
+export async function deleteProperty(id) {
+  if (!isSupabaseConfigured) {
+    return {
+      error: 'Демо режим – изтриване не е налично. Конфигурирайте Supabase.',
+      isDemo: true
+    };
+  }
+
+  const { error } = await supabase
+    .from('properties')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    return { error: error.message, isDemo: false };
+  }
+
+  return { error: null, isDemo: false };
 }
 
 // =============================================================================

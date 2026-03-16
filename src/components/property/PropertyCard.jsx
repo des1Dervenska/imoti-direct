@@ -20,6 +20,7 @@ export default function PropertyCard({ property, showDescription = true, locale 
     slug,
     type,
     category,
+    status,
     price,
     area,
     rooms,
@@ -35,6 +36,8 @@ export default function PropertyCard({ property, showDescription = true, locale 
   const propertyUrl = locale ? `/${locale}/properties/${slug}` : `/properties/${slug}`;
   const imageUrl = images?.[0] || DEFAULT_PROPERTY_IMAGE;
   const location = neighborhood ? `${neighborhood}, ${city}` : city;
+  const isUnavailable = status === 'sold' || status === 'rented';
+  const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕНА') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕНА') : null;
 
   const features = [
     { Icon: ArrowsPointingOutIcon, value: `${area} м²`, show: true },
@@ -44,7 +47,7 @@ export default function PropertyCard({ property, showDescription = true, locale 
   ];
 
   return (
-    <div className={cardStyle}>
+    <div className={`${cardStyle} ${isUnavailable ? 'opacity-85' : ''}`}>
       {/* Image */}
       <Link href={propertyUrl} className="block relative h-52 bg-gray-200 overflow-hidden group">
         <img
@@ -52,6 +55,18 @@ export default function PropertyCard({ property, showDescription = true, locale 
           alt={title}
           className="absolute inset-0 w-full h-full object-cover"
         />
+
+        {/* Sold/Rented overlay */}
+        {isUnavailable && unavailableOverlayText && (
+          <div
+            className="absolute inset-0 flex items-center justify-center z-10 bg-black/50 pointer-events-none"
+            aria-hidden
+          >
+            <span className="text-white text-2xl md:text-3xl tracking-widest uppercase drop-shadow-lg">
+              {unavailableOverlayText}
+            </span>
+          </div>
+        )}
 
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-graphite opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
@@ -72,7 +87,7 @@ export default function PropertyCard({ property, showDescription = true, locale 
             {features.filter(f => f.show).map(({ Icon, value }, idx) => (
               <div key={`${value}-${idx}`} className={featureStyle}>
                 <Icon className={featureIconStyle} />
-                <span>{value}</span>
+                <span style={{ fontWeight: 400 }}>{value}</span>
               </div>
             ))}
           </div>
@@ -89,7 +104,7 @@ export default function PropertyCard({ property, showDescription = true, locale 
             const perSqmText = pricePerSqm != null ? `${Math.round(pricePerSqm)} EUR/м²${category === 'rent' ? '/мес' : ''}` : null;
             return (
               <>
-                <span className="text-2xl font-bold text-graphite">{eurText}</span>
+                <span className="text-2xl text-graphite" style={{ fontWeight: 400 }}>{eurText}</span>
                 <span className="block text-sm font-normal text-graphite-light">{bgnText}</span>
                 {perSqmText && <span className="block text-xs text-graphite-light">{perSqmText}</span>}
                 <span className="block text-xs text-graphite-light">{vatLabel}</span>
@@ -99,14 +114,14 @@ export default function PropertyCard({ property, showDescription = true, locale 
         </div>
 
         <Link href={propertyUrl}>
-          <h3 className="text-lg font-semibold text-graphite hover:text-graphite-dark transition-colors line-clamp-2 mb-2">
+          <h3 className="text-lg text-graphite hover:text-graphite-dark transition-colors line-clamp-2 mb-2">
             {title}
           </h3>
         </Link>
 
         <div className="flex items-center text-graphite-light text-sm mb-3">
           <MapPinIcon className="w-4 h-4 mr-1.5 flex-shrink-0 text-graphite-light" />
-          <span className="font-medium">{location}</span>
+          <span>{location}</span>
         </div>
 
         {showDescription && (

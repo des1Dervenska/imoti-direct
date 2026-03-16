@@ -34,7 +34,7 @@ function OwnerCard({ name, brandName, ownerRole }) {
           />
         </div>
         <div>
-          <div className="text-lg font-semibold text-graphite">{name}</div>
+          <div className="text-lg text-graphite">{name}</div>
           <div className="text-graphite-light">{ownerRole}, {brandName}</div>
         </div>
       </div>

@@ -12,7 +12,7 @@ export default async function LocaleLayout({ children, params }) {
   return (
     <>
       <Navbar locale={locale} />
-      <main className="pt-16 min-h-screen font-playfair">
+      <main className="pt-16 min-h-screen">
         {children}
       </main>
       <Footer locale={locale} />

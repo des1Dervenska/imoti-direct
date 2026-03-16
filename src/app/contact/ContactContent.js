@@ -32,7 +32,7 @@ const SOCIAL_LINKS = [
 
 // Styles
 const inputStyle = 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite text-graphite';
-const labelStyle = 'block text-sm font-medium text-gray-700 mb-2';
+const labelStyle = 'block text-sm text-gray-700 mb-2';
 
 // Helper: Contact info item
 function ContactInfoItem({ icon: Icon, title, content }) {
@@ -42,7 +42,7 @@ function ContactInfoItem({ icon: Icon, title, content }) {
         <Icon className="w-6 h-6 text-graphite" />
       </div>
       <div>
-        <h3 className="font-semibold text-graphite mb-1">{title}</h3>
+        <h3 className="text-graphite mb-1">{title}</h3>
         <p className="text-graphite-light"><span>{content}</span></p>
       </div>
     </div>
@@ -239,7 +239,7 @@ export default function ContactContent({ locale = 'bg' }) {
 
               {/* Social Links */}
               <div className="mt-8 pt-8 border-t">
-                <h3 className="font-semibold text-graphite mb-4">{t.followUs}</h3>
+                <h3 className="text-graphite mb-4">{t.followUs}</h3>
                 <div className="flex space-x-4">
                   {SOCIAL_LINKS.map((link) => (
                     <SocialLink key={link.label} {...link} />
@@ -352,7 +352,7 @@ export default function ContactContent({ locale = 'bg' }) {
                     />
                     <label id="privacyConsent-desc" htmlFor="privacyConsent" className="text-sm text-gray-700">
                       {t.privacyConsent}{' '}
-                      <Link href={`${prefix}/privacy`} className="text-graphite font-medium hover:underline">{t.privacyPolicy}</Link>
+                      <Link href={`${prefix}/privacy`} className="text-graphite hover:underline">{t.privacyPolicy}</Link>
                       {' '}{t.andGdpr}
                     </label>
                   </div>
@@ -404,7 +404,7 @@ export default function ContactContent({ locale = 'bg' }) {
             href={GOOGLE_MAPS_SEARCH_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center mt-4 text-graphite hover:text-graphite-dark font-medium"
+            className="inline-flex items-center mt-4 text-graphite hover:text-graphite-dark"
           >
             {t.openInMaps}
             <ArrowTopRightOnSquareIcon className="w-4 h-4 ml-1" />

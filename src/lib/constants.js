@@ -14,6 +14,9 @@
 // =============================================================================
 
 export const BRAND_NAME = 'ART HOUSE 94';
+/** Текстова част за визуализация – числото 94 се показва с default шрифт, не Playfair */
+export const BRAND_NAME_WITHOUT_NUMBER = 'ART HOUSE ';
+export const BRAND_NAME_NUMBER = '94';
 export const BRAND_DESCRIPTION = 'Професионална компания за недвижими имоти';
 export const BRAND_TAGLINE = 'С нас вашата сделка ще бъде в сигурни ръце';
 

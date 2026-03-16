@@ -12,6 +12,9 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 
+/** Винаги свежи данни – нови обяви се показват веднага на началната страница. */
+export const dynamic = 'force-dynamic';
+
 function SectionHeader({ title, subtitle, href, linkText }) {
   return (
     <div className="flex justify-between items-center mb-8">

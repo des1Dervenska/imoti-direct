@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { formatPriceEurAndBgn } from '@/lib/constants';
 import { getTypeLabel, getCategoryLabel, getConstructionTypeLabel } from '@/data/properties';
 
@@ -12,7 +14,32 @@ const statusLabels = {
   inactive: { label: 'Неактивна', className: 'bg-gray-100 text-gray-800' },
 };
 
+const CONFIRM_DELETE_MESSAGE = 'Сигурни ли сте, че искате да изтриете този имот? Това действие не може да бъде отменено.';
+
 export default function PropertyTable({ properties, isDemo = false }) {
+  const router = useRouter();
+  const [deletingId, setDeletingId] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
+
+  async function handleDelete(property) {
+    if (!window.confirm(CONFIRM_DELETE_MESSAGE)) return;
+    setDeleteError(null);
+    setDeletingId(property.id);
+    try {
+      const res = await fetch(`/api/admin/properties/${property.id}`, { method: 'DELETE' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setDeleteError(data.error || 'Грешка при изтриване');
+        return;
+      }
+      router.refresh();
+    } catch (err) {
+      setDeleteError('Грешка при изтриване на имота');
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   if (!properties || properties.length === 0) {
     return (
       <div className="text-center py-12 bg-gray-50 rounded-lg">
@@ -111,11 +138,11 @@ export default function PropertyTable({ properties, isDemo = false }) {
                   {[property.gaz && 'Газ', property.tec && 'ТЕЦ'].filter(Boolean).join(' / ') || '—'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${status.className}`}>
+                  <span className={`inline-flex px-2 py-1 text-xs rounded-full ${status.className}`}>
                     {status.label}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                   <Link
                     href={`/properties/${property.slug}`}
                     className="text-gray-600 hover:text-gray-900 mr-4"
@@ -124,12 +151,22 @@ export default function PropertyTable({ properties, isDemo = false }) {
                     Преглед
                   </Link>
                   {!isDemo && (
-                    <Link
-                      href={`/admin/properties/${property.id}/edit`}
-                      className="text-blue-600 hover:text-blue-900"
-                    >
-                      Редактирай
-                    </Link>
+                    <>
+                      <Link
+                        href={`/admin/properties/${property.id}/edit`}
+                        className="text-blue-600 hover:text-blue-900 mr-4"
+                      >
+                        Редактирай
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(property)}
+                        disabled={deletingId === property.id}
+                        className="text-red-600 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {deletingId === property.id ? 'Изтриване…' : 'Изтрий'}
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>

@@ -257,7 +257,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
                 Slug (URL) *
                 <span className="relative group inline-flex shrink-0">
                   <span
-                    className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-300 text-gray-600 text-xs font-bold cursor-help hover:bg-gray-400"
+                    className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-300 text-gray-600 text-xs cursor-help hover:bg-gray-400"
                     aria-label="Какво е slug?"
                   >
                     i
@@ -396,7 +396,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               onChange={handleChange}
               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm font-medium text-gray-700">Цена с включено ДДС</span>
+            <span className="text-sm text-gray-700">Цена с включено ДДС</span>
           </label>
           <p className="mt-1 text-xs text-gray-500">Ако не е тикнато, цената се счита за без включено ДДС.</p>
         </div>
@@ -534,7 +534,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
                 onChange={handleChange}
                 className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm font-medium text-gray-700">ТЕЦ</span>
+              <span className="text-sm text-gray-700">ТЕЦ</span>
             </label>
           </div>
         </div>
@@ -743,7 +743,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
                 Удобства (БГ, разделени със запетая)
                 <span className="relative group inline-flex shrink-0">
                   <span
-                    className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-300 text-gray-600 text-xs font-bold cursor-help hover:bg-gray-400"
+                    className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-300 text-gray-600 text-xs cursor-help hover:bg-gray-400"
                     aria-label="Предложени удобства"
                   >
                     i
@@ -768,7 +768,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
                 Удобства (EN, разделени със запетая)
                 <span className="relative group inline-flex shrink-0">
                   <span
-                    className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-300 text-gray-600 text-xs font-bold cursor-help hover:bg-gray-400"
+                    className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-300 text-gray-600 text-xs cursor-help hover:bg-gray-400"
                     aria-label="Suggested amenities"
                   >
                     i
@@ -827,7 +827,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
 
       {/* Лична бележка на брокера – само за админ */}
       <div className="bg-amber-50/80 p-6 rounded-lg shadow-sm border border-amber-200">
-        <h3 className="text-lg font-semibold text-amber-900 mb-1">Лична бележка на брокера</h3>
+        <h3 className="text-lg text-amber-900 mb-1">Лична бележка на брокера</h3>
         <p className="text-sm text-amber-800 mb-3">Само ти я виждаш от админ панела – не се показва на клиентите.</p>
         <textarea
           id="brokerNote"

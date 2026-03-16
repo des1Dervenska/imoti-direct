@@ -82,24 +82,24 @@ export default function PropertyCarousel({ properties = [], locale = 'bg' }) {
 
   return (
     <div className="relative">
-      {/* Arrows - само при повече от 3 имота */}
+      {/* Arrows – на тел много прозрачни и по-малки, за да не пречат на обявата; на комп стъклен фон */}
       {slideCount > 1 && (
         <>
           <button
             type="button"
             onClick={goPrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 z-10 w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center text-graphite hover:bg-gray-50 transition-colors"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-8 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 md:bg-white/50 backdrop-blur-sm md:backdrop-blur-md shadow-md md:shadow-lg border border-white/20 md:border-white/40 flex items-center justify-center text-graphite hover:bg-white/40 md:hover:bg-white/75 transition-colors"
             aria-label="Предишни"
           >
-            <ChevronLeftIcon className="w-6 h-6" />
+            <ChevronLeftIcon className="w-5 h-5 md:w-6 md:h-6" />
           </button>
           <button
             type="button"
             onClick={goNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 z-10 w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center text-graphite hover:bg-gray-50 transition-colors"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-8 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 md:bg-white/50 backdrop-blur-sm md:backdrop-blur-md shadow-md md:shadow-lg border border-white/20 md:border-white/40 flex items-center justify-center text-graphite hover:bg-white/40 md:hover:bg-white/75 transition-colors"
             aria-label="Следващи"
           >
-            <ChevronRightIcon className="w-6 h-6" />
+            <ChevronRightIcon className="w-5 h-5 md:w-6 md:h-6" />
           </button>
         </>
       )}
