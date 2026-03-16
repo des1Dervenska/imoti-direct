@@ -23,6 +23,28 @@ export const PROPERTY_TYPE = {
   APARTMENT: 'apartment',
   HOUSE: 'house',
   LAND: 'land',
+  // Разширени типове
+  EDNOSTAEN: 'ednostaen',
+  DESTAEN: 'destaen',
+  TRISTAEN: 'tristaen',
+  CHETIRISTAEN: 'chetiristaen',
+  MEZONET: 'mezonet',
+  MEZONET_OFIS: 'mezonet_ofis',
+  ATELIE: 'atelie',
+  TAVAN: 'tavan',
+  MNOGOSTAEN_PENTHAUS: 'mnogostaen_penthaus',
+  ETAJ_KASHTA: 'etaj_kashta',
+  KASHTA: 'kashta',
+  VILA: 'vila',
+  MAGAZIN: 'magazin',
+  ZAVEDENIE: 'zavedenie',
+  SKLAD: 'sklad',
+  GARAJ: 'garaj',
+  PARKOMQSTO: 'parkomqsto',
+  PROMISHLENO: 'promishleno',
+  HOTEL: 'hotel',
+  PARCEL: 'parcel',
+  ZEMEDELSKA_ZEMYA: 'zemedelska_zemya',
 };
 
 export const PROPERTY_STATUS = {
@@ -47,8 +69,9 @@ export const CURRENCY = {
  * @property {number} id - Primary key
  * @property {string} slug - URL-friendly идентификатор (unique)
  * @property {string} title - Заглавие
+ * @property {string|null} [titleEn] - Заглавие (EN)
  * @property {('sale'|'rent')} category - Категория
- * @property {('apartment'|'house'|'land')} type - Тип имот
+ * @property {string} type - Тип имот (едностаен, двустаен, мезонет, къща, вила, парцел, и др.)
  * @property {('active'|'pending'|'sold'|'rented'|'inactive')} status - Статус
  * @property {number} price - Цена
  * @property {('EUR'|'BGN')} currency - Валута
@@ -56,15 +79,27 @@ export const CURRENCY = {
  * @property {number|null} rooms - Брой стаи
  * @property {number|null} floor - Етаж
  * @property {number|null} totalFloors - Общо етажи
- * @property {number|null} yearBuilt - Година на строеж
+ * @property {number|null} yearBuilt - Година на строеж (при completed/under_construction)
+ * @property {string|null} [yearBuiltStatus] - completed | under_construction | not_in_use
  * @property {string} city - Град
+ * @property {string|null} [cityEn] - Град (EN)
  * @property {string|null} neighborhood - Квартал
+ * @property {string|null} [neighborhoodEn] - Квартал (EN)
  * @property {string} address - Адрес
+ * @property {string|null} [addressEn] - Адрес (EN)
  * @property {string} description - Описание
+ * @property {string|null} [descriptionEn] - Описание (EN)
  * @property {string[]} features - Удобства
+ * @property {string[]} [featuresEn] - Удобства (EN)
  * @property {string[]} images - Снимки (URLs)
  * @property {string|null} mapUrl - Google Maps линк
+ * @property {string|null} [videoUrl] - Линк към YouTube (или друго) видео за обекта
  * @property {boolean} isFeatured - Промотирана обява
+ * @property {boolean} [gaz] - Газ
+ * @property {boolean} [tec] - ТЕЦ
+ * @property {boolean} [priceIncludesVat] - Цена с включено ДДС (true) / без ДДС (false)
+ * @property {string} [constructionType] - Тип строителство: panel, tuhla, epk, pk, gredored, sglobyaema
+ * @property {string|null} [brokerNote] - Лична бележка на брокера (само за админ, не се показва на сайта)
  * @property {string} createdAt - ISO 8601
  * @property {string} updatedAt - ISO 8601
  */
@@ -79,6 +114,7 @@ export const properties = [
     id: 1,
     slug: "apartament-sofia-lozenets",
     title: "Тристаен апартамент в Лозенец",
+    titleEn: "Three-room apartment in Lozenets",
     category: PROPERTY_CATEGORY.SALE,
     type: PROPERTY_TYPE.APARTMENT,
     status: PROPERTY_STATUS.ACTIVE,
@@ -89,14 +125,24 @@ export const properties = [
     floor: 4,
     totalFloors: 8,
     yearBuilt: 2020,
+    yearBuiltStatus: 'completed',
     city: "София",
+    cityEn: "Sofia",
     neighborhood: "Лозенец",
+    neighborhoodEn: "Lozenets",
     address: "ул. Златен рог 15, Лозенец, София",
+    addressEn: "15 Zlaten Rog St, Lozenets, Sofia",
     description: "Просторен тристаен апартамент в престижния квартал Лозенец. Апартаментът разполага с просторен хол, две спални, модерна кухня и два балкона с прекрасна гледка към Витоша. Жилището е с луксозно обзавеждане и се продава напълно обзаведено.",
+    descriptionEn: "Spacious three-room apartment in the prestigious Lozenets district. The apartment has a spacious hall, two bedrooms, a modern kitchen and two balconies with a beautiful view of Vitosha. The property is luxuriously furnished and sold fully furnished.",
     features: ["Паркомясто", "Асансьор", "Видеонаблюдение", "Климатик", "Панорамни прозорци"],
+    featuresEn: ["Parking", "Elevator", "CCTV", "AC", "Panoramic windows"],
     images: ["/images/apartment-1.jpg", "/images/apartment-1-2.jpg"],
     mapUrl: "https://www.google.com/maps/search/?api=1&query=42.6697,23.3219",
     isFeatured: true,
+    gaz: true,
+    tec: false,
+    priceIncludesVat: true,
+    constructionType: 'tuhla',
     createdAt: "2024-01-15T10:00:00Z",
     updatedAt: "2024-01-15T10:00:00Z",
   },
@@ -122,6 +168,9 @@ export const properties = [
     images: ["/images/house-1.jpg", "/images/house-1-2.jpg"],
     mapUrl: "https://www.google.com/maps/search/?api=1&query=42.1497,24.7510",
     isFeatured: true,
+    gaz: false,
+    tec: true,
+    priceIncludesVat: false,
     createdAt: "2024-01-10T14:30:00Z",
     updatedAt: "2024-01-10T14:30:00Z",
   },
@@ -352,20 +401,21 @@ export function formatPrice(price, currency = CURRENCY.EUR, category = PROPERTY_
 }
 
 /**
- * Връща label за тип имот
+ * Връща label за тип имот (български – за админ и fallback)
  */
 export function getTypeLabel(type) {
-  const labels = {
-    [PROPERTY_TYPE.APARTMENT]: 'Апартамент',
-    [PROPERTY_TYPE.HOUSE]: 'Къща',
-    [PROPERTY_TYPE.LAND]: 'Парцел',
-  };
-  return labels[type] || type;
+  const opt = propertyTypes.find((t) => t.value === type);
+  return opt ? opt.label : type;
 }
 
 /**
  * Връща label за категория
  */
+export function getConstructionTypeLabel(type) {
+  const opt = constructionTypes.find((t) => t.value === type);
+  return opt ? opt.label : type || '';
+}
+
 export function getCategoryLabel(category) {
   const labels = {
     [PROPERTY_CATEGORY.SALE]: 'Продажба',
@@ -379,6 +429,28 @@ export function getCategoryLabel(category) {
 // =============================================================================
 
 export const propertyTypes = [
+  { value: 'ednostaen', label: 'Едностаен' },
+  { value: 'destaen', label: 'Двустаен' },
+  { value: 'tristaen', label: 'Тристаен' },
+  { value: 'chetiristaen', label: 'Четиристаен' },
+  { value: 'mezonet', label: 'Мезонет' },
+  { value: 'mezonet_ofis', label: 'Мезонет офис' },
+  { value: 'atelie', label: 'Ателие' },
+  { value: 'tavan', label: 'Таван' },
+  { value: 'mnogostaen_penthaus', label: 'Многостаен/Пентхаус' },
+  { value: 'etaj_kashta', label: 'Етаж от къща' },
+  { value: 'kashta', label: 'Къща' },
+  { value: 'vila', label: 'Вила' },
+  { value: 'magazin', label: 'Магазин' },
+  { value: 'zavedenie', label: 'Заведение' },
+  { value: 'sklad', label: 'Склад' },
+  { value: 'garaj', label: 'Гараж' },
+  { value: 'parkomqsto', label: 'Паркомясто' },
+  { value: 'promishleno', label: 'Промишлено помещение' },
+  { value: 'hotel', label: 'Хотел' },
+  { value: 'parcel', label: 'Парцел' },
+  { value: 'zemedelska_zemya', label: 'Земеделска земя' },
+  // Обратна съвместимост
   { value: PROPERTY_TYPE.APARTMENT, label: 'Апартамент' },
   { value: PROPERTY_TYPE.HOUSE, label: 'Къща' },
   { value: PROPERTY_TYPE.LAND, label: 'Парцел' },
@@ -396,6 +468,27 @@ export const propertyStatuses = [
   { value: PROPERTY_STATUS.RENTED, label: 'Отдадена' },
   { value: PROPERTY_STATUS.INACTIVE, label: 'Неактивна' },
 ];
+
+export const constructionTypes = [
+  { value: 'panel', label: 'Панел' },
+  { value: 'tuhla', label: 'Тухла' },
+  { value: 'epk', label: 'ЕПК' },
+  { value: 'pk', label: 'ПК' },
+  { value: 'gredored', label: 'Гредоред' },
+  { value: 'sglobyaema', label: 'Сглобяема конструкция' },
+];
+
+/** Година на строителство: завършен / в строеж / не е въведен в експлоатация */
+export const yearBuiltStatuses = [
+  { value: 'completed', label: 'ЗАВЪРШЕН – имотът е въведен в експлоатация' },
+  { value: 'under_construction', label: 'В СТРОЕЖ – имотът ще бъде въведен в експлоатация' },
+  { value: 'not_in_use', label: 'Имотът не е въведен в експлоатация' },
+];
+
+export function getYearBuiltStatusLabel(status) {
+  const found = yearBuiltStatuses.find((s) => s.value === status);
+  return found ? found.label : '';
+}
 
 export const cities = [
   { value: 'София', label: 'София' },

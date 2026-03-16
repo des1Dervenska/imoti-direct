@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getPropertyBySlug } from '@/lib/properties';
+import { getPropertyBySlug, getDisplayText } from '@/lib/properties';
 import { notFound } from 'next/navigation';
 import PropertyGallery from '@/components/property/PropertyGallery';
 import {
@@ -22,9 +22,13 @@ import {
   CalendarIcon,
   CheckIcon,
   MapIcon,
+  BoltIcon,
+  FireIcon,
+  CurrencyDollarIcon,
   PhoneIcon,
   EnvelopeIcon,
   ExclamationTriangleIcon,
+  FilmIcon,
 } from '@heroicons/react/24/outline';
 
 function formatDate(dateString, locale) {
@@ -111,9 +115,10 @@ export async function generateMetadata({ params }) {
   if (!property) {
     return { title: `${t.notFound} | ${BRAND_NAME}` };
   }
+  const display = getDisplayText(property, locale);
   return {
-    title: `${property.title} | ${BRAND_NAME}`,
-    description: property.description?.substring(0, 160),
+    title: `${display.title} | ${BRAND_NAME}`,
+    description: (display.description || '').substring(0, 160),
   };
 }
 
@@ -127,17 +132,33 @@ export default async function PropertyDetailPage({ params }) {
     notFound();
   }
 
+  const display = getDisplayText(property, locale);
+  const { title, address, city, neighborhood, description, features } = display;
   const {
-    title, type, category, price, area, rooms, floor,
-    totalFloors, yearBuilt, description, features, images,
-    address, city, neighborhood, mapUrl, createdAt,
+    type, category, status, price, area, rooms, floor,
+    totalFloors, yearBuilt, yearBuiltStatus, images, mapUrl, videoUrl, createdAt,
+    gaz, tec, priceIncludesVat, constructionType,
   } = property;
 
+  const isUnavailable = status === 'sold' || status === 'rented';
+  const unavailableOverlayText = status === 'sold' ? t.statusSoldOverlay : status === 'rented' ? t.statusRentedOverlay : null;
+
+  const pricePerSqm = area > 0 ? Math.round((price ?? 0) / area) : null;
+  const yearBuiltLabelKey = yearBuiltStatus ? `yearBuiltStatus_${yearBuiltStatus}` : null;
+  const yearBuiltValue = yearBuiltLabelKey
+    ? (yearBuiltStatus === 'not_in_use'
+      ? t[yearBuiltLabelKey]
+      : `${t[yearBuiltLabelKey]}${yearBuilt ? `, ${yearBuilt}` : ''}`)
+    : yearBuilt;
   const keyDetails = [
     { icon: ArrowsPointingOutIcon, value: `${area} м²`, label: t.area, show: true },
+    { icon: CurrencyDollarIcon, value: pricePerSqm != null ? `${pricePerSqm} EUR/m²${category === 'rent' ? t.pricePerSqmRentSuffix : ''}` : null, label: t.pricePerSqm, show: pricePerSqm != null },
     { icon: HomeIcon, value: rooms, label: t.rooms, show: !!rooms },
-    { icon: BuildingOfficeIcon, value: `${floor} / ${totalFloors}`, label: t.floor, show: !!floor },
-    { icon: CalendarIcon, value: yearBuilt, label: t.year, show: !!yearBuilt },
+    { icon: BuildingOfficeIcon, value: totalFloors != null ? `${floor === 0 ? t.floorParter : floor} / ${totalFloors}` : (floor === 0 ? t.floorParter : String(floor)), label: t.floor, show: floor !== undefined && floor !== null && floor !== '' },
+    { icon: CalendarIcon, value: yearBuiltValue, label: yearBuiltStatus ? t.yearBuilt : t.year, show: !!yearBuiltStatus || !!yearBuilt },
+    { icon: BoltIcon, value: t.yes, label: t.gaz, show: !!gaz },
+    { icon: FireIcon, value: t.yes, label: t.tec, show: !!tec },
+    { icon: BuildingOfficeIcon, value: t[`constructionType_${constructionType}`] ?? constructionType, label: t.constructionType, show: !!constructionType },
   ].filter((item) => item.show);
 
   const location = neighborhood ? `${neighborhood}, ${city}` : city;
@@ -162,11 +183,35 @@ export default async function PropertyDetailPage({ params }) {
               <div className="lg:col-span-2 space-y-8">
                 <div className="relative">
                   <PropertyGallery images={images} title={title} />
-                  <div className="absolute top-4 left-4 flex gap-2 z-10">
+                  {isUnavailable && unavailableOverlayText && (
+                    <div
+                      className="absolute inset-0 flex items-center justify-center z-10 bg-black/50 pointer-events-none"
+                      aria-hidden
+                    >
+                      <span className="text-white font-bold text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase drop-shadow-lg">
+                        {unavailableOverlayText}
+                      </span>
+                    </div>
+                  )}
+                  <div className="absolute top-4 left-4 flex gap-2 z-20">
                     <Badge.Category category={category} size="lg" locale={locale} />
                     <Badge.Type type={type} size="lg" locale={locale} />
                   </div>
                 </div>
+
+                {videoUrl && (
+                  <div className="mt-4">
+                    <LinkButton
+                      href={videoUrl}
+                      variant="primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FilmIcon className="w-5 h-5 mr-2" />
+                      {t.watchVideo}
+                    </LinkButton>
+                  </div>
+                )}
 
                 <div className="lg:hidden">
                   <LocationText neighborhood={neighborhood} city={city} />
@@ -174,6 +219,7 @@ export default async function PropertyDetailPage({ params }) {
                   <div className="text-graphite">
                     <span className="font-sans-nums text-3xl font-bold">{formatPriceEurAndBgn(price, category).eurText}</span>
                     <span className="font-sans-nums block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
+                    <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
                   </div>
                 </div>
 
@@ -260,6 +306,7 @@ export default async function PropertyDetailPage({ params }) {
                     <div className="mb-4">
                       <span className="font-sans-nums text-3xl font-bold text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
                       <span className="font-sans-nums block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
+                      <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
                     </div>
                     <div className="font-sans-nums text-sm text-gray-500">
                       {t.published}: {formatDate(createdAt, locale)}

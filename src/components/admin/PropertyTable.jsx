@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { formatPriceEurAndBgn } from '@/lib/constants';
-import { getTypeLabel, getCategoryLabel } from '@/data/properties';
+import { getTypeLabel, getCategoryLabel, getConstructionTypeLabel } from '@/data/properties';
 
 const statusLabels = {
   active: { label: 'Активна', className: 'bg-green-100 text-green-800' },
@@ -51,6 +51,12 @@ export default function PropertyTable({ properties, isDemo = false }) {
               Град
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Тип строит.
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Газ / ТЕЦ
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Статус
             </th>
             <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -85,16 +91,24 @@ export default function PropertyTable({ properties, isDemo = false }) {
                 <td className="px-6 py-4 text-sm">
                   {(() => {
                     const { eurText, bgnText } = formatPriceEurAndBgn(property.price, property.category);
+                    const vatLabel = property.priceIncludesVat ? 'с ДДС' : 'без ДДС';
                     return (
                       <span>
                         <span className="font-medium text-gray-900">{eurText}</span>
                         <span className="block text-xs text-gray-500">{bgnText}</span>
+                        <span className="block text-xs text-gray-500">{vatLabel}</span>
                       </span>
                     );
                   })()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {property.city}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {getConstructionTypeLabel(property.constructionType) || '—'}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {[property.gaz && 'Газ', property.tec && 'ТЕЦ'].filter(Boolean).join(' / ') || '—'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${status.className}`}>

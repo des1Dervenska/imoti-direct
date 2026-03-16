@@ -24,12 +24,22 @@ const filterInputClass =
   'w-full px-3.5 py-2.5 bg-white/90 border border-gray-200/80 rounded-lg text-graphite text-sm transition-colors duration-200 ' +
   'hover:border-cadetblue/30 focus:border-cadetblue/70 focus:ring-2 focus:ring-cadetblue/15 focus:outline-none placeholder:text-gray-400';
 
+function getPricePerSqm(property) {
+  const area = property.area ?? 0;
+  if (!area || area <= 0) return null;
+  return (property.price ?? 0) / area;
+}
+
 function buildSortOptions(t) {
   return [
     { value: 'price-asc', label: t.priceAsc },
     { value: 'price-desc', label: t.priceDesc },
+    { value: 'pricePerSqm-asc', label: t.pricePerSqmAsc },
+    { value: 'pricePerSqm-desc', label: t.pricePerSqmDesc },
     { value: 'area-asc', label: t.areaAsc },
     { value: 'area-desc', label: t.areaDesc },
+    { value: 'floor-asc', label: t.floorAsc },
+    { value: 'floor-desc', label: t.floorDesc },
     { value: 'date-desc', label: t.dateDesc },
     { value: 'date-asc', label: t.dateAsc },
     { value: 'title-asc', label: t.titleAsc },
@@ -46,26 +56,6 @@ function buildRoomsOptions(t) {
   ];
 }
 
-function buildSalePriceRanges(t) {
-  return [
-    { value: '', label: t.allPrices },
-    { value: '0-50000', label: t.priceUpTo50k, min: 0, max: 50000 },
-    { value: '50000-100000', label: t.price50to100, min: 50000, max: 100000 },
-    { value: '100000-200000', label: t.price100to200, min: 100000, max: 200000 },
-    { value: '200000+', label: t.price200plus, min: 200000, max: Infinity },
-  ];
-}
-
-function buildRentPriceRanges(t) {
-  return [
-    { value: '', label: t.allPrices },
-    { value: '0-500', label: t.rentUpTo500, min: 0, max: 500 },
-    { value: '500-1000', label: t.rent500to1000, min: 500, max: 1000 },
-    { value: '1000-2000', label: t.rent1000to2000, min: 1000, max: 2000 },
-    { value: '2000+', label: t.rent2000plus, min: 2000, max: Infinity },
-  ];
-}
-
 export default function PropertyFilters({
   properties,
   emptyMessage = 'Няма намерени имоти',
@@ -76,17 +66,19 @@ export default function PropertyFilters({
   const t = getTranslations(locale).filters;
   const SORT_OPTIONS = useMemo(() => buildSortOptions(t), [locale]);
   const ROOMS_OPTIONS = useMemo(() => buildRoomsOptions(t), [locale]);
-  const SALE_PRICE_RANGES = useMemo(() => buildSalePriceRanges(t), [locale]);
-  const RENT_PRICE_RANGES = useMemo(() => buildRentPriceRanges(t), [locale]);
-  const priceRangesStatic = category === 'rent' ? RENT_PRICE_RANGES : SALE_PRICE_RANGES;
   const [filters, setFilters] = useState({
     type: '',
     city: '',
     neighborhood: '',
-    priceRange: '',
+    minPrice: '',
+    maxPrice: '',
     rooms: '',
     minArea: '',
     maxArea: '',
+    minFloor: '',
+    maxFloor: '',
+    minPricePerSqm: '',
+    maxPricePerSqm: '',
     yearFrom: '',
     yearTo: '',
   });
@@ -128,10 +120,15 @@ export default function PropertyFilters({
       type: '',
       city: '',
       neighborhood: '',
-      priceRange: '',
+      minPrice: '',
+      maxPrice: '',
       rooms: '',
       minArea: '',
       maxArea: '',
+      minFloor: '',
+      maxFloor: '',
+      minPricePerSqm: '',
+      maxPricePerSqm: '',
       yearFrom: '',
       yearTo: '',
     }));
@@ -141,10 +138,15 @@ export default function PropertyFilters({
     filters.type ||
     filters.city ||
     filters.neighborhood ||
-    filters.priceRange ||
+    filters.minPrice ||
+    filters.maxPrice ||
     filters.rooms ||
     filters.minArea ||
     filters.maxArea ||
+    filters.minFloor ||
+    filters.maxFloor ||
+    filters.minPricePerSqm ||
+    filters.maxPricePerSqm ||
     filters.yearFrom ||
     filters.yearTo;
 
@@ -153,9 +155,14 @@ export default function PropertyFilters({
       if (filters.type && property.type !== filters.type) return false;
       if (filters.city && property.city !== filters.city) return false;
       if (filters.neighborhood && property.neighborhood !== filters.neighborhood) return false;
-      if (filters.priceRange) {
-        const range = priceRangesStatic.find((r) => r.value === filters.priceRange);
-        if (range && (property.price < range.min || property.price > range.max)) return false;
+      const price = property.price ?? 0;
+      if (filters.minPrice) {
+        const min = Number(filters.minPrice);
+        if (!isNaN(min) && price < min) return false;
+      }
+      if (filters.maxPrice) {
+        const max = Number(filters.maxPrice);
+        if (!isNaN(max) && price > max) return false;
       }
       if (filters.rooms) {
         const r = Number(filters.rooms);
@@ -170,6 +177,24 @@ export default function PropertyFilters({
       if (filters.maxArea) {
         const max = Number(filters.maxArea);
         if (!isNaN(max) && (property.area ?? 0) > max) return false;
+      }
+      const floor = property.floor;
+      if (filters.minFloor !== '' && filters.minFloor != null) {
+        const min = Number(filters.minFloor);
+        if (!isNaN(min) && (floor == null || floor < min)) return false;
+      }
+      if (filters.maxFloor !== '' && filters.maxFloor != null) {
+        const max = Number(filters.maxFloor);
+        if (!isNaN(max) && (floor == null || floor > max)) return false;
+      }
+      const pricePerSqm = getPricePerSqm(property);
+      if (filters.minPricePerSqm) {
+        const min = Number(filters.minPricePerSqm);
+        if (!isNaN(min) && (pricePerSqm == null || pricePerSqm < min)) return false;
+      }
+      if (filters.maxPricePerSqm) {
+        const max = Number(filters.maxPricePerSqm);
+        if (!isNaN(max) && (pricePerSqm == null || pricePerSqm > max)) return false;
       }
       if (filters.yearFrom) {
         const from = Number(filters.yearFrom);
@@ -189,11 +214,23 @@ export default function PropertyFilters({
       case 'price-desc':
         list = [...list].sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
         break;
+      case 'pricePerSqm-asc':
+        list = [...list].sort((a, b) => (getPricePerSqm(a) ?? 0) - (getPricePerSqm(b) ?? 0));
+        break;
+      case 'pricePerSqm-desc':
+        list = [...list].sort((a, b) => (getPricePerSqm(b) ?? 0) - (getPricePerSqm(a) ?? 0));
+        break;
       case 'area-asc':
         list = [...list].sort((a, b) => (a.area ?? 0) - (b.area ?? 0));
         break;
       case 'area-desc':
         list = [...list].sort((a, b) => (b.area ?? 0) - (a.area ?? 0));
+        break;
+      case 'floor-asc':
+        list = [...list].sort((a, b) => (a.floor ?? -1) - (b.floor ?? -1));
+        break;
+      case 'floor-desc':
+        list = [...list].sort((a, b) => (b.floor ?? -1) - (a.floor ?? -1));
         break;
       case 'date-desc':
         list = [...list].sort(
@@ -213,7 +250,7 @@ export default function PropertyFilters({
     }
 
     return list;
-  }, [properties, filters, priceRangesStatic, sortBy]);
+  }, [properties, filters, sortBy]);
 
   const currentSortLabel = SORT_OPTIONS.find((o) => o.value === sortBy)?.label ?? t.sort;
 
@@ -301,9 +338,9 @@ export default function PropertyFilters({
                             className={filterSelectClass}
                           >
                             <option value="">{t.allTypes}</option>
-                            {propertyTypes.map((t) => (
-                              <option key={t.value} value={t.value}>
-                                {t.label}
+                            {propertyTypes.map((opt) => (
+                              <option key={opt.value} value={opt.value}>
+                                {getTranslations(locale)?.property?.[opt.value] ?? opt.label}
                               </option>
                             ))}
                           </select>
@@ -343,20 +380,32 @@ export default function PropertyFilters({
                               ))}
                             </select>
                           </div>
+                        <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.priceLabel}</label>
-                          <select
-                            value={filters.priceRange ?? ''}
-                            onChange={(e) => updateFilter('priceRange', e.target.value)}
-                            className={filterSelectClass}
-                          >
-                            {priceRangesStatic.map((r) => (
-                              <option key={r.value} value={r.value}>
-                                {r.label}
-                              </option>
-                            ))}
-                          </select>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceFrom}</label>
+                          <input
+                            type="number"
+                            min="0"
+                            step={category === 'rent' ? '50' : '1000'}
+                            placeholder={category === 'rent' ? 'напр. 300' : 'напр. 50000'}
+                            value={filters.minPrice ?? ''}
+                            onChange={(e) => updateFilter('minPrice', e.target.value)}
+                            className={filterInputClass}
+                          />
                         </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceTo}</label>
+                          <input
+                            type="number"
+                            min="0"
+                            step={category === 'rent' ? '50' : '1000'}
+                            placeholder={category === 'rent' ? 'напр. 1500' : 'напр. 200000'}
+                            value={filters.maxPrice ?? ''}
+                            onChange={(e) => updateFilter('maxPrice', e.target.value)}
+                            className={filterInputClass}
+                          />
+                        </div>
+                      </div>
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.rooms}</label>
@@ -374,24 +423,74 @@ export default function PropertyFilters({
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.minArea}</label>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.areaFrom}</label>
                           <input
                             type="number"
                             min="0"
-                            placeholder="мин"
+                            placeholder="от"
                             value={filters.minArea ?? ''}
                             onChange={(e) => updateFilter('minArea', e.target.value)}
                             className={filterInputClass}
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.maxArea}</label>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.areaTo}</label>
                           <input
                             type="number"
                             min="0"
-                            placeholder="макс"
+                            placeholder="до"
                             value={filters.maxArea ?? ''}
                             onChange={(e) => updateFilter('maxArea', e.target.value)}
+                            className={filterInputClass}
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.floorFrom}</label>
+                          <input
+                            type="number"
+                            min="0"
+                            placeholder="напр. 0"
+                            value={filters.minFloor ?? ''}
+                            onChange={(e) => updateFilter('minFloor', e.target.value)}
+                            className={filterInputClass}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.floorTo}</label>
+                          <input
+                            type="number"
+                            min="0"
+                            placeholder="напр. 5"
+                            value={filters.maxFloor ?? ''}
+                            onChange={(e) => updateFilter('maxFloor', e.target.value)}
+                            className={filterInputClass}
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.minPricePerSqm}</label>
+                          <input
+                            type="number"
+                            min="0"
+                            step="100"
+                            placeholder="от"
+                            value={filters.minPricePerSqm ?? ''}
+                            onChange={(e) => updateFilter('minPricePerSqm', e.target.value)}
+                            className={filterInputClass}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">{t.maxPricePerSqm}</label>
+                          <input
+                            type="number"
+                            min="0"
+                            step="100"
+                            placeholder="до"
+                            value={filters.maxPricePerSqm ?? ''}
+                            onChange={(e) => updateFilter('maxPricePerSqm', e.target.value)}
                             className={filterInputClass}
                           />
                         </div>

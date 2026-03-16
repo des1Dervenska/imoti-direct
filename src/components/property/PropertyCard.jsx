@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { DEFAULT_PROPERTY_IMAGE, formatPriceEurAndBgn } from '@/lib/constants';
+import { getDisplayText } from '@/lib/properties';
 import { getTranslations } from '@/lib/translations';
-import { ArrowsPointingOutIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { ArrowsPointingOutIcon, MapPinIcon, BoltIcon, FireIcon } from '@heroicons/react/24/outline';
 import { RoomsIcon } from '@/components/icons';
 import { Badge, LinkButton } from '@/components/ui';
 
@@ -17,17 +18,18 @@ const truncateText = (text, maxLength = 100) => {
 export default function PropertyCard({ property, showDescription = true, locale = 'bg' }) {
   const {
     slug,
-    title,
     type,
     category,
     price,
     area,
     rooms,
-    city,
-    neighborhood,
-    description,
     images,
+    gaz,
+    tec,
+    priceIncludesVat,
   } = property;
+  const display = getDisplayText(property, locale);
+  const { title, city, neighborhood, description } = display;
 
   const t = getTranslations(locale)?.property ?? {};
   const propertyUrl = locale ? `/${locale}/properties/${slug}` : `/properties/${slug}`;
@@ -37,6 +39,8 @@ export default function PropertyCard({ property, showDescription = true, locale 
   const features = [
     { Icon: ArrowsPointingOutIcon, value: `${area} м²`, show: true },
     { Icon: RoomsIcon, value: rooms ? `${rooms} ${t.roomsUnit ?? 'стаи'}` : '', show: !!rooms },
+    { Icon: BoltIcon, value: t.gaz ?? 'Газ', show: !!gaz },
+    { Icon: FireIcon, value: t.tec ?? 'ТЕЦ', show: !!tec },
   ];
 
   return (
@@ -65,8 +69,8 @@ export default function PropertyCard({ property, showDescription = true, locale 
         {/* Features overlay */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
           <div className="flex items-center gap-3 text-white text-sm">
-            {features.filter(f => f.show).map(({ Icon, value }) => (
-              <div key={value} className={featureStyle}>
+            {features.filter(f => f.show).map(({ Icon, value }, idx) => (
+              <div key={`${value}-${idx}`} className={featureStyle}>
                 <Icon className={featureIconStyle} />
                 <span className="font-sans-nums">{value}</span>
               </div>
@@ -80,10 +84,15 @@ export default function PropertyCard({ property, showDescription = true, locale 
         <div className="mb-2">
           {(() => {
             const { eurText, bgnText } = formatPriceEurAndBgn(price, category);
+            const vatLabel = priceIncludesVat ? (t.priceWithVat ?? 'с включено ДДС') : (t.priceWithoutVat ?? 'без включено ДДС');
+            const pricePerSqm = area > 0 ? (price ?? 0) / area : null;
+            const perSqmText = pricePerSqm != null ? `${Math.round(pricePerSqm)} EUR/м²${category === 'rent' ? '/мес' : ''}` : null;
             return (
               <>
                 <span className="font-sans-nums text-2xl font-bold text-graphite">{eurText}</span>
                 <span className="font-sans-nums block text-sm font-normal text-graphite-light">{bgnText}</span>
+                {perSqmText && <span className="font-sans-nums block text-xs text-graphite-light">{perSqmText}</span>}
+                <span className="block text-xs text-graphite-light">{vatLabel}</span>
               </>
             );
           })()}

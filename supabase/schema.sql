@@ -21,7 +21,13 @@ CREATE TABLE IF NOT EXISTS properties (
   -- Basic info
   title VARCHAR(500) NOT NULL,
   category VARCHAR(20) NOT NULL CHECK (category IN ('sale', 'rent')),
-  type VARCHAR(20) NOT NULL CHECK (type IN ('apartment', 'house', 'land')),
+  type VARCHAR(50) NOT NULL CHECK (type IN (
+    'apartment', 'house', 'land',
+    'ednostaen', 'destaen', 'tristaen', 'chetiristaen', 'mezonet', 'mezonet_ofis',
+    'atelie', 'tavan', 'mnogostaen_penthaus', 'etaj_kashta', 'kashta', 'vila',
+    'magazin', 'zavedenie', 'sklad', 'garaj', 'parkomqsto', 'promishleno',
+    'hotel', 'parcel', 'zemedelska_zemya'
+  )),
   status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'pending', 'sold', 'rented', 'inactive')),
 
   -- Price

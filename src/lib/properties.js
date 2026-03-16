@@ -28,6 +28,7 @@ function transformProperty(row) {
     id: row.id ?? null,
     slug: row.slug ?? '',
     title: row.title ?? '',
+    titleEn: row.title_en ?? null,
     category: row.category ?? '',
     type: row.type ?? '',
     status: row.status ?? PROPERTY_STATUS.ACTIVE,
@@ -38,16 +39,45 @@ function transformProperty(row) {
     floor: row.floor ?? null,
     totalFloors: row.total_floors ?? null,
     yearBuilt: row.year_built ?? null,
+    yearBuiltStatus: row.year_built_status ?? null,
     city: row.city ?? '',
+    cityEn: row.city_en ?? null,
     neighborhood: row.neighborhood ?? null,
+    neighborhoodEn: row.neighborhood_en ?? null,
     address: row.address ?? '',
+    addressEn: row.address_en ?? null,
     description: row.description ?? '',
+    descriptionEn: row.description_en ?? null,
     features: Array.isArray(row.features) ? row.features : [],
+    featuresEn: Array.isArray(row.features_en) ? row.features_en : [],
     images: Array.isArray(row.images) ? row.images : [],
     mapUrl: row.map_url ?? null,
+    videoUrl: row.video_url ?? null,
     isFeatured: Boolean(row.is_featured),
+    gaz: Boolean(row.gaz),
+    tec: Boolean(row.tec),
+    priceIncludesVat: Boolean(row.price_includes_vat),
+    constructionType: row.construction_type ?? null,
+    brokerNote: row.broker_note ?? null,
     createdAt: row.created_at ?? null,
     updatedAt: row.updated_at ?? null,
+  };
+}
+
+// =============================================================================
+// HELPER: Display values by locale (BG vs EN)
+// =============================================================================
+
+export function getDisplayText(property, locale) {
+  if (!property) return null;
+  const useEn = locale === 'en';
+  return {
+    title: (useEn && property.titleEn) ? property.titleEn : (property.title ?? ''),
+    address: (useEn && property.addressEn) ? property.addressEn : (property.address ?? ''),
+    neighborhood: (useEn && property.neighborhoodEn) ? property.neighborhoodEn : (property.neighborhood ?? null),
+    city: (useEn && property.cityEn) ? property.cityEn : (property.city ?? ''),
+    description: (useEn && property.descriptionEn) ? property.descriptionEn : (property.description ?? ''),
+    features: (useEn && property.featuresEn?.length) ? property.featuresEn : (property.features ?? []),
   };
 }
 
@@ -324,14 +354,27 @@ function transformToSupabase(property) {
     floor: property.floor || null,
     total_floors: property.totalFloors || null,
     year_built: property.yearBuilt || null,
+    year_built_status: property.yearBuiltStatus || null,
     city: property.city,
+    city_en: property.cityEn || null,
     neighborhood: property.neighborhood || null,
+    neighborhood_en: property.neighborhoodEn || null,
     address: property.address,
+    address_en: property.addressEn || null,
+    title_en: property.titleEn || null,
     description: property.description || '',
+    description_en: property.descriptionEn || null,
     features: property.features || [],
+    features_en: property.featuresEn || [],
     images: property.images || [],
     map_url: property.mapUrl || null,
+    video_url: property.videoUrl || null,
     is_featured: property.isFeatured || false,
+    gaz: Boolean(property.gaz),
+    tec: Boolean(property.tec),
+    price_includes_vat: Boolean(property.priceIncludesVat),
+    construction_type: property.constructionType || null,
+    broker_note: property.brokerNote || null,
   };
 
   return result;

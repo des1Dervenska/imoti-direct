@@ -71,13 +71,11 @@ Badge.Category = function CategoryBadge({ category, size = 'md', className = '',
  */
 Badge.Type = function TypeBadge({ type, size = 'md', className = '', locale }) {
   const t = locale ? getTranslations(locale)?.property : null;
-  const labels = t
-    ? { apartment: t.apartment, house: t.house, land: t.land }
-    : { apartment: 'Апартамент', house: 'Къща', land: 'Парцел' };
+  const label = t && t[type] != null ? t[type] : type;
 
   return (
     <Badge variant="neutral" size={size} className={className}>
-      {labels[type] || type}
+      {label}
     </Badge>
   );
 };
