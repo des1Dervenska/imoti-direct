@@ -27,6 +27,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     status: property?.status || PROPERTY_STATUS.ACTIVE,
     price: property?.price || '',
     priceNote: property?.priceNote ?? '',
+    priceNoteEn: property?.priceNoteEn ?? '',
     currency: 'EUR',
     area: property?.area || '',
     rooms: property?.rooms || '',
@@ -166,6 +167,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
       yearBuiltStatus: formData.yearBuiltStatus || null,
       brokerNote: formData.brokerNote || null,
       priceNote: formData.priceNote || null,
+      priceNoteEn: formData.priceNoteEn || null,
       features: [
         ...(Array.isArray(formData.features) ? formData.features : []),
         ...(formData.featuresOther || '')
@@ -423,7 +425,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
         </div>
         <div className="mt-4">
           <label htmlFor="priceNote" className="block text-sm text-gray-700 mb-1">
-            Забележка цена
+            Забележка цена (български)
           </label>
           <input
             type="text"
@@ -433,7 +435,21 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
-          <p className="mt-1 text-xs text-gray-500">Опционално. Показва се при клиента над „Основни характеристики“.</p>
+          <p className="mt-1 text-xs text-gray-500">Опционално. Показва се при клиента над „Основни характеристики“ (BG).</p>
+        </div>
+        <div className="mt-4">
+          <label htmlFor="priceNoteEn" className="block text-sm text-gray-700 mb-1">
+            Забележка цена (английски)
+          </label>
+          <input
+            type="text"
+            id="priceNoteEn"
+            name="priceNoteEn"
+            value={formData.priceNoteEn}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <p className="mt-1 text-xs text-gray-500">Опционално. Показва се при избор на английски език.</p>
         </div>
         <div className="mt-4">
           <label className="inline-flex items-center gap-2 cursor-pointer">

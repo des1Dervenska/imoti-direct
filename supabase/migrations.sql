@@ -123,15 +123,16 @@ ALTER TABLE properties
 COMMENT ON COLUMN properties.video_url IS 'URL на YouTube (или друго) видео за обекта – показва се при клиента като линк';
 
 -- =============================================================================
--- Migration 009 (FINAL): Забележка цена
+-- Migration 009: Забележка цена (български + английски)
 -- =============================================================================
--- Отворен текст за бележка към цената. В админ панела се въвежда под полето за
--- цена; при клиента се показва над „Основни характеристики“.
+-- price_note = български; price_note_en = английски. Показват се над „Основни характеристики“.
 
 ALTER TABLE properties
-  ADD COLUMN IF NOT EXISTS price_note TEXT NULL;
+  ADD COLUMN IF NOT EXISTS price_note TEXT NULL,
+  ADD COLUMN IF NOT EXISTS price_note_en TEXT NULL;
 
-COMMENT ON COLUMN properties.price_note IS 'Забележка към цената – показва се над Основни характеристики при клиента';
+COMMENT ON COLUMN properties.price_note IS 'Забележка към цената (БГ) – показва се над Основни характеристики при клиента';
+COMMENT ON COLUMN properties.price_note_en IS 'Забележка към цената (EN) – показва се при избор на английски език';
 
 -- =============================================================================
 -- (Следващи миграции ще се добавят тук по-долу)

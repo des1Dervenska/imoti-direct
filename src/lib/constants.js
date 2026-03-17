@@ -29,6 +29,8 @@ export const CONTACT_PERSON = 'Геновева Филева';
 export const CONTACT_PERSON_EN = 'Genoveva Fileva';
 /** Facebook App ID за „Сподели в Messenger“ (Send Dialog). Създай приложение на developers.facebook.com и добави тук. */
 export const FACEBOOK_APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || '';
+/** Facebook Page ID за линк „Отвори чат в Messenger“ (m.me). Работи на телефон и десктоп. */
+export const FACEBOOK_PAGE_ID = '61580202105400';
 export const CONTACT_PHONE = '0887 803 064';
 export const CONTACT_PHONE_LINK = '+359887803064';
 export const CONTACT_EMAIL = 'genoveva@arthouse94.com';

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { getTranslations } from '@/lib/translations';
-import { FACEBOOK_APP_ID } from '@/lib/constants';
+import { FACEBOOK_PAGE_ID } from '@/lib/constants';
 import {
   ChatBubbleLeftRightIcon,
   PrinterIcon,
@@ -51,12 +51,9 @@ export default function PropertyShareBar({ propertyPath, title, locale = 'bg' })
     window.print();
   }, []);
 
-  const messengerUrl =
-    fullUrl && FACEBOOK_APP_ID
-      ? `https://www.facebook.com/dialog/send?app_id=${encodeURIComponent(FACEBOOK_APP_ID)}&link=${encodeURIComponent(fullUrl)}&redirect_uri=${encodeURIComponent(fullUrl)}`
-      : fullUrl
-        ? `https://www.facebook.com/dialog/send?link=${encodeURIComponent(fullUrl)}&redirect_uri=${encodeURIComponent(fullUrl)}`
-        : '#';
+  const messengerUrl = FACEBOOK_PAGE_ID
+    ? `https://m.me/${FACEBOOK_PAGE_ID}${fullUrl ? `?text=${encodeURIComponent(fullUrl)}` : ''}`
+    : '#';
   const viberUrl = shareText ? `viber://forward?text=${encodeURIComponent(shareText)}` : '#';
   const mailtoUrl = shareText
     ? `mailto:?subject=${encodeURIComponent(title || 'Property')}&body=${encodeURIComponent(shareText)}`

@@ -150,11 +150,11 @@ export default async function PropertyDetailPage({ params }) {
   }
 
   const display = getDisplayText(property, locale);
-  const { title, description, features } = display;
+  const { title, description, features, priceNote } = display;
   const {
     type, category, status, price, area, rooms, floor,
     totalFloors, yearBuilt, yearBuiltStatus, images, mapUrl, videoUrl, createdAt,
-    gaz, tec, priceIncludesVat, constructionType, priceNote,
+    gaz, tec, priceIncludesVat, constructionType,
   } = property;
 
   const isUnavailable = status === 'sold' || status === 'rented';

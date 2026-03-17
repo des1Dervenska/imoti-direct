@@ -100,7 +100,8 @@ export const CURRENCY = {
  * @property {boolean} [priceIncludesVat] - Цена с включено ДДС (true) / без ДДС (false)
  * @property {string} [constructionType] - Тип строителство: panel, tuhla, epk, pk, gredored, sglobyaema
  * @property {string|null} [brokerNote] - Лична бележка на брокера (само за админ, не се показва на сайта)
- * @property {string|null} [priceNote] - Забележка цена (показва се над Основни характеристики при клиента)
+ * @property {string|null} [priceNote] - Забележка цена (БГ) – показва се над Основни характеристики при клиента
+ * @property {string|null} [priceNoteEn] - Забележка цена (EN) – показва се при английски език
  * @property {string} createdAt - ISO 8601
  * @property {string} updatedAt - ISO 8601
  */

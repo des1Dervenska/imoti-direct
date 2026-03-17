@@ -60,6 +60,7 @@ function transformProperty(row) {
     constructionType: row.construction_type ?? null,
     brokerNote: row.broker_note ?? null,
     priceNote: row.price_note ?? null,
+    priceNoteEn: row.price_note_en ?? null,
     createdAt: row.created_at ?? null,
     updatedAt: row.updated_at ?? null,
   };
@@ -79,6 +80,7 @@ export function getDisplayText(property, locale) {
     city: (useEn && property.cityEn) ? property.cityEn : (property.city ?? ''),
     description: (useEn && property.descriptionEn) ? property.descriptionEn : (property.description ?? ''),
     features: (useEn && property.featuresEn?.length) ? property.featuresEn : (property.features ?? []),
+    priceNote: (useEn && property.priceNoteEn) ? property.priceNoteEn : (property.priceNote ?? null),
   };
 }
 
@@ -388,6 +390,7 @@ function transformToSupabase(property) {
     construction_type: property.constructionType || null,
     broker_note: property.brokerNote || null,
     price_note: property.priceNote || null,
+    price_note_en: property.priceNoteEn || null,
   };
 
   return result;

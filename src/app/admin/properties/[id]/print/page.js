@@ -26,7 +26,7 @@ export default async function PrintPropertyPage({ params }) {
   const t = getTranslations(locale);
   const display = getDisplayText(property, locale);
   const locationLine = getLocationLine(display);
-  const { title, description, features } = display;
+  const { title, description, features, priceNote } = display;
   const {
     category,
     type,
@@ -42,7 +42,6 @@ export default async function PrintPropertyPage({ params }) {
     constructionType,
     priceIncludesVat,
     images,
-    priceNote,
   } = property;
 
   const typeLabel = propertyTypes.find((opt) => opt.value === type)?.label ?? type;
