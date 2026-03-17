@@ -116,7 +116,10 @@ export async function getPropertyBySlug(slug) {
       .single();
 
     if (error) {
-      console.error('Error fetching property:', error);
+      // PGRST116 = 0 rows (нормално при проверка за свободен slug при създаване на имот)
+      if (error.code !== 'PGRST116') {
+        console.error('Error fetching property:', error);
+      }
       return null;
     }
 
