@@ -54,7 +54,7 @@ export default function PropertyTable({ properties, isDemo = false }) {
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="w-full overflow-x-auto">
       {deleteError && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-red-800 text-sm">{deleteError}</p>
@@ -69,7 +69,7 @@ export default function PropertyTable({ properties, isDemo = false }) {
         </div>
       )}
 
-      <table className="min-w-full divide-y divide-gray-200" style={{ minWidth: '1100px' }}>
+      <table className="w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
             <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
