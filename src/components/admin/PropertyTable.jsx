@@ -11,7 +11,7 @@ const statusLabels = {
   pending: { label: 'Чакаща', className: 'bg-yellow-100 text-yellow-800' },
   sold: { label: 'Продадена', className: 'bg-blue-100 text-blue-800' },
   rented: { label: 'Отдадена', className: 'bg-blue-100 text-blue-800' },
-  inactive: { label: 'Неактивна', className: 'bg-gray-100 text-gray-800' },
+  inactive: { label: 'Блокирана', className: 'bg-gray-100 text-gray-800' },
 };
 
 const CONFIRM_DELETE_MESSAGE = 'Сигурни ли сте, че искате да изтриете този имот? Това действие не може да бъде отменено.';

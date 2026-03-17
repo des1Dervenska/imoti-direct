@@ -81,6 +81,7 @@ export default function PropertyFilters({
     maxPricePerSqm: '',
     yearFrom: '',
     yearTo: '',
+    gaz: '',
     tec: '',
     constructionType: '',
     yearBuiltStatus: '',
@@ -134,6 +135,7 @@ export default function PropertyFilters({
       maxPricePerSqm: '',
       yearFrom: '',
       yearTo: '',
+      gaz: '',
       tec: '',
       constructionType: '',
       yearBuiltStatus: '',
@@ -155,6 +157,7 @@ export default function PropertyFilters({
     filters.maxPricePerSqm ||
     filters.yearFrom ||
     filters.yearTo ||
+    filters.gaz ||
     filters.tec ||
     filters.constructionType ||
     filters.yearBuiltStatus;
@@ -213,6 +216,8 @@ export default function PropertyFilters({
         const to = Number(filters.yearTo);
         if (!isNaN(to) && (property.yearBuilt ?? 0) > to) return false;
       }
+      if (filters.gaz === 'yes' && !property.gaz) return false;
+      if (filters.gaz === 'no' && property.gaz) return false;
       if (filters.tec === 'yes' && !property.tec) return false;
       if (filters.tec === 'no' && property.tec) return false;
       if (filters.constructionType && (property.constructionType ?? '') !== filters.constructionType) return false;
@@ -534,17 +539,31 @@ export default function PropertyFilters({
                           />
                         </div>
                       </div>
-                      <div>
-                        <label className="block text-xs text-gray-500 mb-1.5">{t.tec}</label>
-                        <select
-                          value={filters.tec ?? ''}
-                          onChange={(e) => updateFilter('tec', e.target.value)}
-                          className={filterSelectClass}
-                        >
-                          <option value="">{t.tecAny}</option>
-                          <option value="yes">{t.tecYes}</option>
-                          <option value="no">{t.tecNo}</option>
-                        </select>
+                      <div className="grid grid-cols-1 gap-3">
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.gaz}</label>
+                          <select
+                            value={filters.gaz ?? ''}
+                            onChange={(e) => updateFilter('gaz', e.target.value)}
+                            className={filterSelectClass}
+                          >
+                            <option value="">{t.filterStatusAny}</option>
+                            <option value="yes">{t.filterStatusYes}</option>
+                            <option value="no">{t.filterStatusNo}</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.tec}</label>
+                          <select
+                            value={filters.tec ?? ''}
+                            onChange={(e) => updateFilter('tec', e.target.value)}
+                            className={filterSelectClass}
+                          >
+                            <option value="">{t.filterStatusAny}</option>
+                            <option value="yes">{t.filterStatusYes}</option>
+                            <option value="no">{t.filterStatusNo}</option>
+                          </select>
+                        </div>
                       </div>
                       <div>
                         <label className="block text-xs text-gray-500 mb-1.5">{t.constructionType}</label>
@@ -562,18 +581,16 @@ export default function PropertyFilters({
                         </select>
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1.5">{t.yearBuiltStatus}</label>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.constructionStage}</label>
                         <select
                           value={filters.yearBuiltStatus ?? ''}
                           onChange={(e) => updateFilter('yearBuiltStatus', e.target.value)}
                           className={filterSelectClass}
                         >
-                          <option value="">{t.yearBuiltStatusAny}</option>
-                          {yearBuiltStatuses.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
-                              {getTranslations(locale)?.property?.[`yearBuiltStatus_${opt.value}`] ?? opt.label}
-                            </option>
-                          ))}
+                          <option value="">{t.constructionStageAny}</option>
+                          <option value="completed">{t.constructionStageCompleted}</option>
+                          <option value="under_construction">{t.constructionStageUnderConstruction}</option>
+                          <option value="not_in_use">{t.constructionStageNotInUse}</option>
                         </select>
                       </div>
                       {hasExtraFilters && (

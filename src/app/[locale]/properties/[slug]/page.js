@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { getPropertyBySlug, getDisplayText } from '@/lib/properties';
+import { getPropertyBySlug, getDisplayText, getLocationLine } from '@/lib/properties';
 import { notFound } from 'next/navigation';
 import PropertyGallery from '@/components/property/PropertyGallery';
+import PropertyShareBar from '@/components/property/PropertyShareBar';
 import YouTubeVideoThumbnail from '@/components/property/YouTubeVideoThumbnail';
 import {
   BRAND_NAME,
@@ -115,11 +116,11 @@ function ContactActionButton({ href, icon: Icon, children, variant = 'primary' }
   );
 }
 
-function LocationText({ neighborhood, city }) {
+function LocationText({ locationLine, className = '' }) {
   return (
-    <div className="flex items-center gap-2 text-sm text-gray-500" style={{ fontWeight: 400 }}>
-      <MapPinIcon className="w-4 h-4" />
-      <span>{neighborhood ? `${neighborhood}, ${city}` : city}</span>
+    <div className={`flex items-center gap-2 text-sm text-gray-500 ${className}`.trim()} style={{ fontWeight: 400 }}>
+      <MapPinIcon className="w-4 h-4 shrink-0" />
+      <span>{locationLine}</span>
     </div>
   );
 }
@@ -149,11 +150,11 @@ export default async function PropertyDetailPage({ params }) {
   }
 
   const display = getDisplayText(property, locale);
-  const { title, address, city, neighborhood, description, features } = display;
+  const { title, description, features } = display;
   const {
     type, category, status, price, area, rooms, floor,
     totalFloors, yearBuilt, yearBuiltStatus, images, mapUrl, videoUrl, createdAt,
-    gaz, tec, priceIncludesVat, constructionType,
+    gaz, tec, priceIncludesVat, constructionType, priceNote,
   } = property;
 
   const isUnavailable = status === 'sold' || status === 'rented';
@@ -178,10 +179,10 @@ export default async function PropertyDetailPage({ params }) {
     { icon: BuildingOfficeIcon, value: constructionType ? (t[`constructionType_${constructionType}`] ?? constructionType) : noVal, label: t.constructionType },
   ];
 
-  const location = neighborhood ? `${neighborhood}, ${city}` : city;
-  const mapQuery = [address, neighborhood, city].filter(Boolean).join(', ');
+  const locationLine = getLocationLine(display);
+  const mapQuery = locationLine || [display.address, display.neighborhood, display.city].filter(Boolean).join(', ');
   const contactSubject = locale === 'en' ? 'Inquiry re:' : 'Запитване за:';
-  const propertyPath = `${prefix}/${category === 'sale' ? 'sales' : 'rent'}`;
+  const propertyPath = `${prefix}/properties/${slug}`;
 
   return (
     <>
@@ -212,7 +213,7 @@ export default async function PropertyDetailPage({ params }) {
                 </div>
 
                 <div className="lg:hidden" style={{ fontWeight: 400 }}>
-                  <LocationText neighborhood={neighborhood} city={city} />
+                  <LocationText locationLine={locationLine} />
                   <h1 className="text-2xl text-cadetblue mb-3 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
                   <div className="text-graphite">
                     <span className="text-3xl">{formatPriceEurAndBgn(price, category).eurText}</span>
@@ -221,6 +222,11 @@ export default async function PropertyDetailPage({ params }) {
                   </div>
                 </div>
 
+                {priceNote && (
+                  <p className="text-graphite-light text-sm md:text-base leading-relaxed">
+                    {priceNote}
+                  </p>
+                )}
                 <Card className="p-6" variant="light">
                   <h2 className="text-lg text-graphite mb-4">{t.keyDetails}</h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
@@ -229,6 +235,10 @@ export default async function PropertyDetailPage({ params }) {
                     ))}
                   </div>
                 </Card>
+
+                <div className="lg:hidden mt-4">
+                  <PropertyShareBar propertyPath={propertyPath} title={title} locale={locale} />
+                </div>
 
                 {videoUrl && getYoutubeVideoId(videoUrl) && (
                   <YouTubeVideoThumbnail
@@ -262,8 +272,7 @@ export default async function PropertyDetailPage({ params }) {
                     <div className="flex items-start space-x-3 mb-4">
                       <MapPinIcon className="w-6 h-6 text-graphite flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-graphite">{address}</p>
-                        <p className="text-gray-500">{location}</p>
+                        <p className="text-graphite">{locationLine}</p>
                       </div>
                     </div>
 
@@ -306,16 +315,19 @@ export default async function PropertyDetailPage({ params }) {
 
               <div className="lg:col-span-1">
                 <div className="sticky top-24 space-y-6">
-                  <Card className="hidden lg:block p-6" style={{ fontWeight: 400 }}>
-                    <LocationText neighborhood={neighborhood} city={city} />
-                    <h1 className="text-xl text-cadetblue mb-4 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
+                  <Card className="hidden lg:block p-6 font-sans" style={{ fontWeight: 400 }}>
+                    <LocationText locationLine={locationLine} className="text-lg text-gray-600" />
+                    <h1 className="text-xl text-cadetblue mt-3 mb-3 font-normal">{title}</h1>
                     <div className="mb-4">
-                      <span className="text-3xl text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
+                      <span className="text-xl text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
                       <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
                       <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
                     </div>
                     <div className="text-sm text-gray-500">
                       {t.published}: {formatDate(createdAt, locale)}
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <PropertyShareBar propertyPath={propertyPath} title={title} locale={locale} />
                     </div>
                   </Card>
 

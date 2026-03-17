@@ -8,6 +8,7 @@ import {
   propertyStatuses,
   constructionTypes,
   yearBuiltStatuses,
+  FEATURE_OPTIONS,
   PROPERTY_STATUS,
 } from '@/data/properties';
 import { createProperty, updateProperty } from '@/lib/properties';
@@ -25,6 +26,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     type: property?.type || 'apartment',
     status: property?.status || PROPERTY_STATUS.ACTIVE,
     price: property?.price || '',
+    priceNote: property?.priceNote ?? '',
     currency: 'EUR',
     area: property?.area || '',
     rooms: property?.rooms || '',
@@ -40,8 +42,10 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     addressEn: property?.addressEn || '',
     description: property?.description || '',
     descriptionEn: property?.descriptionEn || '',
-    features: property?.features?.join(', ') || '',
-    featuresEn: property?.featuresEn?.join(', ') || '',
+    features: property?.features ? property.features.filter((f) => FEATURE_OPTIONS.some((o) => o.bg === f)) : [],
+    featuresEn: property?.featuresEn ? property.featuresEn.filter((f) => FEATURE_OPTIONS.some((o) => o.en === f)) : [],
+    featuresOther: property?.features ? property.features.filter((f) => !FEATURE_OPTIONS.some((o) => o.bg === f)).join(', ') : '',
+    featuresEnOther: property?.featuresEn ? property.featuresEn.filter((f) => !FEATURE_OPTIONS.some((o) => o.en === f)).join(', ') : '',
     images: property?.images || [],
     mapUrl: property?.mapUrl || '',
     videoUrl: property?.videoUrl || '',
@@ -85,6 +89,25 @@ export default function PropertyForm({ property = null, isDemo = false }) {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  const toggleFeature = (option, checked) => {
+    setFormData((prev) => {
+      const features = Array.isArray(prev.features) ? [...prev.features] : [];
+      const featuresEn = Array.isArray(prev.featuresEn) ? [...prev.featuresEn] : [];
+      if (checked) {
+        return {
+          ...prev,
+          features: [...features, option.bg],
+          featuresEn: [...featuresEn, option.en],
+        };
+      }
+      return {
+        ...prev,
+        features: features.filter((f) => f !== option.bg),
+        featuresEn: featuresEn.filter((f) => f !== option.en),
+      };
+    });
   };
 
   const transliterateBgToLatin = (str) => {
@@ -133,19 +156,30 @@ export default function PropertyForm({ property = null, isDemo = false }) {
       price: Number(formData.price) || 0,
       area: Number(formData.area) || 0,
       rooms: formData.rooms ? Number(formData.rooms) : null,
-      floor: formData.floor ? Number(formData.floor) : null,
-      totalFloors: formData.totalFloors ? Number(formData.totalFloors) : null,
+      floor: formData.floor !== '' && formData.floor != null
+        ? Math.min(20, Math.max(0, Math.round(Number(formData.floor))))
+        : null,
+      totalFloors: formData.totalFloors !== '' && formData.totalFloors != null
+        ? Math.min(20, Math.max(0, Math.round(Number(formData.totalFloors))))
+        : null,
       yearBuilt: formData.yearBuilt ? Number(formData.yearBuilt) : null,
       yearBuiltStatus: formData.yearBuiltStatus || null,
       brokerNote: formData.brokerNote || null,
-      features: formData.features
-        .split(',')
-        .map(f => f.trim())
-        .filter(Boolean),
-      featuresEn: formData.featuresEn
-        .split(',')
-        .map(f => f.trim())
-        .filter(Boolean),
+      priceNote: formData.priceNote || null,
+      features: [
+        ...(Array.isArray(formData.features) ? formData.features : []),
+        ...(formData.featuresOther || '')
+          .split(',')
+          .map((f) => f.trim())
+          .filter(Boolean),
+      ],
+      featuresEn: [
+        ...(Array.isArray(formData.featuresEn) ? formData.featuresEn : []),
+        ...(formData.featuresEnOther || '')
+          .split(',')
+          .map((f) => f.trim())
+          .filter(Boolean),
+      ],
       images: formData.images,
     };
 
@@ -354,7 +388,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label htmlFor="price" className="block text-sm text-gray-700 mb-1">
-              Цена *
+              {formData.category === 'rent' ? 'Месечна цена *' : 'Цена *'}
             </label>
             <input
               type="number"
@@ -386,6 +420,20 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               placeholder="95"
             />
           </div>
+        </div>
+        <div className="mt-4">
+          <label htmlFor="priceNote" className="block text-sm text-gray-700 mb-1">
+            Забележка цена
+          </label>
+          <input
+            type="text"
+            id="priceNote"
+            name="priceNote"
+            value={formData.priceNote}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <p className="mt-1 text-xs text-gray-500">Опционално. Показва се при клиента над „Основни характеристики“.</p>
         </div>
         <div className="mt-4">
           <label className="inline-flex items-center gap-2 cursor-pointer">
@@ -427,19 +475,19 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             <label htmlFor="floor" className="block text-sm text-gray-700 mb-1">
               Етаж
             </label>
-            <select
+            <input
+              type="number"
               id="floor"
               name="floor"
+              min="0"
+              max="20"
+              step="1"
               value={formData.floor === '' || formData.floor == null ? '' : String(formData.floor)}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">—</option>
-              <option value="0">Партер</option>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30].map((n) => (
-                <option key={n} value={n}>{n}. етаж</option>
-              ))}
-            </select>
+              placeholder="0 = партер"
+            />
+            <p className="mt-1 text-xs text-gray-500">Цяло число от 0 (партер) до 20.</p>
           </div>
 
           <div>
@@ -453,34 +501,19 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               value={formData.totalFloors}
               onChange={handleChange}
               min="0"
+              max="20"
+              step="1"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="8"
             />
+            <p className="mt-1 text-xs text-gray-500">Цяло число до 20.</p>
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-sm text-gray-700 mb-2">
-              Година на строителство
-            </label>
-            <div className="space-y-2">
-              {yearBuiltStatuses.map((opt) => (
-                <label key={opt.value} className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="yearBuiltStatus"
-                    value={opt.value}
-                    checked={(formData.yearBuiltStatus || '') === opt.value}
-                    onChange={handleChange}
-                    className="mt-1 w-4 h-4 border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">{opt.label}</span>
-                </label>
-              ))}
-            </div>
-            {(formData.yearBuiltStatus === 'completed' || formData.yearBuiltStatus === 'under_construction') && (
-              <div className="mt-3">
+            {formData.category === 'rent' ? (
+              <>
                 <label htmlFor="yearBuilt" className="block text-sm text-gray-700 mb-1">
-                  {formData.yearBuiltStatus === 'completed' ? 'Година на въвеждане в експлоатация' : 'Очаквана година на въвеждане'}
+                  Година на строителство
                 </label>
                 <input
                   type="number"
@@ -491,9 +524,48 @@ export default function PropertyForm({ property = null, isDemo = false }) {
                   min="1900"
                   max="2035"
                   className="w-full max-w-[140px] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder={formData.yearBuiltStatus === 'under_construction' ? '2026' : '2020'}
+                  placeholder="2020"
                 />
-              </div>
+              </>
+            ) : (
+              <>
+                <label className="block text-sm text-gray-700 mb-2">
+                  Година на строителство
+                </label>
+                <div className="space-y-2">
+                  {yearBuiltStatuses.map((opt) => (
+                    <label key={opt.value} className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="yearBuiltStatus"
+                        value={opt.value}
+                        checked={(formData.yearBuiltStatus || '') === opt.value}
+                        onChange={handleChange}
+                        className="mt-1 w-4 h-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">{opt.label}</span>
+                    </label>
+                  ))}
+                </div>
+                {(formData.yearBuiltStatus === 'completed' || formData.yearBuiltStatus === 'under_construction') && (
+                  <div className="mt-3">
+                    <label htmlFor="yearBuilt" className="block text-sm text-gray-700 mb-1">
+                      {formData.yearBuiltStatus === 'completed' ? 'Година на въвеждане в експлоатация' : 'Очаквана година на въвеждане'}
+                    </label>
+                    <input
+                      type="number"
+                      id="yearBuilt"
+                      name="yearBuilt"
+                      value={formData.yearBuilt}
+                      onChange={handleChange}
+                      min="1900"
+                      max="2035"
+                      className="w-full max-w-[140px] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder={formData.yearBuiltStatus === 'under_construction' ? '2026' : '2020'}
+                    />
+                  </div>
+                )}
+              </>
             )}
           </div>
 
@@ -737,56 +809,67 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-4">
             <div>
-              <label htmlFor="features" className="flex items-center gap-1.5 text-sm text-gray-700 mb-1">
-                Удобства (БГ, разделени със запетая)
-                <span className="relative group inline-flex shrink-0">
-                  <span
-                    className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-300 text-gray-600 text-xs cursor-help hover:bg-gray-400"
-                    aria-label="Предложени удобства"
-                  >
-                    i
-                  </span>
-                  <span className="absolute left-0 top-full mt-1.5 px-3 py-2 w-80 text-left text-xs font-normal bg-gray-800 text-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 pointer-events-none whitespace-pre-line">
-                    {['С преход', 'Асансьор', 'С гараж', 'С паркинг', 'Интернет връзка', 'С действащ бизнес', 'Обзаведен', 'Видео наблюдение', 'Контрол на достъпа', 'Охрана', 'Саниран', 'В затворен комплекс', 'За ремонт', 'Възможност за дан. кредит'].join('\n')}
-                  </span>
-                </span>
-              </label>
-              <input
-                type="text"
-                id="features"
-                name="features"
-                value={formData.features}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Паркомясто, Асансьор, Климатик"
-              />
+              <p className="text-sm text-gray-700 mb-2">
+                Удобства – тикни за български; в английската версия излиза автоматично.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 max-h-64 overflow-y-auto py-2 pr-2 border border-gray-200 rounded-lg bg-gray-50/50">
+                {FEATURE_OPTIONS.map((opt) => {
+                  const checked = Array.isArray(formData.features) && formData.features.includes(opt.bg);
+                  return (
+                    <label
+                      key={opt.bg}
+                      className="flex items-start gap-2 cursor-pointer group"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleFeature(opt, !checked)}
+                        className="mt-1 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700 group-hover:text-gray-900">
+                        {opt.bg}
+                        {checked && (
+                          <span className="ml-1.5 text-gray-500 font-normal">
+                            ({opt.en})
+                          </span>
+                        )}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
             </div>
-            <div>
-              <label htmlFor="featuresEn" className="flex items-center gap-1.5 text-sm text-gray-700 mb-1">
-                Удобства (EN, разделени със запетая)
-                <span className="relative group inline-flex shrink-0">
-                  <span
-                    className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-300 text-gray-600 text-xs cursor-help hover:bg-gray-400"
-                    aria-label="Suggested amenities"
-                  >
-                    i
-                  </span>
-                  <span className="absolute left-0 top-full mt-1.5 px-3 py-2 w-80 text-left text-xs font-normal bg-gray-800 text-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 pointer-events-none whitespace-pre-line">
-                    {['With hallway', 'Elevator', 'With garage', 'With parking', 'Internet connection', 'With operating business', 'Furnished', 'CCTV', 'Access control', 'Security', 'Renovated', 'In gated complex', 'For renovation', 'Mortgage possible'].join('\n')}
-                  </span>
-                </span>
-              </label>
-              <input
-                type="text"
-                id="featuresEn"
-                name="featuresEn"
-                value={formData.featuresEn}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Parking, Elevator, AC"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="featuresOther" className="block text-sm text-gray-700 mb-1">
+                  Други удобства (БГ, разделени със запетая)
+                </label>
+                <input
+                  type="text"
+                  id="featuresOther"
+                  name="featuresOther"
+                  value={formData.featuresOther}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="друго 1, друго 2"
+                />
+              </div>
+              <div>
+                <label htmlFor="featuresEnOther" className="block text-sm text-gray-700 mb-1">
+                  Други удобства (EN, разделени със запетая)
+                </label>
+                <input
+                  type="text"
+                  id="featuresEnOther"
+                  name="featuresEnOther"
+                  value={formData.featuresEnOther}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="other 1, other 2"
+                />
+              </div>
             </div>
           </div>
 

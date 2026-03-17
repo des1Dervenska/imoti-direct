@@ -25,12 +25,20 @@ export const BRAND_TAGLINE = 'С нас вашата сделка ще бъде 
 // =============================================================================
 
 export const CONTACT_PERSON = 'Геновева Филева';
+/** Име на контакт за английска версия (транслитерация) */
+export const CONTACT_PERSON_EN = 'Genoveva Fileva';
+/** Facebook App ID за „Сподели в Messenger“ (Send Dialog). Създай приложение на developers.facebook.com и добави тук. */
+export const FACEBOOK_APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || '';
 export const CONTACT_PHONE = '0887 803 064';
 export const CONTACT_PHONE_LINK = '+359887803064';
 export const CONTACT_EMAIL = 'genoveva@arthouse94.com';
 export const CONTACT_ADDRESS = 'Бул. България, ж.к. Белите Брези, бл. 4';
 export const CONTACT_ADDRESS_SHORT = 'Бул. България, ж.к. Белите Брези, бл. 4, София';
 export const CONTACT_CITY = 'София, България';
+/** Адрес и град за английска версия */
+export const CONTACT_ADDRESS_EN = 'Bul. Bulgaria, Belite Brezi distr., bl. 4';
+export const CONTACT_ADDRESS_SHORT_EN = 'Bul. Bulgaria, Belite Brezi distr., bl. 4, Sofia';
+export const CONTACT_CITY_EN = 'Sofia, Bulgaria';
 
 // =============================================================================
 // WORKING HOURS
@@ -40,6 +48,13 @@ export const WORKING_HOURS = {
   weekdays: 'Понеделник - Петък: 9:00 - 18:00',
   saturday: 'Събота: 10:00 - 16:00',
   sunday: 'Неделя: Почивен ден',
+};
+
+/** Работно време за английска версия */
+export const WORKING_HOURS_EN = {
+  weekdays: 'Monday - Friday: 9:00 AM - 6:00 PM',
+  saturday: 'Saturday: 10:00 AM - 4:00 PM',
+  sunday: 'Sunday: Day off',
 };
 
 // =============================================================================

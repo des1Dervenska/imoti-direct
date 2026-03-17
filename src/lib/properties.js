@@ -59,6 +59,7 @@ function transformProperty(row) {
     priceIncludesVat: Boolean(row.price_includes_vat),
     constructionType: row.construction_type ?? null,
     brokerNote: row.broker_note ?? null,
+    priceNote: row.price_note ?? null,
     createdAt: row.created_at ?? null,
     updatedAt: row.updated_at ?? null,
   };
@@ -79,6 +80,17 @@ export function getDisplayText(property, locale) {
     description: (useEn && property.descriptionEn) ? property.descriptionEn : (property.description ?? ''),
     features: (useEn && property.featuresEn?.length) ? property.featuresEn : (property.features ?? []),
   };
+}
+
+/**
+ * Единен ред за местоположение: Град, Квартал, булевард/улица.
+ * @param {{ city?: string, neighborhood?: string | null, address?: string }} display - обект от getDisplayText
+ * @returns {string}
+ */
+export function getLocationLine(display) {
+  if (!display) return '';
+  const parts = [display.city, display.neighborhood, display.address].filter(Boolean);
+  return parts.join(', ');
 }
 
 // =============================================================================
@@ -375,9 +387,27 @@ function transformToSupabase(property) {
     price_includes_vat: Boolean(property.priceIncludesVat),
     construction_type: property.constructionType || null,
     broker_note: property.brokerNote || null,
+    price_note: property.priceNote || null,
   };
 
   return result;
+}
+
+/**
+ * Връща уникален slug: ако подаденият вече съществува, добавя случайно число.
+ * @param {string} baseSlug
+ * @param {number} maxAttempts
+ * @returns {Promise<string>}
+ */
+async function ensureUniqueSlug(baseSlug, maxAttempts = 20) {
+  const slug = (baseSlug || '').trim().toLowerCase().replace(/\s+/g, '-') || 'imot';
+  let candidate = slug;
+  for (let i = 0; i < maxAttempts; i++) {
+    const existing = await getPropertyBySlug(candidate);
+    if (!existing) return candidate;
+    candidate = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
+  }
+  return `${slug}-${Date.now().toString(36)}`;
 }
 
 export async function createProperty(propertyData) {
@@ -389,7 +419,9 @@ export async function createProperty(propertyData) {
     };
   }
 
-  const supabaseData = transformToSupabase(propertyData);
+  const uniqueSlug = await ensureUniqueSlug(propertyData.slug);
+  const dataWithSlug = { ...propertyData, slug: uniqueSlug };
+  const supabaseData = transformToSupabase(dataWithSlug);
 
   const { data, error } = await supabase
     .from('properties')

@@ -100,6 +100,7 @@ export const CURRENCY = {
  * @property {boolean} [priceIncludesVat] - Цена с включено ДДС (true) / без ДДС (false)
  * @property {string} [constructionType] - Тип строителство: panel, tuhla, epk, pk, gredored, sglobyaema
  * @property {string|null} [brokerNote] - Лична бележка на брокера (само за админ, не се показва на сайта)
+ * @property {string|null} [priceNote] - Забележка цена (показва се над Основни характеристики при клиента)
  * @property {string} createdAt - ISO 8601
  * @property {string} updatedAt - ISO 8601
  */
@@ -466,7 +467,7 @@ export const propertyStatuses = [
   { value: PROPERTY_STATUS.PENDING, label: 'Чакаща' },
   { value: PROPERTY_STATUS.SOLD, label: 'Продадена' },
   { value: PROPERTY_STATUS.RENTED, label: 'Отдадена' },
-  { value: PROPERTY_STATUS.INACTIVE, label: 'Неактивна' },
+  { value: PROPERTY_STATUS.INACTIVE, label: 'Блокирана' },
 ];
 
 export const constructionTypes = [
@@ -489,6 +490,49 @@ export function getYearBuiltStatusLabel(status) {
   const found = yearBuiltStatuses.find((s) => s.value === status);
   return found ? found.label : '';
 }
+
+/** Удобства – опции за чекбокси в админ (български + английски) */
+export const FEATURE_OPTIONS = [
+  { bg: 'Паркомясто', en: 'Parking' },
+  { bg: 'Асансьор', en: 'Elevator' },
+  { bg: 'Видеонаблюдение', en: 'CCTV' },
+  { bg: 'Климатик', en: 'AC' },
+  { bg: 'Панорамни прозорци', en: 'Panoramic windows' },
+  { bg: 'С преход', en: 'With hallway' },
+  { bg: 'С гараж', en: 'With garage' },
+  { bg: 'С паркинг', en: 'With parking' },
+  { bg: 'Интернет връзка', en: 'Internet connection' },
+  { bg: 'С действащ бизнес', en: 'With operating business' },
+  { bg: 'Обзаведен', en: 'Furnished' },
+  { bg: 'Контрол на достъпа', en: 'Access control' },
+  { bg: 'Охрана', en: 'Security' },
+  { bg: 'Саниран', en: 'Renovated' },
+  { bg: 'В затворен комплекс', en: 'In gated complex' },
+  { bg: 'За ремонт', en: 'For renovation' },
+  { bg: 'Възможност за дан. кредит', en: 'Mortgage possible' },
+  { bg: 'Собствен двор', en: 'Private yard' },
+  { bg: 'Тераса', en: 'Terrace' },
+  { bg: 'Централно отопление', en: 'Central heating' },
+  { bg: 'Гараж', en: 'Garage' },
+  { bg: 'Ток', en: 'Electricity' },
+  { bg: 'Вода', en: 'Water' },
+  { bg: 'Асфалтов път', en: 'Paved road' },
+  { bg: 'Панорамна гледка', en: 'Panoramic view' },
+  { bg: 'Регулиран', en: 'Regulated' },
+  { bg: 'Морска гледка', en: 'Sea view' },
+  { bg: 'Басейн', en: 'Swimming pool' },
+  { bg: 'Фитнес', en: 'Fitness' },
+  { bg: 'Камина', en: 'Fireplace' },
+  { bg: 'Джакузи', en: 'Jacuzzi' },
+  { bg: 'Барбекю', en: 'Barbecue' },
+  { bg: 'WiFi', en: 'WiFi' },
+  { bg: 'Интернет', en: 'Internet' },
+  { bg: 'Централна локация', en: 'Central location' },
+  { bg: 'Строителни права', en: 'Building rights' },
+  { bg: 'Детска площадка', en: 'Playground' },
+  { bg: 'Ново строителство', en: 'New construction' },
+  { bg: 'Луксозен', en: 'Luxury' },
+];
 
 export const cities = [
   { value: 'София', label: 'София' },

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { DEFAULT_PROPERTY_IMAGE, formatPriceEurAndBgn } from '@/lib/constants';
-import { getDisplayText } from '@/lib/properties';
+import { getDisplayText, getLocationLine } from '@/lib/properties';
 import { getTranslations } from '@/lib/translations';
 import { ArrowsPointingOutIcon, MapPinIcon, BoltIcon, FireIcon } from '@heroicons/react/24/outline';
 import { RoomsIcon } from '@/components/icons';
@@ -30,12 +30,12 @@ export default function PropertyCard({ property, showDescription = true, locale 
     priceIncludesVat,
   } = property;
   const display = getDisplayText(property, locale);
-  const { title, city, neighborhood, description } = display;
+  const { title, description } = display;
+  const location = getLocationLine(display);
 
   const t = getTranslations(locale)?.property ?? {};
   const propertyUrl = locale ? `/${locale}/properties/${slug}` : `/properties/${slug}`;
   const imageUrl = images?.[0] || DEFAULT_PROPERTY_IMAGE;
-  const location = neighborhood ? `${neighborhood}, ${city}` : city;
   const isUnavailable = status === 'sold' || status === 'rented';
   const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕНА') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕНА') : null;
 
@@ -70,6 +70,11 @@ export default function PropertyCard({ property, showDescription = true, locale 
 
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-graphite opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+
+        {/* Watermark */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
+          <img src="/images/logo.jpg" alt="" className="w-14 h-14 object-contain opacity-25" />
+        </div>
 
         {/* Category badge */}
         <div className="absolute top-3 left-3">

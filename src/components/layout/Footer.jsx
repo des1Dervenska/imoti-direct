@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {
   BRAND_NAME,
   CONTACT_ADDRESS_SHORT,
+  CONTACT_ADDRESS_SHORT_EN,
   CONTACT_PHONE,
   CONTACT_EMAIL,
 } from '@/lib/constants';
@@ -38,8 +39,9 @@ export default function Footer({ locale = 'bg' }) {
     { label: t.footerLinks.contact, href: `${prefix}/contact` },
   ];
 
+  const contactAddressShort = locale === 'en' ? CONTACT_ADDRESS_SHORT_EN : CONTACT_ADDRESS_SHORT;
   const contactInfo = [
-    { Icon: MapPinIcon, value: CONTACT_ADDRESS_SHORT, iconClass: `${iconStyle} mt-0.5` },
+    { Icon: MapPinIcon, value: contactAddressShort, iconClass: `${iconStyle} mt-0.5` },
     { Icon: PhoneIcon, value: CONTACT_PHONE, iconClass: iconStyle },
     { Icon: EnvelopeIcon, value: CONTACT_EMAIL, iconClass: iconStyle },
     { Icon: ClockIcon, value: t.footer.workingHoursShort, iconClass: iconStyle },

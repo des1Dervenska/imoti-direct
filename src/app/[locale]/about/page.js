@@ -1,6 +1,7 @@
 import {
   BRAND_NAME,
   CONTACT_PERSON,
+  CONTACT_PERSON_EN,
 } from '@/lib/constants';
 import { getTranslations } from '@/lib/translations';
 import { Section, Container, Card, LinkButton, FeatureCard, AnimateOnScroll } from '@/components/ui';
@@ -56,8 +57,9 @@ export default async function AboutPage({ params }) {
     { title: t.about.service6Title, description: t.about.service6Desc, icon: <ArrowTrendingUpIcon className="w-6 h-6 text-graphite" /> },
   ];
 
+  const contactName = locale === 'en' ? CONTACT_PERSON_EN : CONTACT_PERSON;
   const intro1 = t.about.intro1.replace(/{brandName}/g, BRAND_NAME);
-  const intro2 = t.about.intro2.replace(/{contactPerson}/g, CONTACT_PERSON);
+  const intro2 = t.about.intro2.replace(/{contactPerson}/g, contactName);
   const intro3 = t.about.intro3;
 
   const renderIntro1 = () => {
@@ -100,7 +102,7 @@ export default async function AboutPage({ params }) {
                 <p>{intro2}</p>
                 <p>{intro3}</p>
               </div>
-              <OwnerCard name={CONTACT_PERSON} brandName={BRAND_NAME} ownerRole={t.about.ownerRole} />
+              <OwnerCard name={contactName} brandName={BRAND_NAME} ownerRole={t.about.ownerRole} />
             </AnimateOnScroll>
           </div>
         </Container>

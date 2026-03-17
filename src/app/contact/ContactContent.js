@@ -5,12 +5,16 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
   CONTACT_ADDRESS,
+  CONTACT_ADDRESS_EN,
   CONTACT_CITY,
+  CONTACT_CITY_EN,
   CONTACT_PHONE,
   CONTACT_PHONE_LINK,
   CONTACT_EMAIL,
   CONTACT_ADDRESS_SHORT,
+  CONTACT_ADDRESS_SHORT_EN,
   WORKING_HOURS,
+  WORKING_HOURS_EN,
   GOOGLE_MAPS_SEARCH_URL,
 } from '@/lib/constants';
 import { getTranslations } from '@/lib/translations';
@@ -74,6 +78,11 @@ function SuccessMessage({ message }) {
 export default function ContactContent({ locale = 'bg' }) {
   const t = getTranslations(locale).contact;
   const prefix = `/${locale}`;
+  const isEn = locale === 'en';
+  const contactAddress = isEn ? CONTACT_ADDRESS_EN : CONTACT_ADDRESS;
+  const contactCity = isEn ? CONTACT_CITY_EN : CONTACT_CITY;
+  const contactAddressShort = isEn ? CONTACT_ADDRESS_SHORT_EN : CONTACT_ADDRESS_SHORT;
+  const workingHours = isEn ? WORKING_HOURS_EN : WORKING_HOURS;
 
   const contactInfoItems = [
     {
@@ -81,8 +90,8 @@ export default function ContactContent({ locale = 'bg' }) {
       title: t.address,
       content: (
         <>
-          {CONTACT_ADDRESS}<br />
-          {CONTACT_CITY}
+          {contactAddress}<br />
+          {contactCity}
         </>
       ),
     },
@@ -109,9 +118,9 @@ export default function ContactContent({ locale = 'bg' }) {
       title: t.workingHours,
       content: (
         <>
-          <span className="block">{WORKING_HOURS.weekdays}</span>
-          <span className="block">{WORKING_HOURS.saturday}</span>
-          <span className="block">{WORKING_HOURS.sunday}</span>
+          <span className="block">{workingHours.weekdays}</span>
+          <span className="block">{workingHours.saturday}</span>
+          <span className="block">{workingHours.sunday}</span>
         </>
       ),
     },
@@ -382,7 +391,7 @@ export default function ContactContent({ locale = 'bg' }) {
           <AnimateOnScroll direction="down">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-graphite mb-2">{t.whereToFind}</h2>
-            <p className="text-graphite-light">{CONTACT_ADDRESS_SHORT}</p>
+            <p className="text-graphite-light">{contactAddressShort}</p>
           </div>
           </AnimateOnScroll>
 
@@ -390,7 +399,7 @@ export default function ContactContent({ locale = 'bg' }) {
           {/* Вградена карта на локацията */}
           <div className="rounded-2xl overflow-hidden h-80 md:h-96 bg-gray-200">
             <iframe
-              src={`https://www.google.com/maps?q=${encodeURIComponent(CONTACT_ADDRESS_SHORT)}&output=embed`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(contactAddressShort)}&output=embed`}
               width="100%"
               height="100%"
               style={{ border: 0 }}

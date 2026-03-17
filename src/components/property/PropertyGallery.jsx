@@ -46,6 +46,11 @@ export default function PropertyGallery({ images = [], title = 'Имот', isUna
           className={imageStyle}
         />
 
+        {/* Watermark */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1]" aria-hidden>
+          <img src="/images/logo.jpg" alt="" className="w-20 h-20 md:w-24 md:h-24 object-contain opacity-25" />
+        </div>
+
         {/* Sold/Rented overlay – само върху голямата снимка */}
         {isUnavailable && unavailableOverlayText && (
           <div
