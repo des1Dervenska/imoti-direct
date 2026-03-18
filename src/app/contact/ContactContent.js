@@ -69,7 +69,7 @@ function SocialLink({ icon: Icon, href, label }) {
 function SuccessMessage({ message }) {
   return (
     <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center">
-      <CheckCircleIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
+      <CheckCircleIcon className="w-5 h-5 text-green-600 mr-3 shrink-0" />
       <span className="text-green-800">{message}</span>
     </div>
   );
@@ -79,9 +79,24 @@ export default function ContactContent({ locale = 'bg' }) {
   const t = getTranslations(locale).contact;
   const prefix = `/${locale}`;
   const isEn = locale === 'en';
-  const contactAddress = isEn ? CONTACT_ADDRESS_EN : CONTACT_ADDRESS;
   const contactCity = isEn ? CONTACT_CITY_EN : CONTACT_CITY;
-  const contactAddressShort = isEn ? CONTACT_ADDRESS_SHORT_EN : CONTACT_ADDRESS_SHORT;
+
+  // Премахваме „бл. 4“ от показвания адрес в секцията „Контакти“.
+  const stripBlockNumber = (addr) => {
+    if (!addr) return '';
+    return isEn
+      ? addr
+          .replace(/,\s*bl\.\s*\d+\s*,\s*/gi, ', ')
+          .replace(/,\s*bl\.\s*\d+\s*$/i, '')
+      : addr
+          .replace(/,\s*бл\.\s*\d+\s*,\s*/gi, ', ')
+          .replace(/,\s*бл\.\s*\d+\s*$/u, '');
+  };
+
+  const contactAddress = stripBlockNumber(isEn ? CONTACT_ADDRESS_EN : CONTACT_ADDRESS);
+  const contactAddressShort = stripBlockNumber(
+    isEn ? CONTACT_ADDRESS_SHORT_EN : CONTACT_ADDRESS_SHORT
+  );
   const workingHours = isEn ? WORKING_HOURS_EN : WORKING_HOURS;
 
   const contactInfoItems = [

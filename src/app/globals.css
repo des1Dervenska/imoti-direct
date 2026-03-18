@@ -69,15 +69,15 @@ body {
    Custom Utilities
    =========================================== */
 
-/* h1 и h2 – Playfair навсякъде */
+/* h1 и h2 – Playfair Display по подразбиране */
 h1,
 h2 {
   font-family: var(--font-playfair), Georgia, serif;
 }
 
-/* Hero подзаглавие (tagline) – Playfair; числата в него с default шрифт */
+/* Hero подзаглавие (tagline) */
 .hero-tagline {
-  font-family: var(--font-playfair), Georgia, serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 .hero-tagline .tagline-number {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
@@ -90,17 +90,7 @@ h2 {
 
 /* Целият текст "ART HOUSE 94" – изцяло с default шрифт (без Playfair) в hero и навбар */
 .brand-name-sans {
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif !important;
-}
-
-/* Текстове в навбара – Playfair; изключение за бранда ART HOUSE 94 */
-.font-playfair-nav,
-.font-playfair-nav a,
-.font-playfair-nav span {
-  font-family: var(--font-playfair), Georgia, serif;
-}
-.font-playfair-nav .brand-name-sans {
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif !important;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
 .line-clamp-2 {

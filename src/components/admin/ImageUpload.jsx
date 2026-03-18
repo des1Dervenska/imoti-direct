@@ -77,6 +77,18 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
     onChange(newImages);
   };
 
+  // Reorder uploaded images
+  const moveUploadedImage = (fromIndex, toIndex) => {
+    if (disabled || !storageReady) return;
+    if (fromIndex === toIndex) return;
+    if (toIndex < 0 || toIndex >= images.length) return;
+
+    const next = [...images];
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    onChange(next);
+  };
+
   // Upload selected files
   const handleUpload = async () => {
     console.log('[ImageUpload] handleUpload called');
@@ -153,7 +165,26 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {images.map((url, index) => (
-              <div key={url} className="relative group">
+              <div key={`${url}-${index}`} className="relative group">
+                {/* Up / Down controls */}
+                <button
+                  type="button"
+                  onClick={() => moveUploadedImage(index, index - 1)}
+                  disabled={disabled || index === 0}
+                  className="absolute top-1 left-1 w-7 h-7 bg-white/80 hover:bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-graphite text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Премести снимката нагоре"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveUploadedImage(index, index + 1)}
+                  disabled={disabled || index === images.length - 1}
+                  className="absolute top-1 left-9 w-7 h-7 bg-white/80 hover:bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-graphite text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Премести снимката надолу"
+                >
+                  ↓
+                </button>
                 <img
                   src={url}
                   alt={`Снимка ${index + 1}`}

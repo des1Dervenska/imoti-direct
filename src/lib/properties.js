@@ -85,13 +85,14 @@ export function getDisplayText(property, locale) {
 }
 
 /**
- * Единен ред за местоположение: Град, Квартал, булевард/улица.
- * @param {{ city?: string, neighborhood?: string | null, address?: string }} display - обект от getDisplayText
+ * Единен ред за местоположение за клиента: Град, Квартал.
+ * (Адрес/улица не се показва.)
+ * @param {{ city?: string, neighborhood?: string | null }} display - обект от getDisplayText
  * @returns {string}
  */
 export function getLocationLine(display) {
   if (!display) return '';
-  const parts = [display.city, display.neighborhood, display.address].filter(Boolean);
+  const parts = [display.city, display.neighborhood].filter(Boolean);
   return parts.join(', ');
 }
 

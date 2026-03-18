@@ -4,7 +4,6 @@ import { useState, useCallback, useEffect } from 'react';
 import { getTranslations } from '@/lib/translations';
 import { FACEBOOK_PAGE_ID } from '@/lib/constants';
 import {
-  ChatBubbleLeftRightIcon,
   PrinterIcon,
   ClipboardDocumentIcon,
   EnvelopeIcon,
@@ -51,9 +50,6 @@ export default function PropertyShareBar({ propertyPath, title, locale = 'bg' })
     window.print();
   }, []);
 
-  const messengerUrl = FACEBOOK_PAGE_ID
-    ? `https://m.me/${FACEBOOK_PAGE_ID}${fullUrl ? `?text=${encodeURIComponent(fullUrl)}` : ''}`
-    : '#';
   const viberUrl = shareText ? `viber://forward?text=${encodeURIComponent(shareText)}` : '#';
   const mailtoUrl = shareText
     ? `mailto:?subject=${encodeURIComponent(title || 'Property')}&body=${encodeURIComponent(shareText)}`
@@ -61,16 +57,6 @@ export default function PropertyShareBar({ propertyPath, title, locale = 'bg' })
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <a
-        href={messengerUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={BUTTON_CLASS}
-        aria-label={t.shareViaMessage}
-      >
-        <ChatBubbleLeftRightIcon className="w-5 h-5" />
-        <span className="hidden sm:inline">{t.shareViaMessage}</span>
-      </a>
       <button type="button" onClick={handlePrint} className={BUTTON_CLASS} aria-label={t.sharePrint}>
         <PrinterIcon className="w-5 h-5" />
         <span className="hidden sm:inline">{t.sharePrint}</span>

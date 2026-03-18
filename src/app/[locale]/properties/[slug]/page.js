@@ -151,6 +151,7 @@ export default async function PropertyDetailPage({ params }) {
 
   const display = getDisplayText(property, locale);
   const { title, description, features, priceNote } = display;
+  const titleHasDigits = /\d/.test(String(title ?? ''));
   const {
     type, category, status, price, area, rooms, floor,
     totalFloors, yearBuilt, yearBuiltStatus, images, mapUrl, videoUrl, createdAt,
@@ -180,7 +181,8 @@ export default async function PropertyDetailPage({ params }) {
   ];
 
   const locationLine = getLocationLine(display);
-  const mapQuery = locationLine || [display.address, display.neighborhood, display.city].filter(Boolean).join(', ');
+  // Не включваме display.address (улица/адрес) за да не излиза на клиента.
+  const mapQuery = locationLine || [display.city, display.neighborhood].filter(Boolean).join(', ');
   const contactSubject = locale === 'en' ? 'Inquiry re:' : 'Запитване за:';
   const propertyPath = `${prefix}/properties/${slug}`;
 
@@ -214,7 +216,11 @@ export default async function PropertyDetailPage({ params }) {
 
                 <div className="lg:hidden" style={{ fontWeight: 400 }}>
                   <LocationText locationLine={locationLine} />
-                  <h1 className="text-2xl text-cadetblue mb-3 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]">{title}</h1>
+                  <h1
+                    className={`${titleHasDigits ? 'brand-name-sans ' : ''}text-2xl text-cadetblue mb-3 mt-2 tracking-wide [text-shadow:0_1px_2px_rgba(0,151,178,0.25)]`}
+                  >
+                    {title}
+                  </h1>
                   <div className="text-graphite">
                     <span className="text-3xl">{formatPriceEurAndBgn(price, category).eurText}</span>
                     <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
@@ -317,7 +323,11 @@ export default async function PropertyDetailPage({ params }) {
                 <div className="sticky top-24 space-y-6">
                   <Card className="hidden lg:block p-6 font-sans" style={{ fontWeight: 400 }}>
                     <LocationText locationLine={locationLine} className="text-lg text-gray-600" />
-                    <h1 className="text-xl text-cadetblue mt-3 mb-3 font-normal">{title}</h1>
+                    <h1
+                      className={`${titleHasDigits ? 'brand-name-sans ' : ''}text-xl text-cadetblue mt-3 mb-3 font-normal`}
+                    >
+                      {title}
+                    </h1>
                     <div className="mb-4">
                       <span className="text-xl text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
                       <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>

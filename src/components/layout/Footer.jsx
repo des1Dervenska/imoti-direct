@@ -52,6 +52,10 @@ export default function Footer({ locale = 'bg' }) {
     { label: t.footer.terms, href: `${prefix}/terms` },
   ];
 
+  // Safety filter: in case some external config injects these links
+  // (we do NOT want them shown in the footer).
+  const usefulLinksFiltered = USEFUL_LINKS.filter(({ href = '' }) => !/nag\.sofia\.bg/i.test(href));
+
   return (
     <footer className={`${footerBg} py-12`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,7 +93,7 @@ export default function Footer({ locale = 'bg' }) {
           <div>
             <h3 className={sectionTitle}>{t.footer.usefulLinks}</h3>
             <ul className="space-y-2">
-              {USEFUL_LINKS.map(({ label, href }) => (
+              {usefulLinksFiltered.map(({ label, href }) => (
                 <li key={href}>
                   <a
                     href={href}

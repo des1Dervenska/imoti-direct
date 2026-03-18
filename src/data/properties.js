@@ -436,7 +436,7 @@ export const propertyTypes = [
   { value: 'tristaen', label: 'Тристаен' },
   { value: 'chetiristaen', label: 'Четиристаен' },
   { value: 'mezonet', label: 'Мезонет' },
-  { value: 'mezonet_ofis', label: 'Мезонет офис' },
+  { value: 'mezonet_ofis', label: 'Офис' },
   { value: 'atelie', label: 'Ателие' },
   { value: 'tavan', label: 'Таван' },
   { value: 'mnogostaen_penthaus', label: 'Многостаен/Пентхаус' },

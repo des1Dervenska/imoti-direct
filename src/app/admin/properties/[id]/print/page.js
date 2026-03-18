@@ -27,6 +27,7 @@ export default async function PrintPropertyPage({ params }) {
   const display = getDisplayText(property, locale);
   const locationLine = getLocationLine(display);
   const { title, description, features, priceNote } = display;
+  const titleHasDigits = /\d/.test(String(title ?? ''));
   const {
     category,
     type,
@@ -96,7 +97,11 @@ export default async function PrintPropertyPage({ params }) {
             <span className="px-2 py-1 bg-gray-100 rounded">{typeLabel}</span>
           </div>
 
-          <h1 className="text-2xl font-semibold text-gray-900 print:text-xl">{title}</h1>
+          <h1
+            className={`${titleHasDigits ? 'brand-name-sans ' : ''}text-2xl font-semibold text-gray-900 print:text-xl`}
+          >
+            {title}
+          </h1>
           <p className="text-gray-600">{locationLine}</p>
           <div>
             <p className="text-xl font-semibold text-gray-900">{eurText}</p>

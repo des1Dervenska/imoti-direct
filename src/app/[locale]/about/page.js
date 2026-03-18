@@ -96,7 +96,7 @@ export default async function AboutPage({ params }) {
             </AnimateOnScroll>
 
             <AnimateOnScroll direction="up">
-              <h2 className="text-3xl font-bold text-graphite mb-6">{BRAND_NAME}</h2>
+              <h2 className="text-3xl font-bold text-graphite mb-6 brand-name-sans">{BRAND_NAME}</h2>
               <div className="space-y-4 text-graphite-light">
                 <p>{renderIntro1()}</p>
                 <p>{intro2}</p>

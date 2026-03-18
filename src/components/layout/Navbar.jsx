@@ -136,19 +136,19 @@ export default function Navbar({ locale = "bg" }) {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="font-playfair-nav fixed inset-x-0 top-0 z-50 border-b border-gray-200/80 bg-[#fbf7f4]/95 shadow-sm backdrop-blur-md">
-      <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-6 py-4">
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-gray-200/80 bg-[#fbf7f4]/95 shadow-sm backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
         <Link
           href={`/${locale}`}
           className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-90"
           onClick={closeMenu}
         >
-          <Logo width={38} height={38} priority className="object-contain" />
+          <Logo width={92} height={92} priority className="object-contain" />
           <div className="flex flex-col leading-none">
             <span className="brand-name-sans text-base tracking-[0.02em] text-graphite sm:text-xl">
               {BRAND_NAME_WITHOUT_NUMBER}{BRAND_NAME_NUMBER}
             </span>
-            <span className="hidden text-[11px] uppercase tracking-[0.22em] text-graphite/55 sm:block">
+            <span className="brand-name-sans hidden text-[11px] uppercase tracking-[0.22em] text-graphite/55 sm:block">
               {t.brand.taglineSub}
             </span>
           </div>
@@ -231,7 +231,7 @@ export default function Navbar({ locale = "bg" }) {
             isMenuOpen ? "translate-y-0" : "-translate-y-full"
           }`}
         >
-          <div className="mx-auto max-w-screen-xl px-5 py-3">
+        <div className="mx-auto max-w-7xl px-5 py-3">
             <ul className="space-y-1">
               {navLinks.map(({ label, href }) => {
                 const isActive = pathname === href;
