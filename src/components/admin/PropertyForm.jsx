@@ -31,8 +31,8 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     currency: 'EUR',
     area: property?.area || '',
     rooms: property?.rooms || '',
-    floor: property?.floor || '',
-    totalFloors: property?.totalFloors || '',
+    floor: property?.floor ?? '',
+    totalFloors: property?.totalFloors ?? '',
     yearBuilt: property?.yearBuilt || '',
     yearBuiltStatus: property?.yearBuiltStatus ?? '',
     city: property?.city || '',
@@ -53,6 +53,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     isFeatured: property?.isFeatured || false,
     gaz: property?.gaz ?? false,
     tec: property?.tec ?? false,
+    hidePricePerSqm: property?.hidePricePerSqm ?? false,
     priceIncludesVat: property?.priceIncludesVat ?? false,
     constructionType: property?.constructionType ?? '',
     brokerNote: property?.brokerNote ?? '',
@@ -141,6 +142,13 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     setFormData(prev => ({ ...prev, slug: slug || 'imot' }));
   };
 
+  const parseOptionalFloor = (value) => {
+    if (value === '' || value == null) return null;
+    const parsed = Math.round(Number(value));
+    if (Number.isNaN(parsed)) return null;
+    return Math.min(20, Math.max(0, parsed));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -157,17 +165,14 @@ export default function PropertyForm({ property = null, isDemo = false }) {
       price: Number(formData.price) || 0,
       area: Number(formData.area) || 0,
       rooms: formData.rooms ? Number(formData.rooms) : null,
-      floor: formData.floor !== '' && formData.floor != null
-        ? Math.min(20, Math.max(0, Math.round(Number(formData.floor))))
-        : null,
-      totalFloors: formData.totalFloors !== '' && formData.totalFloors != null
-        ? Math.min(20, Math.max(0, Math.round(Number(formData.totalFloors))))
-        : null,
+      floor: parseOptionalFloor(formData.floor),
+      totalFloors: parseOptionalFloor(formData.totalFloors),
       yearBuilt: formData.yearBuilt ? Number(formData.yearBuilt) : null,
       yearBuiltStatus: formData.yearBuiltStatus || null,
       brokerNote: formData.brokerNote || null,
       priceNote: formData.priceNote || null,
       priceNoteEn: formData.priceNoteEn || null,
+      hidePricePerSqm: Boolean(formData.hidePricePerSqm),
       features: [
         ...(Array.isArray(formData.features) ? formData.features : []),
         ...(formData.featuresOther || '')
@@ -422,6 +427,22 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               placeholder="95"
             />
           </div>
+
+          <div className="md:self-end">
+            <label className="inline-flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                name="hidePricePerSqm"
+                checked={formData.hidePricePerSqm}
+                onChange={handleChange}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">Скрий цена на м²</span>
+            </label>
+            <p className="mt-1 text-xs text-gray-500">
+              Когато е включено, цената на квадратен метър няма да се показва в клиентската част.
+            </p>
+          </div>
         </div>
         <div className="mt-4">
           <label htmlFor="priceNote" className="block text-sm text-gray-700 mb-1">
@@ -514,7 +535,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
               type="number"
               id="totalFloors"
               name="totalFloors"
-              value={formData.totalFloors}
+              value={formData.totalFloors === '' || formData.totalFloors == null ? '' : String(formData.totalFloors)}
               onChange={handleChange}
               min="0"
               max="20"

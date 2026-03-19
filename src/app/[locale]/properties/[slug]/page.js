@@ -7,13 +7,14 @@ import YouTubeVideoThumbnail from '@/components/property/YouTubeVideoThumbnail';
 import {
   BRAND_NAME,
   CONTACT_PERSON,
+  CONTACT_PERSON_EN,
   CONTACT_PHONE,
   CONTACT_PHONE_LINK,
   CONTACT_EMAIL,
   formatPriceEurAndBgn,
 } from '@/lib/constants';
 import { getTranslations } from '@/lib/translations';
-import { Section, Container, Badge, Card, LinkButton, AnimateOnScroll } from '@/components/ui';
+import { Section, Container, Card, LinkButton, AnimateOnScroll } from '@/components/ui';
 import {
   ChevronRightIcon,
   ChevronLeftIcon,
@@ -155,13 +156,13 @@ export default async function PropertyDetailPage({ params }) {
   const {
     type, category, status, price, area, rooms, floor,
     totalFloors, yearBuilt, yearBuiltStatus, images, mapUrl, videoUrl, createdAt,
-    gaz, tec, priceIncludesVat, constructionType,
+    gaz, tec, hidePricePerSqm, priceIncludesVat, constructionType,
   } = property;
 
   const isUnavailable = status === 'sold' || status === 'rented';
   const unavailableOverlayText = status === 'sold' ? t.statusSoldOverlay : status === 'rented' ? t.statusRentedOverlay : null;
 
-  const pricePerSqm = area > 0 ? Math.round((price ?? 0) / area) : null;
+  const pricePerSqm = !hidePricePerSqm && area > 0 ? Math.round((price ?? 0) / area) : null;
   const yearBuiltLabelKey = yearBuiltStatus ? `yearBuiltStatus_${yearBuiltStatus}` : null;
   const yearBuiltValue = yearBuiltLabelKey
     ? (yearBuiltStatus === 'not_in_use'
@@ -171,9 +172,19 @@ export default async function PropertyDetailPage({ params }) {
   const noVal = t.noValue ?? 'няма';
   const keyDetails = [
     { icon: ArrowsPointingOutIcon, value: area != null && area !== '' ? `${area} м²` : noVal, label: t.area },
-    { icon: CurrencyDollarIcon, value: pricePerSqm != null ? `${pricePerSqm} EUR/m²${category === 'rent' ? t.pricePerSqmRentSuffix : ''}` : noVal, label: t.pricePerSqm },
+    ...(!hidePricePerSqm ? [{
+      icon: CurrencyDollarIcon,
+      value: pricePerSqm != null ? `${pricePerSqm} EUR/m²${category === 'rent' ? t.pricePerSqmRentSuffix : ''}` : noVal,
+      label: t.pricePerSqm,
+    }] : []),
     { icon: HomeIcon, value: rooms != null && rooms !== '' ? String(rooms) : noVal, label: t.rooms },
-    { icon: BuildingOfficeIcon, value: floor !== undefined && floor !== null && floor !== '' ? (totalFloors != null ? `${floor === 0 ? t.floorParter : floor} / ${totalFloors}` : (floor === 0 ? t.floorParter : String(floor))) : noVal, label: t.floor },
+    {
+      icon: BuildingOfficeIcon,
+      value: floor !== undefined && floor !== null && floor !== ''
+        ? (totalFloors != null ? `${floor === 0 ? t.floorParter : floor} / ${totalFloors}` : (floor === 0 ? t.floorParter : String(floor)))
+        : '',
+      label: t.floor,
+    },
     { icon: BoltIcon, value: gaz ? t.yes : noVal, label: t.gaz },
     { icon: FireIcon, value: tec ? t.yes : noVal, label: t.tec },
     { icon: CalendarIcon, value: yearBuiltStatus || yearBuilt ? yearBuiltValue : noVal, label: yearBuiltStatus ? t.yearBuilt : t.year },
@@ -208,10 +219,6 @@ export default async function PropertyDetailPage({ params }) {
                     isUnavailable={isUnavailable}
                     unavailableOverlayText={unavailableOverlayText}
                   />
-                  <div className="absolute top-4 left-4 flex gap-2 z-20">
-                    <Badge.Category category={category} size="lg" locale={locale} />
-                    <Badge.Type type={type} size="lg" locale={locale} />
-                  </div>
                 </div>
 
                 <div className="lg:hidden" style={{ fontWeight: 400 }}>
@@ -349,7 +356,7 @@ export default async function PropertyDetailPage({ params }) {
                         <BuildingOfficeIcon className="w-6 h-6 text-graphite" />
                       </div>
                       <div>
-                        <p className="text-graphite">{CONTACT_PERSON}</p>
+                        <p className="text-graphite">{locale === 'en' ? CONTACT_PERSON_EN : CONTACT_PERSON}</p>
                         <p className="text-sm text-gray-500">{BRAND_NAME}</p>
                       </div>
                     </div>

@@ -137,7 +137,7 @@ export const properties = [
     description: "Просторен тристаен апартамент в престижния квартал Лозенец. Апартаментът разполага с просторен хол, две спални, модерна кухня и два балкона с прекрасна гледка към Витоша. Жилището е с луксозно обзавеждане и се продава напълно обзаведено.",
     descriptionEn: "Spacious three-room apartment in the prestigious Lozenets district. The apartment has a spacious hall, two bedrooms, a modern kitchen and two balconies with a beautiful view of Vitosha. The property is luxuriously furnished and sold fully furnished.",
     features: ["Паркомясто", "Асансьор", "Видеонаблюдение", "Климатик", "Панорамни прозорци"],
-    featuresEn: ["Parking", "Elevator", "CCTV", "AC", "Panoramic windows"],
+    featuresEn: ["Parking", "Elevator", "Access Control", "AC", "Panoramic windows"],
     images: ["/images/apartment-1.jpg", "/images/apartment-1-2.jpg"],
     mapUrl: "https://www.google.com/maps/search/?api=1&query=42.6697,23.3219",
     isFeatured: true,
@@ -496,7 +496,7 @@ export function getYearBuiltStatusLabel(status) {
 export const FEATURE_OPTIONS = [
   { bg: 'Паркомясто', en: 'Parking' },
   { bg: 'Асансьор', en: 'Elevator' },
-  { bg: 'Видеонаблюдение', en: 'CCTV' },
+  { bg: 'Видеонаблюдение', en: 'Access Control' },
   { bg: 'Климатик', en: 'AC' },
   { bg: 'Панорамни прозорци', en: 'Panoramic windows' },
   { bg: 'С преход', en: 'With hallway' },

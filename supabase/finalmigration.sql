@@ -1,12 +1,9 @@
 -- =============================================================================
--- Migration 009 (FINAL): Забележка цена (български + английски)
+-- Migration 010 (FINAL): Скриване на цена на квадратен метър
 -- =============================================================================
--- price_note = български; price_note_en = английски. В админ се въвеждат под полето за цена;
--- при клиента се показва над „Основни характеристики“ според езика.
+-- hide_price_per_sqm = TRUE -> цената на м² не се показва в клиентската част.
 
 ALTER TABLE properties
-  ADD COLUMN IF NOT EXISTS price_note TEXT NULL,
-  ADD COLUMN IF NOT EXISTS price_note_en TEXT NULL;
+  ADD COLUMN IF NOT EXISTS hide_price_per_sqm BOOLEAN NOT NULL DEFAULT FALSE;
 
-COMMENT ON COLUMN properties.price_note IS 'Забележка към цената (БГ) – показва се над Основни характеристики при клиента';
-COMMENT ON COLUMN properties.price_note_en IS 'Забележка към цената (EN) – показва се при избор на английски език';
+COMMENT ON COLUMN properties.hide_price_per_sqm IS 'TRUE = не показвай цена на м² в клиентската част за този имот';

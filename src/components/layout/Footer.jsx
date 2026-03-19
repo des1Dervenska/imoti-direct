@@ -93,10 +93,10 @@ export default function Footer({ locale = 'bg' }) {
           <div>
             <h3 className={sectionTitle}>{t.footer.usefulLinks}</h3>
             <ul className="space-y-2">
-              {usefulLinksFiltered.map(({ label, href }) => (
+              {usefulLinksFiltered.map(({ label, href, hrefEn }) => (
                 <li key={href}>
                   <a
-                    href={href}
+                    href={locale === 'en' && hrefEn ? hrefEn : href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={linkStyle}

@@ -10,6 +10,6 @@ export const QUICK_LINKS = [
 ];
 
 export const USEFUL_LINKS = [
-  { label: 'Агенция по кадастър', href: 'https://www.cadastre.bg/' },
-  { label: 'Агенция по вписванията', href: 'https://portal.registryagency.bg/' },
+  { label: 'Агенция по кадастър', href: 'https://www.cadastre.bg/', hrefEn: 'https://www.cadastre.bg/en/frontpage' },
+  { label: 'Агенция по вписванията', href: 'https://portal.registryagency.bg/', hrefEn: 'https://portal.registryagency.bg/en/' },
 ];

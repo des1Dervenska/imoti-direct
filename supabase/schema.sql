@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS properties (
 
   -- Basic info
   title VARCHAR(500) NOT NULL,
+  title_en VARCHAR(500),
   category VARCHAR(20) NOT NULL CHECK (category IN ('sale', 'rent')),
   type VARCHAR(50) NOT NULL CHECK (type IN (
     'apartment', 'house', 'land',
@@ -33,6 +34,9 @@ CREATE TABLE IF NOT EXISTS properties (
   -- Price
   price DECIMAL(12, 2) NOT NULL CHECK (price >= 0),
   currency VARCHAR(3) NOT NULL DEFAULT 'EUR' CHECK (currency IN ('EUR', 'BGN')),
+  price_includes_vat BOOLEAN NOT NULL DEFAULT FALSE,
+  price_note TEXT,
+  price_note_en TEXT,
 
   -- Property details
   area DECIMAL(10, 2) NOT NULL CHECK (area > 0),
@@ -40,22 +44,34 @@ CREATE TABLE IF NOT EXISTS properties (
   floor SMALLINT CHECK (floor >= 0),
   total_floors SMALLINT CHECK (total_floors > 0),
   year_built SMALLINT CHECK (year_built >= 1800 AND year_built <= 2100),
+  year_built_status VARCHAR(30) CHECK (year_built_status IN ('completed', 'under_construction', 'not_in_use')),
+  construction_type VARCHAR(30) CHECK (construction_type IN ('panel', 'tuhla', 'epk', 'pk', 'gredored', 'sglobyaema')),
 
   -- Location
   city VARCHAR(100) NOT NULL,
+  city_en VARCHAR(100),
   neighborhood VARCHAR(100),
+  neighborhood_en VARCHAR(100),
   address VARCHAR(500) NOT NULL,
+  address_en VARCHAR(500),
 
   -- Description & Features
   description TEXT NOT NULL,
+  description_en TEXT,
   features TEXT[] NOT NULL DEFAULT '{}',
+  features_en TEXT[] NOT NULL DEFAULT '{}',
   images TEXT[] NOT NULL DEFAULT '{}',
 
   -- Map
   map_url TEXT,
+  video_url TEXT,
 
   -- Flags
   is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+  hide_price_per_sqm BOOLEAN NOT NULL DEFAULT FALSE,
+  gaz BOOLEAN NOT NULL DEFAULT FALSE,
+  tec BOOLEAN NOT NULL DEFAULT FALSE,
+  broker_note TEXT,
 
   -- Timestamps
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -156,9 +172,19 @@ CREATE POLICY "Authenticated users can delete properties"
 COMMENT ON TABLE properties IS 'Real estate listings for sale and rent';
 COMMENT ON COLUMN properties.slug IS 'URL-friendly unique identifier';
 COMMENT ON COLUMN properties.category IS 'sale or rent';
-COMMENT ON COLUMN properties.type IS 'apartment, house, or land';
+COMMENT ON COLUMN properties.type IS 'Тип имот (вкл. apartment/house/land и разширените типове)';
 COMMENT ON COLUMN properties.status IS 'active, pending, sold, rented, or inactive';
 COMMENT ON COLUMN properties.features IS 'Array of amenities/features';
 COMMENT ON COLUMN properties.images IS 'Array of image URLs';
 COMMENT ON COLUMN properties.map_url IS 'Google Maps URL';
+COMMENT ON COLUMN properties.video_url IS 'YouTube/видео URL за имота';
 COMMENT ON COLUMN properties.is_featured IS 'Show on homepage featured section';
+COMMENT ON COLUMN properties.hide_price_per_sqm IS 'Hide price per square meter in client-facing UI for this property';
+COMMENT ON COLUMN properties.gaz IS 'Имотът има газ';
+COMMENT ON COLUMN properties.tec IS 'Имотът има ТЕЦ';
+COMMENT ON COLUMN properties.price_includes_vat IS 'TRUE = цена с включено ДДС, FALSE = цена без ДДС';
+COMMENT ON COLUMN properties.price_note IS 'Забележка към цената (БГ)';
+COMMENT ON COLUMN properties.price_note_en IS 'Забележка към цената (EN)';
+COMMENT ON COLUMN properties.year_built_status IS 'Статус на година на строителство';
+COMMENT ON COLUMN properties.construction_type IS 'Тип строителство';
+COMMENT ON COLUMN properties.broker_note IS 'Лична бележка на брокера (админ)';

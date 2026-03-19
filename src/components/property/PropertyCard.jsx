@@ -27,6 +27,7 @@ export default function PropertyCard({ property, showDescription = true, locale 
     images,
     gaz,
     tec,
+    hidePricePerSqm,
     priceIncludesVat,
   } = property;
   const display = getDisplayText(property, locale);
@@ -76,13 +77,9 @@ export default function PropertyCard({ property, showDescription = true, locale 
           <img src="/images/logo.jpg" alt="" className="w-14 h-14 object-contain opacity-25" />
         </div>
 
-        {/* Category badge */}
-        <div className="absolute top-3 left-3">
+        {/* Category + Type badges */}
+        <div className="absolute top-3 left-3 flex gap-2">
           <Badge.Category category={category} locale={locale} />
-        </div>
-
-        {/* Type badge */}
-        <div className="absolute top-3 right-3">
           <Badge.Type type={type} locale={locale} />
         </div>
 
@@ -106,7 +103,9 @@ export default function PropertyCard({ property, showDescription = true, locale 
             const { eurText, bgnText } = formatPriceEurAndBgn(price, category);
             const vatLabel = priceIncludesVat ? (t.priceWithVat ?? 'с включено ДДС') : (t.priceWithoutVat ?? 'без включено ДДС');
             const pricePerSqm = area > 0 ? (price ?? 0) / area : null;
-            const perSqmText = pricePerSqm != null ? `${Math.round(pricePerSqm)} EUR/м²${category === 'rent' ? '/мес' : ''}` : null;
+            const perSqmText = !hidePricePerSqm && pricePerSqm != null
+              ? `${Math.round(pricePerSqm)} EUR/м²${category === 'rent' ? '/мес' : ''}`
+              : null;
             return (
               <>
                 <span className="text-2xl text-graphite" style={{ fontWeight: 400 }}>{eurText}</span>

@@ -19,7 +19,13 @@ const NAV_BUTTONS = [
   { Icon: ChevronRightIcon, position: 'right-3', label: 'Следваща снимка', direction: 1 },
 ];
 
-export default function PropertyGallery({ images = [], title = 'Имот', isUnavailable = false, unavailableOverlayText = null }) {
+export default function PropertyGallery({
+  images = [],
+  title = 'Имот',
+  isUnavailable = false,
+  unavailableOverlayText = null,
+  topLeftOverlay = null,
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const displayImages = images?.length > 0 ? images : [DEFAULT_PROPERTY_IMAGE];
@@ -44,6 +50,12 @@ export default function PropertyGallery({ images = [], title = 'Имот', isUna
           alt={`${title} - снимка ${activeIndex + 1}`}
           className={imageStyle}
         />
+
+        {topLeftOverlay && (
+          <div className="absolute top-4 left-4 z-20 pointer-events-none">
+            {topLeftOverlay}
+          </div>
+        )}
 
         <div className="absolute top-8 left-[27%] -translate-x-1/2 md:top-10 pointer-events-none z-1" aria-hidden>
           <img

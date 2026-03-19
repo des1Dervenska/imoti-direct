@@ -40,6 +40,7 @@ export default async function PrintPropertyPage({ params }) {
     yearBuiltStatus,
     gaz,
     tec,
+    hidePricePerSqm,
     constructionType,
     priceIncludesVat,
     images,
@@ -48,7 +49,7 @@ export default async function PrintPropertyPage({ params }) {
   const typeLabel = propertyTypes.find((opt) => opt.value === type)?.label ?? type;
   const categoryLabel = category === 'sale' ? (t?.property?.sale ?? 'Продажба') : (t?.property?.rent ?? 'Наем');
   const { eurText, bgnText } = formatPriceEurAndBgn(price, category);
-  const pricePerSqm = area > 0 ? Math.round((price ?? 0) / area) : null;
+  const pricePerSqm = !hidePricePerSqm && area > 0 ? Math.round((price ?? 0) / area) : null;
   const imageUrl = images?.[0] || '/images/placeholder-property.jpg';
 
   const yearBuiltLabel = yearBuiltStatus === 'completed' && yearBuilt
@@ -116,7 +117,7 @@ export default async function PrintPropertyPage({ params }) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 print:grid-cols-4">
             {[
               { label: 'Площ', value: area != null ? `${area} м²` : '—' },
-              { label: 'Цена/м²', value: pricePerSqm != null ? `${pricePerSqm} EUR/м²` : '—' },
+              ...(!hidePricePerSqm ? [{ label: 'Цена/м²', value: pricePerSqm != null ? `${pricePerSqm} EUR/м²` : '—' }] : []),
               { label: 'Стаи', value: rooms != null ? String(rooms) : '—' },
               { label: 'Етаж', value: floor != null && totalFloors != null ? `${floor} / ${totalFloors}` : floor != null ? String(floor) : '—' },
               { label: 'Газ', value: gaz ? 'Да' : 'Не' },
