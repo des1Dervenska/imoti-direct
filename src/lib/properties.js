@@ -369,8 +369,9 @@ function transformToSupabase(property) {
     currency: property.currency || 'EUR',
     area: property.area,
     rooms: property.rooms || null,
-    floor: property.floor || null,
-    total_floors: property.totalFloors || null,
+    // IMPORTANT: keep 0 as a valid value (партер), don't coerce to null.
+    floor: property.floor ?? null,
+    total_floors: property.totalFloors ?? null,
     year_built: property.yearBuilt || null,
     year_built_status: property.yearBuiltStatus || null,
     city: property.city,
