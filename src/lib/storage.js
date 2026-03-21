@@ -69,6 +69,34 @@ export async function uploadPropertyImage(file) {
   const fileName = generateFileName(file.name);
   const filePath = `properties/${fileName}`;
 
+  return uploadToBucket(filePath, file);
+}
+
+/**
+ * Качва една снимка за рекламен постер – същият bucket като имотите, папка `posters/`.
+ * @param {File} file
+ * @returns {Promise<{url: string|null, error: string|null}>}
+ */
+export async function uploadPosterImage(file) {
+  if (!isSupabaseConfigured) {
+    return {
+      url: null,
+      error: 'Supabase не е конфигуриран. Моля, добавете credentials в .env.local',
+    };
+  }
+
+  const validation = validateFile(file);
+  if (!validation.valid) {
+    return { url: null, error: validation.error };
+  }
+
+  const fileName = generateFileName(file.name);
+  const filePath = `posters/${fileName}`;
+
+  return uploadToBucket(filePath, file);
+}
+
+async function uploadToBucket(filePath, file) {
   // Upload to Supabase Storage
   const { data, error } = await supabase.storage
     .from(BUCKET_NAME)
@@ -81,7 +109,6 @@ export async function uploadPropertyImage(file) {
     return { url: null, error: `Грешка при качване: ${error.message}` };
   }
 
-  // Get public URL
   const { data: urlData } = supabase.storage
     .from(BUCKET_NAME)
     .getPublicUrl(data.path);

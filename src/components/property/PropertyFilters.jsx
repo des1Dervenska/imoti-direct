@@ -364,6 +364,19 @@ export default function PropertyFilters({
                           </select>
                         </div>
                         <div>
+                          <label className="block text-xs text-gray-500 mb-1.5">{t.constructionStage}</label>
+                          <select
+                            value={filters.yearBuiltStatus ?? ''}
+                            onChange={(e) => updateFilter('yearBuiltStatus', e.target.value)}
+                            className={filterSelectClass}
+                          >
+                            <option value="">{t.constructionStageAny}</option>
+                            <option value="completed">{t.constructionStageCompleted}</option>
+                            <option value="under_construction">{t.constructionStageUnderConstruction}</option>
+                            <option value="not_in_use">{t.constructionStageNotInUse}</option>
+                          </select>
+                        </div>
+                        <div>
                           <label className="block text-xs text-gray-500 mb-1.5">{t.city}</label>
                           <select
                             value={filters.city ?? ''}
@@ -405,7 +418,7 @@ export default function PropertyFilters({
                             type="number"
                             min="0"
                             step={category === 'rent' ? '50' : '1000'}
-                            placeholder={category === 'rent' ? 'напр. 300' : 'напр. 50000'}
+                            placeholder={category === 'rent' ? t.pricePlaceholderMinRent : t.pricePlaceholderMinSale}
                             value={filters.minPrice ?? ''}
                             onChange={(e) => updateFilter('minPrice', e.target.value)}
                             className={filterInputClass}
@@ -417,7 +430,7 @@ export default function PropertyFilters({
                             type="number"
                             min="0"
                             step={category === 'rent' ? '50' : '1000'}
-                            placeholder={category === 'rent' ? 'напр. 1500' : 'напр. 200000'}
+                            placeholder={category === 'rent' ? t.pricePlaceholderMaxRent : t.pricePlaceholderMaxSale}
                             value={filters.maxPrice ?? ''}
                             onChange={(e) => updateFilter('maxPrice', e.target.value)}
                             className={filterInputClass}
@@ -445,7 +458,7 @@ export default function PropertyFilters({
                           <input
                             type="number"
                             min="0"
-                            placeholder="от"
+                            placeholder={t.placeholderFrom}
                             value={filters.minArea ?? ''}
                             onChange={(e) => updateFilter('minArea', e.target.value)}
                             className={filterInputClass}
@@ -456,7 +469,7 @@ export default function PropertyFilters({
                           <input
                             type="number"
                             min="0"
-                            placeholder="до"
+                            placeholder={t.placeholderTo}
                             value={filters.maxArea ?? ''}
                             onChange={(e) => updateFilter('maxArea', e.target.value)}
                             className={filterInputClass}
@@ -469,7 +482,7 @@ export default function PropertyFilters({
                           <input
                             type="number"
                             min="0"
-                            placeholder="напр. 0"
+                            placeholder={t.floorPlaceholderFrom}
                             value={filters.minFloor ?? ''}
                             onChange={(e) => updateFilter('minFloor', e.target.value)}
                             className={filterInputClass}
@@ -480,7 +493,7 @@ export default function PropertyFilters({
                           <input
                             type="number"
                             min="0"
-                            placeholder="напр. 5"
+                            placeholder={t.floorPlaceholderTo}
                             value={filters.maxFloor ?? ''}
                             onChange={(e) => updateFilter('maxFloor', e.target.value)}
                             className={filterInputClass}
@@ -494,7 +507,7 @@ export default function PropertyFilters({
                             type="number"
                             min="0"
                             step="100"
-                            placeholder="от"
+                            placeholder={t.placeholderFrom}
                             value={filters.minPricePerSqm ?? ''}
                             onChange={(e) => updateFilter('minPricePerSqm', e.target.value)}
                             className={filterInputClass}
@@ -506,7 +519,7 @@ export default function PropertyFilters({
                             type="number"
                             min="0"
                             step="100"
-                            placeholder="до"
+                            placeholder={t.placeholderTo}
                             value={filters.maxPricePerSqm ?? ''}
                             onChange={(e) => updateFilter('maxPricePerSqm', e.target.value)}
                             className={filterInputClass}
@@ -520,7 +533,7 @@ export default function PropertyFilters({
                             type="number"
                             min="1900"
                             max="2100"
-                            placeholder="напр. 2015"
+                            placeholder={t.yearPlaceholderFrom}
                             value={filters.yearFrom ?? ''}
                             onChange={(e) => updateFilter('yearFrom', e.target.value)}
                             className={filterInputClass}
@@ -532,7 +545,7 @@ export default function PropertyFilters({
                             type="number"
                             min="1900"
                             max="2100"
-                            placeholder="2026"
+                            placeholder={t.yearPlaceholderTo}
                             value={filters.yearTo ?? ''}
                             onChange={(e) => updateFilter('yearTo', e.target.value)}
                             className={filterInputClass}
@@ -578,19 +591,6 @@ export default function PropertyFilters({
                               {getTranslations(locale)?.property?.[`constructionType_${opt.value}`] ?? opt.label}
                             </option>
                           ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray-500 mb-1.5">{t.constructionStage}</label>
-                        <select
-                          value={filters.yearBuiltStatus ?? ''}
-                          onChange={(e) => updateFilter('yearBuiltStatus', e.target.value)}
-                          className={filterSelectClass}
-                        >
-                          <option value="">{t.constructionStageAny}</option>
-                          <option value="completed">{t.constructionStageCompleted}</option>
-                          <option value="under_construction">{t.constructionStageUnderConstruction}</option>
-                          <option value="not_in_use">{t.constructionStageNotInUse}</option>
                         </select>
                       </div>
                       {hasExtraFilters && (

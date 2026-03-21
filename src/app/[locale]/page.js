@@ -1,6 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection";
-import PropertyCarousel from "@/components/property/PropertyCarousel";
-import { getSaleProperties, getRentProperties } from "@/lib/properties";
+import { getHomePosters } from "@/lib/banners";
 import { getTranslations } from "@/lib/translations";
 import Link from "next/link";
 import { Section, Container, LinkButton, Card, FeatureCard, AnimateOnScroll } from "@/components/ui";
@@ -9,55 +8,16 @@ import {
   BoltIcon,
   UserGroupIcon,
   CurrencyDollarIcon,
-  ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 
 /** Винаги свежи данни – нови обяви се показват веднага на началната страница. */
 export const dynamic = 'force-dynamic';
 
-function SectionHeader({ title, subtitle, href, linkText }) {
-  return (
-    <div className="flex justify-between items-center mb-8">
-      <div>
-        <h2 className="text-3xl font-bold text-graphite">{title}</h2>
-        <p className="text-graphite-light mt-2">{subtitle}</p>
-      </div>
-      {href && (
-        <Link
-          href={href}
-          className="hidden sm:flex items-center text-graphite hover:text-graphite-dark"
-        >
-          {linkText}
-          <ChevronRightIcon className="w-5 h-5 ml-1" />
-        </Link>
-      )}
-    </div>
-  );
-}
-
-function MobileLink({ href, children }) {
-  return (
-    <div className="mt-8 text-center sm:hidden">
-      <Link
-        href={href}
-        className="inline-flex items-center text-graphite hover:text-graphite-dark"
-      >
-        {children}
-        <ChevronRightIcon className="w-5 h-5 ml-1" />
-      </Link>
-    </div>
-  );
-}
-
 export default async function Home({ params }) {
   const { locale } = await params;
   const t = getTranslations(locale);
   const prefix = `/${locale}`;
-
-  const allSaleProperties = await getSaleProperties();
-  const allRentProperties = await getRentProperties();
-  const salePropertiesForCarousel = allSaleProperties.slice(0, 12);
-  const rentPropertiesForCarousel = allRentProperties.slice(0, 12);
+  const { data: posters } = await getHomePosters();
 
   const features = [
     { title: t.home.security, description: t.home.securityDesc, icon: <ShieldCheckIcon className="w-8 h-8 text-graphite" /> },
@@ -72,35 +32,31 @@ export default async function Home({ params }) {
 
       <Section background="white">
         <Container>
-          <AnimateOnScroll direction="down">
-            <SectionHeader
-              title={t.home.saleTitle}
-              subtitle={t.home.saleSubtitle}
-              href={`${prefix}/sales`}
-              linkText={t.home.viewAll}
-            />
-          </AnimateOnScroll>
-          <AnimateOnScroll direction="up">
-            <PropertyCarousel properties={salePropertiesForCarousel} locale={locale} />
-            <MobileLink href={`${prefix}/sales`}>{t.home.viewAllSales}</MobileLink>
-          </AnimateOnScroll>
-        </Container>
-      </Section>
+          <div className="space-y-6">
+            {(posters || []).slice(0, 3).map((poster, idx) => {
+              const imageUrl = (locale === 'en' ? poster.imageUrlEn : poster.imageUrl) || poster.imageUrl || poster.imageUrlEn;
+              const text = (locale === 'en' ? poster.textEn : poster.text) || poster.text || poster.textEn;
+              const href = (locale === 'en' ? poster.linkUrlEn : poster.linkUrl) || poster.linkUrl || poster.linkUrlEn;
+              const cardBody = (
+                <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white">
+                  {imageUrl && <img src={imageUrl} alt={text || `Poster ${idx + 1}`} className="w-full h-auto object-cover" />}
+                  {text && <div className="p-4 text-lg text-graphite">{text}</div>}
+                </div>
+              );
 
-      <Section background="light">
-        <Container>
-          <AnimateOnScroll direction="down">
-            <SectionHeader
-              title={t.home.rentTitle}
-              subtitle={t.home.rentSubtitle}
-              href={`${prefix}/rent`}
-              linkText={t.home.viewAll}
-            />
-          </AnimateOnScroll>
-          <AnimateOnScroll direction="up">
-            <PropertyCarousel properties={rentPropertiesForCarousel} locale={locale} />
-            <MobileLink href={`${prefix}/rent`}>{t.home.viewAllRent}</MobileLink>
-          </AnimateOnScroll>
+              return (
+                <AnimateOnScroll key={idx} direction="up">
+                  {href ? (
+                    <Link href={href} className="block hover:opacity-95 transition-opacity">
+                      {cardBody}
+                    </Link>
+                  ) : (
+                    cardBody
+                  )}
+                </AnimateOnScroll>
+              );
+            })}
+          </div>
         </Container>
       </Section>
 

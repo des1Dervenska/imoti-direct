@@ -23,6 +23,12 @@ export default function AdminLayout({ children }) {
                 >
                   Имоти
                 </Link>
+                <Link
+                  href="/admin/posters"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Постери
+                </Link>
               </nav>
             </div>
             <div className="flex items-center gap-4">

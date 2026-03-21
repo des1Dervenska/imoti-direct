@@ -188,3 +188,48 @@ COMMENT ON COLUMN properties.price_note_en IS 'Забележка към цен�
 COMMENT ON COLUMN properties.year_built_status IS 'Статус на година на строителство';
 COMMENT ON COLUMN properties.construction_type IS 'Тип строителство';
 COMMENT ON COLUMN properties.broker_note IS 'Лична бележка на брокера (админ)';
+
+-- =============================================================================
+-- HOME POSTERS TABLE (3 promotional posters)
+-- =============================================================================
+
+CREATE TABLE IF NOT EXISTS home_posters (
+  position SMALLINT PRIMARY KEY CHECK (position BETWEEN 1 AND 3),
+  image_url TEXT,
+  image_url_en TEXT,
+  link_url TEXT,
+  link_url_en TEXT,
+  text_bg TEXT,
+  text_en TEXT,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE OR REPLACE FUNCTION update_home_posters_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trigger_home_posters_updated_at ON home_posters;
+CREATE TRIGGER trigger_home_posters_updated_at
+  BEFORE UPDATE ON home_posters
+  FOR EACH ROW
+  EXECUTE FUNCTION update_home_posters_updated_at();
+
+ALTER TABLE home_posters ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public can view home posters"
+  ON home_posters
+  FOR SELECT
+  USING (TRUE);
+
+CREATE POLICY "Authenticated users can manage home posters"
+  ON home_posters
+  FOR ALL
+  TO authenticated
+  USING (TRUE)
+  WITH CHECK (TRUE);
+
+COMMENT ON TABLE home_posters IS 'Homepage advertising posters (up to 3 rows by position 1..3)';

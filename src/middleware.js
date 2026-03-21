@@ -76,6 +76,6 @@ export const config = {
     '/properties/:path*',
     '/admin',
     '/admin/login',
-    '/admin/properties/:path*',
+    '/admin/:path*',
   ],
 };

@@ -34,12 +34,12 @@ export const FACEBOOK_PAGE_ID = '61580202105400';
 export const CONTACT_PHONE = '0887 803 064';
 export const CONTACT_PHONE_LINK = '+359887803064';
 export const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'genoveva@arthouse94.com';
-export const CONTACT_ADDRESS = 'Бул. България, ж.к. Белите Брези, бл. 4';
-export const CONTACT_ADDRESS_SHORT = 'Бул. България, ж.к. Белите Брези, бл. 4, София';
+export const CONTACT_ADDRESS = 'Бул. България, ж.к. Белите Брези';
+export const CONTACT_ADDRESS_SHORT = 'Бул. България, ж.к. Белите Брези, София';
 export const CONTACT_CITY = 'София, България';
 /** Адрес и град за английска версия */
-export const CONTACT_ADDRESS_EN = 'Bul. Bulgaria, Belite Brezi distr., bl. 4';
-export const CONTACT_ADDRESS_SHORT_EN = 'Bul. Bulgaria, Belite Brezi distr., bl. 4, Sofia';
+export const CONTACT_ADDRESS_EN = 'Bul. Bulgaria, Belite Brezi distr.';
+export const CONTACT_ADDRESS_SHORT_EN = 'Bul. Bulgaria, Belite Brezi distr., Sofia';
 export const CONTACT_CITY_EN = 'Sofia, Bulgaria';
 
 // =============================================================================
