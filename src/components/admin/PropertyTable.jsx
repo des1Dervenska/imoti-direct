@@ -16,10 +16,39 @@ const statusLabels = {
 
 const CONFIRM_DELETE_MESSAGE = 'Сигурни ли сте, че искате да изтриете този имот? Това действие не може да бъде отменено.';
 
+/** Извън компонента – стабилна при Fast Refresh (избягва „handleClone is not defined“). */
+async function runCloneListing(property, { setCloneError, setCloningId, router }) {
+  const id = property.id;
+  if (id == null || id === '') {
+    setCloneError('Липсва id на имот');
+    return;
+  }
+  setCloneError(null);
+  setCloningId(id);
+  try {
+    const res = await fetch(`/api/admin/properties/${String(id)}/clone`, { method: 'POST' });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      setCloneError(data.error || 'Грешка при клониране');
+      return;
+    }
+    if (data.property?.id != null) {
+      router.push(`/admin/properties/${data.property.id}/edit`);
+      router.refresh();
+    }
+  } catch {
+    setCloneError('Грешка при клониране на имота');
+  } finally {
+    setCloningId(null);
+  }
+}
+
 export default function PropertyTable({ properties, isDemo = false }) {
   const router = useRouter();
   const [deletingId, setDeletingId] = useState(null);
+  const [cloningId, setCloningId] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
+  const [cloneError, setCloneError] = useState(null);
 
   async function handleDelete(property) {
     if (!window.confirm(CONFIRM_DELETE_MESSAGE)) return;
@@ -60,6 +89,11 @@ export default function PropertyTable({ properties, isDemo = false }) {
           <p className="text-red-800 text-sm">{deleteError}</p>
         </div>
       )}
+      {cloneError && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-800 text-sm">{cloneError}</p>
+        </div>
+      )}
       {isDemo && (
         <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
           <p className="text-yellow-800 text-sm">
@@ -74,6 +108,9 @@ export default function PropertyTable({ properties, isDemo = false }) {
           <tr>
             <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
               Имот
+            </th>
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
+              Код
             </th>
             <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
               Категория
@@ -118,6 +155,9 @@ export default function PropertyTable({ properties, isDemo = false }) {
                       </div>
                     </div>
                   </div>
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 font-mono">
+                  {property.code ? String(property.code) : '—'}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                   {getCategoryLabel(property.category)}
@@ -168,6 +208,20 @@ export default function PropertyTable({ properties, isDemo = false }) {
                       >
                         Редактирай
                       </Link>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void runCloneListing(property, {
+                            setCloneError,
+                            setCloningId,
+                            router,
+                          })
+                        }
+                        disabled={cloningId === property.id}
+                        className="text-emerald-700 hover:text-emerald-900 mr-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {cloningId === property.id ? 'Копиране…' : 'Копирай'}
+                      </button>
                       <button
                         type="button"
                         onClick={() => handleDelete(property)}

@@ -19,6 +19,21 @@ export default async function Home({ params }) {
   const prefix = `/${locale}`;
   const { data: posters } = await getHomePosters();
 
+  const posterRows = (posters || [])
+    .slice(0, 3)
+    .map((poster, idx) => {
+      const imageUrl = (
+        (locale === 'en' ? poster.imageUrlEn : poster.imageUrl) ||
+        poster.imageUrl ||
+        poster.imageUrlEn ||
+        ''
+      ).trim();
+      const text = (locale === 'en' ? poster.textEn : poster.text) || poster.text || poster.textEn;
+      const href = (locale === 'en' ? poster.linkUrlEn : poster.linkUrl) || poster.linkUrl || poster.linkUrlEn;
+      return { poster, idx, imageUrl, text, href };
+    })
+    .filter((row) => Boolean(row.imageUrl));
+
   const features = [
     { title: t.home.security, description: t.home.securityDesc, icon: <ShieldCheckIcon className="w-8 h-8 text-graphite" /> },
     { title: t.home.speed, description: t.home.speedDesc, icon: <BoltIcon className="w-8 h-8 text-graphite" /> },
@@ -30,35 +45,38 @@ export default async function Home({ params }) {
     <>
       <HeroSection locale={locale} />
 
-      <Section background="white">
-        <Container>
-          <div className="space-y-6">
-            {(posters || []).slice(0, 3).map((poster, idx) => {
-              const imageUrl = (locale === 'en' ? poster.imageUrlEn : poster.imageUrl) || poster.imageUrl || poster.imageUrlEn;
-              const text = (locale === 'en' ? poster.textEn : poster.text) || poster.text || poster.textEn;
-              const href = (locale === 'en' ? poster.linkUrlEn : poster.linkUrl) || poster.linkUrl || poster.linkUrlEn;
-              const cardBody = (
-                <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white">
-                  {imageUrl && <img src={imageUrl} alt={text || `Poster ${idx + 1}`} className="w-full h-auto object-cover" />}
-                  {text && <div className="p-4 text-lg text-graphite">{text}</div>}
-                </div>
-              );
+      {posterRows.length > 0 ? (
+        <Section background="white">
+          <Container>
+            <div className="space-y-6">
+              {posterRows.map(({ poster, idx, imageUrl, text, href }) => {
+                const cardBody = (
+                  <div className="mx-auto w-full max-w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm md:max-w-lg lg:max-w-md xl:max-w-lg">
+                    <img
+                      src={imageUrl}
+                      alt={text || `Poster ${idx + 1}`}
+                      className="block h-auto w-full max-h-80 object-cover sm:max-h-72 md:max-h-52 lg:max-h-48"
+                    />
+                    {text ? <div className="p-4 text-base text-graphite md:text-lg">{text}</div> : null}
+                  </div>
+                );
 
-              return (
-                <AnimateOnScroll key={idx} direction="up">
-                  {href ? (
-                    <Link href={href} className="block hover:opacity-95 transition-opacity">
-                      {cardBody}
-                    </Link>
-                  ) : (
-                    cardBody
-                  )}
-                </AnimateOnScroll>
-              );
-            })}
-          </div>
-        </Container>
-      </Section>
+                return (
+                  <AnimateOnScroll key={poster.position ?? idx} direction="up">
+                    {href ? (
+                      <Link href={href} className="block hover:opacity-95 transition-opacity">
+                        {cardBody}
+                      </Link>
+                    ) : (
+                      cardBody
+                    )}
+                  </AnimateOnScroll>
+                );
+              })}
+            </div>
+          </Container>
+        </Section>
+      ) : null}
 
       <Section background="white">
         <Container>

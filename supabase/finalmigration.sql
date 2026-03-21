@@ -1,5 +1,19 @@
 -- =============================================================================
--- FINAL Migration: Home posters (3 advertising posters)
+-- FINAL Migration: incremental updates (пусни целия файл в Supabase SQL Editor)
+-- =============================================================================
+
+-- -----------------------------------------------------------------------------
+-- 1) properties.code – вътрешен код (картички, търсене в админ)
+-- -----------------------------------------------------------------------------
+ALTER TABLE properties ADD COLUMN IF NOT EXISTS code VARCHAR(100);
+
+CREATE INDEX IF NOT EXISTS idx_properties_code ON properties(code)
+  WHERE code IS NOT NULL AND btrim(code) <> '';
+
+COMMENT ON COLUMN properties.code IS 'Вътрешен код на обявата (стринг); показва се на клиентските картички';
+
+-- =============================================================================
+-- 2) Home posters (3 advertising posters)
 -- =============================================================================
 -- Adds a separate table for homepage posters editable from admin.
 

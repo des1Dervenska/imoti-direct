@@ -58,15 +58,15 @@ export default function HeroSection({ locale = 'bg' }) {
       <div className="relative h-full flex items-center justify-center">
         <div className="text-center px-4">
           {/* Brand Title – изцяло default шрифт, без Playfair */}
-          <h1 className="brand-name-sans text-4xl md:text-5xl lg:text-6xl text-white tracking-[0.3em] md:tracking-[0.4em] mb-6 drop-shadow-lg">
+          <h1 className="brand-name-sans font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-[0.28em] md:tracking-[0.35em] mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
             {BRAND_NAME_WITHOUT_NUMBER.trim().split(' ').join('   ')}{BRAND_NAME_NUMBER}
           </h1>
 
           {/* Divider */}
-          <div className="w-24 h-px bg-white/60 mx-auto mb-6" />
+          <div className="w-28 h-px bg-white/70 mx-auto mb-6" />
 
           {/* Tagline – Playfair, числата с default шрифт */}
-          <p className="hero-tagline text-lg md:text-xl lg:text-2xl text-white/90 tracking-[0.15em] drop-shadow-md">
+          <p className="hero-tagline font-semibold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white tracking-[0.12em] md:tracking-[0.15em] drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
             <TaglineWithNumbers text={taglineStr} />
           </p>
         </div>

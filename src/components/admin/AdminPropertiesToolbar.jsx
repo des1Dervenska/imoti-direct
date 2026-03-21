@@ -46,7 +46,8 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
         (p) =>
           (p.title && p.title.toLowerCase().includes(q)) ||
           (p.slug && p.slug.toLowerCase().includes(q)) ||
-          (p.address && p.address.toLowerCase().includes(q))
+          (p.address && p.address.toLowerCase().includes(q)) ||
+          (p.code && String(p.code).toLowerCase().includes(q))
       );
     }
     if (categoryFilter) list = list.filter((p) => p.category === categoryFilter);
@@ -91,7 +92,7 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
           {/* Търсене по име */}
           <div className="min-w-[200px] flex-1">
             <label htmlFor="admin-search" className="mb-1 block text-xs text-gray-600">
-              Търсене по име / адрес
+              Търсене по име, адрес или код
             </label>
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -100,7 +101,7 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Заглавие, slug или адрес..."
+                placeholder="Заглавие, slug, адрес, код…"
                 className={`${inputClass} pl-9`}
               />
             </div>

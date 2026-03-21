@@ -68,6 +68,7 @@ export const CURRENCY = {
  * @typedef {Object} Property
  * @property {number} id - Primary key
  * @property {string} slug - URL-friendly идентификатор (unique)
+ * @property {string|null} [code] - Вътрешен код (картички, търсене в админ)
  * @property {string} title - Заглавие
  * @property {string|null} [titleEn] - Заглавие (EN)
  * @property {('sale'|'rent')} category - Категория
@@ -115,6 +116,7 @@ export const properties = [
   {
     id: 1,
     slug: "apartament-sofia-lozenets",
+    code: "AH-1001",
     title: "Тристаен апартамент в Лозенец",
     titleEn: "Three-room apartment in Lozenets",
     category: PROPERTY_CATEGORY.SALE,
@@ -151,6 +153,7 @@ export const properties = [
   {
     id: 2,
     slug: "kashta-plovdiv-kapana",
+    code: "AH-1002",
     title: "Къща в центъра на Пловдив",
     category: PROPERTY_CATEGORY.SALE,
     type: PROPERTY_TYPE.HOUSE,
@@ -179,6 +182,7 @@ export const properties = [
   {
     id: 3,
     slug: "parcel-bansko",
+    code: "AH-1003",
     title: "Парцел край Банско",
     category: PROPERTY_CATEGORY.SALE,
     type: PROPERTY_TYPE.LAND,
@@ -204,6 +208,7 @@ export const properties = [
   {
     id: 4,
     slug: "apartament-varna-sea-garden",
+    code: "AH-R201",
     title: "Двустаен апартамент с морска гледка",
     category: PROPERTY_CATEGORY.RENT,
     type: PROPERTY_TYPE.APARTMENT,
@@ -229,6 +234,7 @@ export const properties = [
   {
     id: 5,
     slug: "kashta-borovets-naem",
+    code: "AH-R202",
     title: "Планинска къща в Боровец",
     category: PROPERTY_CATEGORY.RENT,
     type: PROPERTY_TYPE.HOUSE,
@@ -254,6 +260,7 @@ export const properties = [
   {
     id: 6,
     slug: "apartament-burgas-naem",
+    code: "AH-R203",
     title: "Студио в центъра на Бургас",
     category: PROPERTY_CATEGORY.RENT,
     type: PROPERTY_TYPE.APARTMENT,
@@ -279,6 +286,7 @@ export const properties = [
   {
     id: 7,
     slug: "parcel-sozopol",
+    code: "AH-1004",
     title: "Парцел близо до Созопол",
     category: PROPERTY_CATEGORY.SALE,
     type: PROPERTY_TYPE.LAND,
@@ -304,6 +312,7 @@ export const properties = [
   {
     id: 8,
     slug: "apartament-sofia-mladost",
+    code: "AH-1005",
     title: "Четиристаен апартамент в Младост",
     category: PROPERTY_CATEGORY.SALE,
     type: PROPERTY_TYPE.APARTMENT,

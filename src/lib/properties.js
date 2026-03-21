@@ -27,6 +27,7 @@ function transformProperty(row) {
   return {
     id: row.id ?? null,
     slug: row.slug ?? '',
+    code: row.code ?? null,
     title: row.title ?? '',
     titleEn: row.title_en ?? null,
     category: row.category ?? '',
@@ -360,8 +361,14 @@ export async function getPropertyById(id) {
 // =============================================================================
 
 function transformToSupabase(property) {
+  const codeTrimmed =
+    property.code != null && String(property.code).trim() !== ''
+      ? String(property.code).trim().slice(0, 100)
+      : null;
+
   const result = {
     slug: property.slug,
+    code: codeTrimmed,
     title: property.title,
     category: property.category,
     type: property.type,
@@ -407,14 +414,26 @@ function transformToSupabase(property) {
  * Връща уникален slug: ако подаденият вече съществува, добавя случайно число.
  * @param {string} baseSlug
  * @param {number} maxAttempts
+ * @param {import('@supabase/supabase-js').SupabaseClient} [dbClient] — за admin/сървърни операции (вижда всички редове)
  * @returns {Promise<string>}
  */
-async function ensureUniqueSlug(baseSlug, maxAttempts = 20) {
+async function ensureUniqueSlug(baseSlug, maxAttempts = 20, dbClient = supabase) {
+  const client = dbClient || supabase;
   const slug = (baseSlug || '').trim().toLowerCase().replace(/\s+/g, '-') || 'imot';
   let candidate = slug;
   for (let i = 0; i < maxAttempts; i++) {
-    const existing = await getPropertyBySlug(candidate);
-    if (!existing) return candidate;
+    const { data, error } = await client
+      .from('properties')
+      .select('id')
+      .eq('slug', candidate)
+      .limit(1);
+
+    if (error) {
+      console.error('ensureUniqueSlug:', error);
+      candidate = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
+      continue;
+    }
+    if (!data || data.length === 0) return candidate;
     candidate = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
   }
   return `${slug}-${Date.now().toString(36)}`;
@@ -444,6 +463,112 @@ export async function createProperty(propertyData) {
   }
 
   return { data: transformProperty(data), error: null, isDemo: false };
+}
+
+// =============================================================================
+// ADMIN: CLONE PROPERTY
+// =============================================================================
+
+/**
+ * Създава копие на имот с нов slug, без код, без featured; заглавията получават „(копие)“.
+ * Новият ред получава нов created_at → при сортиране по дата излиза най-отгоре.
+ */
+export async function cloneProperty(id) {
+  if (!isSupabaseConfigured) {
+    return {
+      data: null,
+      error: 'Демо режим – клониране не е налично. Конфигурирайте Supabase.',
+      isDemo: true,
+    };
+  }
+
+  // API route няма Supabase сесия – anon няма INSERT/SELECT за неактивни обяви по RLS.
+  if (!supabaseAdmin) {
+    return {
+      data: null,
+      error:
+        'Клонирането изисква SUPABASE_SERVICE_ROLE_KEY в .env.local (същият ключ като за изтриване от админ).',
+      isDemo: false,
+    };
+  }
+
+  const client = supabaseAdmin;
+  const idVal = id === undefined || id === null ? NaN : typeof id === 'number' ? id : Number(id);
+  if (Number.isNaN(idVal)) {
+    return { data: null, error: 'Невалиден id на имот', isDemo: false };
+  }
+
+  const { data: row, error: fetchErr } = await client
+    .from('properties')
+    .select('*')
+    .eq('id', idVal)
+    .single();
+
+  if (fetchErr || !row) {
+    return {
+      data: null,
+      error: fetchErr?.message || 'Имотът не е намерен',
+      isDemo: false,
+    };
+  }
+
+  const prop = transformProperty(row);
+  const baseSlug = `${prop.slug}-kopie`;
+  const uniqueSlug = await ensureUniqueSlug(baseSlug, 20, client);
+
+  const clonePayload = {
+    slug: uniqueSlug,
+    code: null,
+    title: prop.title ? `${prop.title} (копие)` : '(копие)',
+    titleEn: prop.titleEn ? `${prop.titleEn} (copy)` : null,
+    category: prop.category,
+    type: prop.type,
+    status: prop.status,
+    price: prop.price,
+    currency: prop.currency || 'EUR',
+    area: prop.area,
+    rooms: prop.rooms,
+    floor: prop.floor,
+    totalFloors: prop.totalFloors,
+    yearBuilt: prop.yearBuilt,
+    yearBuiltStatus: prop.yearBuiltStatus,
+    city: prop.city,
+    cityEn: prop.cityEn,
+    neighborhood: prop.neighborhood,
+    neighborhoodEn: prop.neighborhoodEn,
+    address: prop.address,
+    addressEn: prop.addressEn,
+    description: prop.description,
+    descriptionEn: prop.descriptionEn,
+    features: Array.isArray(prop.features) ? [...prop.features] : [],
+    featuresEn: Array.isArray(prop.featuresEn) ? [...prop.featuresEn] : [],
+    images: Array.isArray(prop.images) ? [...prop.images] : [],
+    mapUrl: prop.mapUrl,
+    videoUrl: prop.videoUrl,
+    isFeatured: false,
+    gaz: prop.gaz,
+    tec: prop.tec,
+    hidePricePerSqm: prop.hidePricePerSqm,
+    priceIncludesVat: prop.priceIncludesVat,
+    constructionType: prop.constructionType,
+    brokerNote: prop.brokerNote,
+    priceNote: prop.priceNote,
+    priceNoteEn: prop.priceNoteEn,
+  };
+
+  const supabaseData = transformToSupabase({ ...clonePayload, slug: uniqueSlug });
+
+  const { data: inserted, error: insErr } = await client
+    .from('properties')
+    .insert([supabaseData])
+    .select()
+    .single();
+
+  if (insErr) {
+    return { data: null, error: insErr.message, isDemo: false };
+  }
+
+  return { data: transformProperty(inserted), error: null, isDemo: false };
 }
 
 // =============================================================================

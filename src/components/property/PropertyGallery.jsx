@@ -7,7 +7,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 // Styles
 const mainImageContainer = 'relative bg-white rounded-2xl overflow-hidden h-72 md:h-96 lg:h-[500px]';
 const imageStyle = 'absolute inset-0 w-full h-full object-contain';
-const counterBadge = 'absolute bottom-4 right-4 bg-black/60 text-white text-sm px-3 py-1 rounded-full z-20';
+const counterBadge =
+  'rounded-full bg-black/70 text-white text-sm px-3 py-1 shadow-md z-20';
 const navBtnBase = 'absolute top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors z-20';
 const navIconStyle = 'w-5 h-5 text-gray-700';
 const thumbBase = 'flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all';
@@ -25,11 +26,14 @@ export default function PropertyGallery({
   isUnavailable = false,
   unavailableOverlayText = null,
   topLeftOverlay = null,
+  code = '',
+  codeLabel = 'КОД',
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const displayImages = images?.length > 0 ? images : [DEFAULT_PROPERTY_IMAGE];
   const hasMultipleImages = displayImages.length > 1;
+  const codeStr = code != null ? String(code).trim() : '';
   const totalImages = displayImages.length;
 
   const navigate = (direction) => {
@@ -61,7 +65,7 @@ export default function PropertyGallery({
           <img
             src="/images/logo.jpg"
             alt=""
-            className="w-16 h-16 md:w-20 md:h-20 object-contain opacity-60"
+            className="w-16 h-16 md:w-20 md:h-20 object-contain opacity-95"
           />
         </div>
 
@@ -76,9 +80,18 @@ export default function PropertyGallery({
           </div>
         )}
 
-        {hasMultipleImages && (
-          <div className={counterBadge}>
-            {activeIndex + 1} / {totalImages}
+        {(codeStr || hasMultipleImages) && (
+          <div className="absolute bottom-3 right-3 z-20 flex max-w-[min(100%-1.5rem,18rem)] flex-col items-end gap-2 pointer-events-none">
+            {codeStr !== '' && (
+              <span className="inline-block w-full truncate rounded-full bg-white px-3 py-1.5 text-center text-sm font-semibold text-black shadow-md ring-1 ring-black/10">
+                {codeLabel}: {codeStr}
+              </span>
+            )}
+            {hasMultipleImages && (
+              <div className={counterBadge}>
+                {activeIndex + 1} / {totalImages}
+              </div>
+            )}
           </div>
         )}
 

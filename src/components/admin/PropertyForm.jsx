@@ -22,6 +22,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     title: property?.title || '',
     titleEn: property?.titleEn || '',
     slug: property?.slug || '',
+    code: property?.code ?? '',
     category: property?.category || 'sale',
     type: property?.type || 'apartment',
     status: property?.status || PROPERTY_STATUS.ACTIVE,
@@ -159,8 +160,11 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     console.log('[PropertyForm] Current formData.images:', formData.images);
 
     // Prepare data
+    const codeTrimmed =
+      typeof formData.code === 'string' ? formData.code.trim().slice(0, 100) : '';
     const propertyData = {
       ...formData,
+      code: codeTrimmed || null,
       currency: 'EUR',
       price: Number(formData.price) || 0,
       area: Number(formData.area) || 0,
@@ -254,6 +258,190 @@ export default function PropertyForm({ property = null, isDemo = false }) {
           <p className="text-green-800">{success}</p>
         </div>
       )}
+
+      {/* Код – най-отгоре във формата */}
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-blue-100">
+        <h3 className="text-lg text-gray-900 mb-3">Код на обявата</h3>
+        <div>
+          <label htmlFor="code" className="block text-sm text-gray-700 mb-1">
+            Код
+          </label>
+          <input
+            type="text"
+            id="code"
+            name="code"
+            value={formData.code}
+            onChange={handleChange}
+            maxLength={100}
+            className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="напр. AH-1024"
+          />
+          <p className="mt-1 text-xs text-gray-500">
+            Показва се на картичките при клиента под заглавието (КОД: …). Търси се от списъка в админ панела.
+          </p>
+        </div>
+      </div>
+
+      {/* Location */}
+      <div className="bg-white p-6 rounded-lg shadow-sm border">
+        <h3 className="text-lg text-gray-900 mb-4">Локация</h3>
+
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="city" className="block text-sm text-gray-700 mb-1">
+                Град * (БГ)
+              </label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                required
+                list="city-bg-suggestions"
+                autoComplete="off"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="София"
+              />
+              <datalist id="city-bg-suggestions">
+                {suggestions.cities.map((v) => (
+                  <option key={v} value={v} />
+                ))}
+              </datalist>
+            </div>
+            <div>
+              <label htmlFor="cityEn" className="block text-sm text-gray-700 mb-1">
+                Град (EN)
+              </label>
+              <input
+                type="text"
+                id="cityEn"
+                name="cityEn"
+                value={formData.cityEn}
+                onChange={handleChange}
+                list="city-en-suggestions"
+                autoComplete="off"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Sofia"
+              />
+              <datalist id="city-en-suggestions">
+                {suggestions.citiesEn.map((v) => (
+                  <option key={v} value={v} />
+                ))}
+              </datalist>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="neighborhood" className="block text-sm text-gray-700 mb-1">
+                Квартал (БГ)
+              </label>
+              <input
+                type="text"
+                id="neighborhood"
+                name="neighborhood"
+                value={formData.neighborhood}
+                onChange={handleChange}
+                list="neighborhood-bg-suggestions"
+                autoComplete="off"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Лозенец"
+              />
+              <datalist id="neighborhood-bg-suggestions">
+                {suggestions.neighborhoods.map((v) => (
+                  <option key={v} value={v} />
+                ))}
+              </datalist>
+            </div>
+            <div>
+              <label htmlFor="neighborhoodEn" className="block text-sm text-gray-700 mb-1">
+                Квартал (EN)
+              </label>
+              <input
+                type="text"
+                id="neighborhoodEn"
+                name="neighborhoodEn"
+                value={formData.neighborhoodEn}
+                onChange={handleChange}
+                list="neighborhood-en-suggestions"
+                autoComplete="off"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Lozenets"
+              />
+              <datalist id="neighborhood-en-suggestions">
+                {suggestions.neighborhoodsEn.map((v) => (
+                  <option key={v} value={v} />
+                ))}
+              </datalist>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="address" className="block text-sm text-gray-700 mb-1">
+                Адрес * (БГ)
+              </label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="ул. Златен рог 15, Лозенец, София"
+              />
+            </div>
+            <div>
+              <label htmlFor="addressEn" className="block text-sm text-gray-700 mb-1">
+                Адрес (EN)
+              </label>
+              <input
+                type="text"
+                id="addressEn"
+                name="addressEn"
+                value={formData.addressEn}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="15 Zlaten Rog St, Lozenets, Sofia"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="mapUrl" className="block text-sm text-gray-700 mb-1">
+              Google Maps URL
+            </label>
+            <input
+              type="url"
+              id="mapUrl"
+              name="mapUrl"
+              value={formData.mapUrl}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="https://www.google.com/maps/..."
+            />
+          </div>
+
+          <div>
+            <label htmlFor="videoUrl" className="block text-sm text-gray-700 mb-1">
+              Видео (YouTube) – линк
+            </label>
+            <input
+              type="url"
+              id="videoUrl"
+              name="videoUrl"
+              value={formData.videoUrl}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="https://www.youtube.com/watch?v=..."
+            />
+            <p className="mt-1 text-xs text-gray-500">Линкът се показва при клиента на страницата на обекта.</p>
+          </div>
+        </div>
+      </div>
 
       {/* Basic Info */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
@@ -649,175 +837,14 @@ export default function PropertyForm({ property = null, isDemo = false }) {
         </div>
       </div>
 
-      {/* Location */}
+      {/* Description */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 className="text-lg text-gray-900 mb-4">Локация</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Описание</h3>
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-6">
             <div>
-              <label htmlFor="city" className="block text-sm text-gray-700 mb-1">
-                Град * (БГ)
-              </label>
-              <input
-                type="text"
-                id="city"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                required
-                list="city-bg-suggestions"
-                autoComplete="off"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="София"
-              />
-              <datalist id="city-bg-suggestions">
-                {suggestions.cities.map((v) => (
-                  <option key={v} value={v} />
-                ))}
-              </datalist>
-            </div>
-            <div>
-              <label htmlFor="cityEn" className="block text-sm text-gray-700 mb-1">
-                Град (EN)
-              </label>
-              <input
-                type="text"
-                id="cityEn"
-                name="cityEn"
-                value={formData.cityEn}
-                onChange={handleChange}
-                list="city-en-suggestions"
-                autoComplete="off"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Sofia"
-              />
-              <datalist id="city-en-suggestions">
-                {suggestions.citiesEn.map((v) => (
-                  <option key={v} value={v} />
-                ))}
-              </datalist>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="neighborhood" className="block text-sm text-gray-700 mb-1">
-                Квартал (БГ)
-              </label>
-              <input
-                type="text"
-                id="neighborhood"
-                name="neighborhood"
-                value={formData.neighborhood}
-                onChange={handleChange}
-                list="neighborhood-bg-suggestions"
-                autoComplete="off"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Лозенец"
-              />
-              <datalist id="neighborhood-bg-suggestions">
-                {suggestions.neighborhoods.map((v) => (
-                  <option key={v} value={v} />
-                ))}
-              </datalist>
-            </div>
-            <div>
-              <label htmlFor="neighborhoodEn" className="block text-sm text-gray-700 mb-1">
-                Квартал (EN)
-              </label>
-              <input
-                type="text"
-                id="neighborhoodEn"
-                name="neighborhoodEn"
-                value={formData.neighborhoodEn}
-                onChange={handleChange}
-                list="neighborhood-en-suggestions"
-                autoComplete="off"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Lozenets"
-              />
-              <datalist id="neighborhood-en-suggestions">
-                {suggestions.neighborhoodsEn.map((v) => (
-                  <option key={v} value={v} />
-                ))}
-              </datalist>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="address" className="block text-sm text-gray-700 mb-1">
-                Адрес * (БГ)
-              </label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="ул. Златен рог 15, Лозенец, София"
-              />
-            </div>
-            <div>
-              <label htmlFor="addressEn" className="block text-sm text-gray-700 mb-1">
-                Адрес (EN)
-              </label>
-              <input
-                type="text"
-                id="addressEn"
-                name="addressEn"
-                value={formData.addressEn}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="15 Zlaten Rog St, Lozenets, Sofia"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="mapUrl" className="block text-sm text-gray-700 mb-1">
-              Google Maps URL
-            </label>
-            <input
-              type="url"
-              id="mapUrl"
-              name="mapUrl"
-              value={formData.mapUrl}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="https://www.google.com/maps/..."
-            />
-          </div>
-
-          <div>
-            <label htmlFor="videoUrl" className="block text-sm text-gray-700 mb-1">
-              Видео (YouTube) – линк
-            </label>
-            <input
-              type="url"
-              id="videoUrl"
-              name="videoUrl"
-              value={formData.videoUrl}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="https://www.youtube.com/watch?v=..."
-            />
-            <p className="mt-1 text-xs text-gray-500">Линкът се показва при клиента на страницата на обекта.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Description & Features */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 className="text-lg text-gray-900 mb-4">Описание</h3>
-
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="description" className="block text-sm text-gray-700 mb-1">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-800 mb-1.5">
                 Описание (БГ)
               </label>
               <textarea
@@ -825,13 +852,13 @@ export default function PropertyForm({ property = null, isDemo = false }) {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                rows={4}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                rows={10}
+                className="w-full min-h-64 px-4 py-3 text-base leading-relaxed border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
                 placeholder="Подробно описание на имота..."
               />
             </div>
             <div>
-              <label htmlFor="descriptionEn" className="block text-sm text-gray-700 mb-1">
+              <label htmlFor="descriptionEn" className="block text-sm font-medium text-gray-800 mb-1.5">
                 Описание (EN)
               </label>
               <textarea
@@ -839,96 +866,100 @@ export default function PropertyForm({ property = null, isDemo = false }) {
                 name="descriptionEn"
                 value={formData.descriptionEn}
                 onChange={handleChange}
-                rows={4}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                rows={10}
+                className="w-full min-h-64 px-4 py-3 text-base leading-relaxed border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
                 placeholder="Detailed property description..."
               />
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-gray-700 mb-2">
-                Удобства – тикни за български; в английската версия излиза автоматично.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 max-h-64 overflow-y-auto py-2 pr-2 border border-gray-200 rounded-lg bg-gray-50/50">
-                {FEATURE_OPTIONS.map((opt) => {
-                  const checked = Array.isArray(formData.features) && formData.features.includes(opt.bg);
-                  return (
-                    <label
-                      key={opt.bg}
-                      className="flex items-start gap-2 cursor-pointer group"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleFeature(opt, !checked)}
-                        className="mt-1 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700 group-hover:text-gray-900">
-                        {opt.bg}
-                        {checked && (
-                          <span className="ml-1.5 text-gray-500 font-normal">
-                            ({opt.en})
-                          </span>
-                        )}
-                      </span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="featuresOther" className="block text-sm text-gray-700 mb-1">
-                  Други удобства (БГ, разделени със запетая)
-                </label>
-                <input
-                  type="text"
-                  id="featuresOther"
-                  name="featuresOther"
-                  value={formData.featuresOther}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="друго 1, друго 2"
-                />
-              </div>
-              <div>
-                <label htmlFor="featuresEnOther" className="block text-sm text-gray-700 mb-1">
-                  Други удобства (EN, разделени със запетая)
-                </label>
-                <input
-                  type="text"
-                  id="featuresEnOther"
-                  name="featuresEnOther"
-                  value={formData.featuresEnOther}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="other 1, other 2"
-                />
-              </div>
-            </div>
-          </div>
+      {/* Удобства */}
+      <div className="bg-white p-6 rounded-lg shadow-sm border">
+        <h3 className="text-lg text-gray-900 mb-4">Удобства</h3>
 
-          {/* Image Upload */}
+        <div className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-700 mb-2">
-              Снимки
-            </label>
-            <ImageUpload
-              images={formData.images}
-              onChange={(newImages) => {
-                console.log('[PropertyForm] ImageUpload onChange called with:', newImages);
-                setFormData(prev => {
-                  const updated = { ...prev, images: newImages };
-                  console.log('[PropertyForm] Updated formData.images:', updated.images);
-                  return updated;
-                });
-              }}
-              disabled={isSubmitting}
-            />
+            <p className="text-sm text-gray-700 mb-2">
+              Удобства – тикни за български; в английската версия излиза автоматично.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 max-h-64 overflow-y-auto py-2 pr-2 border border-gray-200 rounded-lg bg-gray-50/50">
+              {FEATURE_OPTIONS.map((opt) => {
+                const checked = Array.isArray(formData.features) && formData.features.includes(opt.bg);
+                return (
+                  <label
+                    key={opt.bg}
+                    className="flex items-start gap-2 cursor-pointer group"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleFeature(opt, !checked)}
+                      className="mt-1 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700 group-hover:text-gray-900">
+                      {opt.bg}
+                      {checked && (
+                        <span className="ml-1.5 text-gray-500 font-normal">
+                          ({opt.en})
+                        </span>
+                      )}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="featuresOther" className="block text-sm text-gray-700 mb-1">
+                Други удобства (БГ, разделени със запетая)
+              </label>
+              <input
+                type="text"
+                id="featuresOther"
+                name="featuresOther"
+                value={formData.featuresOther}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="друго 1, друго 2"
+              />
+            </div>
+            <div>
+              <label htmlFor="featuresEnOther" className="block text-sm text-gray-700 mb-1">
+                Други удобства (EN, разделени със запетая)
+              </label>
+              <input
+                type="text"
+                id="featuresEnOther"
+                name="featuresEnOther"
+                value={formData.featuresEnOther}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="other 1, other 2"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
+      {/* Снимки */}
+      <div className="bg-white p-6 rounded-lg shadow-sm border">
+        <h3 className="text-lg text-gray-900 mb-4">Снимки</h3>
+        <div>
+          <ImageUpload
+            images={formData.images}
+            onChange={(newImages) => {
+              console.log('[PropertyForm] ImageUpload onChange called with:', newImages);
+              setFormData(prev => {
+                const updated = { ...prev, images: newImages };
+                console.log('[PropertyForm] Updated formData.images:', updated.images);
+                return updated;
+              });
+            }}
+            disabled={isSubmitting}
+          />
         </div>
       </div>
 

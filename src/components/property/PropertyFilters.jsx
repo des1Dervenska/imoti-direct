@@ -9,6 +9,7 @@ import {
   ArrowsUpDownIcon,
   ChevronDownIcon,
   XMarkIcon,
+  MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 
 const countStyle = 'text-graphite-light';
@@ -67,6 +68,7 @@ export default function PropertyFilters({
   const SORT_OPTIONS = useMemo(() => buildSortOptions(t), [locale]);
   const ROOMS_OPTIONS = useMemo(() => buildRoomsOptions(t), [locale]);
   const [filters, setFilters] = useState({
+    codeSearch: '',
     type: '',
     city: '',
     neighborhood: '',
@@ -121,6 +123,7 @@ export default function PropertyFilters({
   const clearExtraFilters = () => {
     setFilters((prev) => ({
       ...prev,
+      codeSearch: '',
       type: '',
       city: '',
       neighborhood: '',
@@ -164,6 +167,11 @@ export default function PropertyFilters({
 
   const filteredProperties = useMemo(() => {
     let list = properties.filter((property) => {
+      const codeQ = filters.codeSearch?.trim().toLowerCase();
+      if (codeQ) {
+        const propCode = property.code != null ? String(property.code).trim().toLowerCase() : '';
+        if (!propCode || !propCode.includes(codeQ)) return false;
+      }
       if (filters.type && property.type !== filters.type) return false;
       if (filters.city && property.city !== filters.city) return false;
       if (filters.neighborhood && property.neighborhood !== filters.neighborhood) return false;
@@ -276,6 +284,26 @@ export default function PropertyFilters({
     <>
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-screen-xl mx-auto px-4 py-4">
+          <div className="mb-4 w-full max-w-md">
+            <label htmlFor="filter-code-search" className="mb-1 block text-sm font-medium text-graphite">
+              {t.searchByCode}
+            </label>
+            <div className="relative">
+              <MagnifyingGlassIcon
+                className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+                aria-hidden
+              />
+              <input
+                id="filter-code-search"
+                type="search"
+                autoComplete="off"
+                value={filters.codeSearch}
+                onChange={(e) => updateFilter('codeSearch', e.target.value)}
+                placeholder={t.codePlaceholder}
+                className={`${filterInputClass} pl-10`}
+              />
+            </div>
+          </div>
           <div className="flex flex-wrap gap-4 items-center justify-end">
             <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
               <div className={`${countStyle} shrink-0`}>

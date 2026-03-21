@@ -17,6 +17,8 @@ const playfairDisplay = Playfair_Display({
   subsets: ["latin", "latin-ext"],
 });
 
+const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+
 export const metadata = {
   title: `${BRAND_NAME} - Недвижими имоти в България`,
   description: `${BRAND_DESCRIPTION}. ${BRAND_TAGLINE}. Покупко-продажба и наем на имоти в София и България.`,
@@ -25,6 +27,9 @@ export const metadata = {
     icon: '/images/logo.jpg',
     apple: '/images/logo.jpg',
   },
+  ...(googleVerification
+    ? { verification: { google: googleVerification } }
+    : {}),
 };
 
 export default function RootLayout({ children }) {

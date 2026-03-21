@@ -7,8 +7,11 @@ import { RoomsIcon } from '@/components/icons';
 import { Badge, LinkButton } from '@/components/ui';
 
 const cardStyle = 'bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full';
-const featureStyle = 'flex items-center';
-const featureIconStyle = 'w-4 h-4 mr-1';
+/** Единен размер за всички текстове в тялото на картичката */
+const cardText = 'text-sm text-graphite leading-snug';
+const cardTextMuted = 'text-sm text-graphite-light leading-snug';
+const featureStyle = `flex items-center ${cardText}`;
+const featureIconStyle = 'w-4 h-4 mr-1 shrink-0 text-graphite-light';
 
 const truncateText = (text, maxLength = 100) => {
   if (!text) return '';
@@ -18,6 +21,7 @@ const truncateText = (text, maxLength = 100) => {
 export default function PropertyCard({ property, showDescription = true, locale = 'bg' }) {
   const {
     slug,
+    code,
     type,
     category,
     status,
@@ -32,10 +36,12 @@ export default function PropertyCard({ property, showDescription = true, locale 
   } = property;
   const display = getDisplayText(property, locale);
   const { title, description } = display;
-  const location = getLocationLine(display);
 
   const t = getTranslations(locale)?.property ?? {};
   const propertyUrl = locale ? `/${locale}/properties/${slug}` : `/properties/${slug}`;
+  const typeLabel = t[type] != null ? t[type] : type;
+  const addressLine =
+    display.address?.trim() ? display.address.trim() : getLocationLine(display);
   const imageUrl = images?.[0] || DEFAULT_PROPERTY_IMAGE;
   const isUnavailable = status === 'sold' || status === 'rented';
   const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕНА') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕНА') : null;
@@ -74,33 +80,32 @@ export default function PropertyCard({ property, showDescription = true, locale 
 
         {/* Watermark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
-          <img src="/images/logo.jpg" alt="" className="w-14 h-14 object-contain opacity-25" />
+          <img src="/images/logo.jpg" alt="" className="w-14 h-14 object-contain opacity-95" />
         </div>
 
-        {/* Category + Type badges */}
-        <div className="absolute top-3 left-3 flex gap-2">
+        {/* Category badge – тип имот е в текста под снимката */}
+        <div className="absolute top-3 left-3 flex gap-2 z-20">
           <Badge.Category category={category} locale={locale} />
-          <Badge.Type type={type} locale={locale} />
         </div>
 
-        {/* Features overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-          <div className="flex items-center gap-3 text-white text-sm">
-            {features.filter(f => f.show).map(({ Icon, value }, idx) => (
-              <div key={`${value}-${idx}`} className={featureStyle}>
-                <Icon className={featureIconStyle} />
-                <span style={{ fontWeight: 400 }}>{value}</span>
-              </div>
-            ))}
+        {/* Код – черен текст, бял закръглен фон, долен десен ъгъл */}
+        {code != null && String(code).trim() !== '' && (
+          <div
+            className="absolute bottom-3 right-3 z-25 max-w-[min(100%-1.5rem,14rem)] pointer-events-none"
+            aria-hidden
+          >
+            <span className="inline-block w-full truncate rounded-full bg-white px-3 py-1.5 text-center text-xs font-semibold text-black shadow-md ring-1 ring-black/10 sm:text-sm">
+              {(t.listingCode ?? 'КОД')}: {String(code).trim()}
+            </span>
           </div>
-        </div>
+        )}
       </Link>
 
       {/* Content */}
-      <div className="p-5 flex flex-col flex-grow">
-        <div className="mb-2">
+      <div className="p-5 flex flex-col grow">
+        <div className="mb-2 space-y-1">
           {(() => {
-            const { eurText, bgnText } = formatPriceEurAndBgn(price, category);
+            const { eurText } = formatPriceEurAndBgn(price, category);
             const vatLabel = priceIncludesVat ? (t.priceWithVat ?? 'с включено ДДС') : (t.priceWithoutVat ?? 'без включено ДДС');
             const pricePerSqm = area > 0 ? (price ?? 0) / area : null;
             const perSqmText = !hidePricePerSqm && pricePerSqm != null
@@ -108,28 +113,38 @@ export default function PropertyCard({ property, showDescription = true, locale 
               : null;
             return (
               <>
-                <span className="text-2xl text-graphite" style={{ fontWeight: 400 }}>{eurText}</span>
-                <span className="block text-sm font-normal text-graphite-light">{bgnText}</span>
-                {perSqmText && <span className="block text-xs text-graphite-light">{perSqmText}</span>}
-                <span className="block text-xs text-graphite-light">{vatLabel}</span>
+                <span className={`block ${cardText} font-medium`}>{eurText}</span>
+                {perSqmText && <span className={`block ${cardTextMuted}`}>{perSqmText}</span>}
+                <span className={`block ${cardTextMuted}`}>{vatLabel}</span>
               </>
             );
           })()}
         </div>
 
         <Link href={propertyUrl}>
-          <h3 className="text-lg text-graphite hover:text-graphite-dark transition-colors line-clamp-2 mb-2">
+          <h3 className={`${cardText} font-medium hover:text-graphite-dark transition-colors line-clamp-2 mb-2`}>
             {title}
           </h3>
         </Link>
 
-        <div className="flex items-center text-graphite-light text-sm mb-3">
-          <MapPinIcon className="w-4 h-4 mr-1.5 flex-shrink-0 text-graphite-light" />
-          <span>{location}</span>
+        <p className={`${cardText} mb-2`}>{typeLabel}</p>
+
+        <div className={`flex items-start gap-1.5 ${cardText} mb-3`}>
+          <MapPinIcon className="w-4 h-4 mt-0.5 shrink-0 text-graphite-light" />
+          <span className="line-clamp-3">{addressLine}</span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-3">
+          {features.filter(f => f.show).map(({ Icon, value }, idx) => (
+            <div key={`${value}-${idx}`} className={featureStyle}>
+              <Icon className={featureIconStyle} />
+              <span className="font-normal">{value}</span>
+            </div>
+          ))}
         </div>
 
         {showDescription && (
-          <p className="text-graphite-light text-sm leading-relaxed mb-4 flex-grow">
+          <p className={`${cardTextMuted} mb-4 grow`}>
             {truncateText(description)}
           </p>
         )}
@@ -137,6 +152,7 @@ export default function PropertyCard({ property, showDescription = true, locale 
         <LinkButton
           href={propertyUrl}
           variant="accent"
+          size="sm"
           className="mt-auto w-full justify-center"
         >
           {t.viewProperty ?? 'Виж имота'}

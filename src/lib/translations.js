@@ -230,6 +230,7 @@ export const translations = {
       shareViber: 'Viber',
       shareEmail: 'Имейл',
       shareCopied: 'Линкът е копиран',
+      listingCode: 'КОД',
     },
     filters: {
       sort: 'Сортиране',
@@ -312,6 +313,8 @@ export const translations = {
       floorDesc: 'По етаж (низх.)',
       filtersSubtitle: 'Вид, град, цена, стаи, площ, етаж, ТЕЦ, тип строителство и година',
       tryChangeCriteria: 'Опитайте да промените критериите за търсене',
+      searchByCode: 'Търсене по код',
+      codePlaceholder: 'Въведете код на обявата…',
     },
     privacy: {
       title: 'Политика за поверителност',
@@ -554,6 +557,7 @@ export const translations = {
       shareViber: 'Viber',
       shareEmail: 'Email',
       shareCopied: 'Link copied',
+      listingCode: 'REF',
     },
     filters: {
       sort: 'Sort',
@@ -636,6 +640,8 @@ export const translations = {
       floorDesc: 'By floor (desc.)',
       filtersSubtitle: 'Kind, city, price, rooms, area, floor, TEC, construction type and year',
       tryChangeCriteria: 'Try changing your search criteria',
+      searchByCode: 'Search by listing code',
+      codePlaceholder: 'Enter property code…',
     },
     privacy: {
       title: 'Privacy policy',

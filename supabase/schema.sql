@@ -18,6 +18,9 @@ CREATE TABLE IF NOT EXISTS properties (
   -- URL-friendly identifier (unique)
   slug VARCHAR(255) NOT NULL UNIQUE,
 
+  -- Вътрешен/рекламен код (показва се на картичките, търсене в админ)
+  code VARCHAR(100),
+
   -- Basic info
   title VARCHAR(500) NOT NULL,
   title_en VARCHAR(500),
@@ -97,6 +100,9 @@ CREATE INDEX idx_properties_status ON properties(status);
 -- City index (location filtering)
 CREATE INDEX idx_properties_city ON properties(city);
 
+-- Код (филтър/търсене в админ)
+CREATE INDEX idx_properties_code ON properties(code) WHERE code IS NOT NULL AND btrim(code) <> '';
+
 -- Featured index (homepage featured properties)
 CREATE INDEX idx_properties_featured ON properties(is_featured) WHERE is_featured = TRUE;
 
@@ -118,6 +124,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_properties_updated_at ON properties;
 CREATE TRIGGER trigger_properties_updated_at
   BEFORE UPDATE ON properties
   FOR EACH ROW
@@ -171,6 +178,7 @@ CREATE POLICY "Authenticated users can delete properties"
 
 COMMENT ON TABLE properties IS 'Real estate listings for sale and rent';
 COMMENT ON COLUMN properties.slug IS 'URL-friendly unique identifier';
+COMMENT ON COLUMN properties.code IS 'Вътрешен код на обявата (стринг); показва се на клиентските картички';
 COMMENT ON COLUMN properties.category IS 'sale or rent';
 COMMENT ON COLUMN properties.type IS 'Тип имот (вкл. apartment/house/land и разширените типове)';
 COMMENT ON COLUMN properties.status IS 'active, pending, sold, rented, or inactive';
