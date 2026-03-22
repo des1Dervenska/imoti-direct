@@ -53,8 +53,8 @@ export default async function TermsPage({ params }) {
                 <h2 className="text-xl font-semibold text-graphite mb-3">{t.terms.section2Title}</h2>
                 <p>
                   {isEn
-                    ? 'All listings, descriptions, photos and prices on the site are for information only. We strive to keep information accurate but do not guarantee completeness. Prices are in EUR; BGN equivalent is indicative.'
-                    : 'Всички обяви, описания, снимки и цени на Сайта са с информативен характер. Ние полагаме усилия да поддържаме информацията актуална и точна. Цените са в евро (EUR), като еквивалент в лева (BGN) е ориентировъчен.'}
+                    ? 'All listings, descriptions, photos and prices on the site are for information only. We strive to keep information accurate but do not guarantee completeness. Prices are stated in EUR.'
+                    : 'Всички обяви, описания, снимки и цени на Сайта са с информативен характер. Ние полагаме усилия да поддържаме информацията актуална и точна. Цените са в евро (EUR).'}
                 </p>
               </section>
 

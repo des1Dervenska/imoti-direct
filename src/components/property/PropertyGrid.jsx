@@ -28,6 +28,7 @@ export default function PropertyGrid({
   animateCards = false,
   showDescription = true,
   locale = 'bg',
+  showStreetAddress = true,
 }) {
   const t = getTranslations(locale)?.filters;
   const tryChangeCriteria = t?.tryChangeCriteria;
@@ -41,10 +42,21 @@ export default function PropertyGrid({
       {properties.map((property) =>
         animateCards ? (
           <AnimateOnScroll key={property.id} direction="up">
-            <PropertyCard property={property} showDescription={showDescription} locale={locale} />
+            <PropertyCard
+              property={property}
+              showDescription={showDescription}
+              locale={locale}
+              showStreetAddress={showStreetAddress}
+            />
           </AnimateOnScroll>
         ) : (
-          <PropertyCard key={property.id} property={property} showDescription={showDescription} locale={locale} />
+          <PropertyCard
+            key={property.id}
+            property={property}
+            showDescription={showDescription}
+            locale={locale}
+            showStreetAddress={showStreetAddress}
+          />
         )
       )}
     </div>

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { DEFAULT_PROPERTY_IMAGE, formatPriceEurAndBgn } from '@/lib/constants';
+import { DEFAULT_PROPERTY_IMAGE, formatPriceEur } from '@/lib/constants';
 import { getDisplayText, getLocationLine } from '@/lib/properties';
 import { getTranslations } from '@/lib/translations';
 import { ArrowsPointingOutIcon, MapPinIcon, BoltIcon, FireIcon } from '@heroicons/react/24/outline';
@@ -18,7 +18,13 @@ const truncateText = (text, maxLength = 100) => {
   return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
 };
 
-export default function PropertyCard({ property, showDescription = true, locale = 'bg' }) {
+export default function PropertyCard({
+  property,
+  showDescription = true,
+  locale = 'bg',
+  /** false = само град и квартал (без улица/адрес) – за списъци наем/продажба */
+  showStreetAddress = true,
+}) {
   const {
     slug,
     code,
@@ -40,8 +46,9 @@ export default function PropertyCard({ property, showDescription = true, locale 
   const t = getTranslations(locale)?.property ?? {};
   const propertyUrl = locale ? `/${locale}/properties/${slug}` : `/properties/${slug}`;
   const typeLabel = t[type] != null ? t[type] : type;
-  const addressLine =
-    display.address?.trim() ? display.address.trim() : getLocationLine(display);
+  const addressLine = showStreetAddress && display.address?.trim()
+    ? display.address.trim()
+    : getLocationLine(display);
   const imageUrl = images?.[0] || DEFAULT_PROPERTY_IMAGE;
   const isUnavailable = status === 'sold' || status === 'rented';
   const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕНА') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕНА') : null;
@@ -105,7 +112,7 @@ export default function PropertyCard({ property, showDescription = true, locale 
       <div className="p-5 flex flex-col grow">
         <div className="mb-2 space-y-1">
           {(() => {
-            const { eurText } = formatPriceEurAndBgn(price, category);
+            const { eurText } = formatPriceEur(price, category);
             const vatLabel = priceIncludesVat ? (t.priceWithVat ?? 'с включено ДДС') : (t.priceWithoutVat ?? 'без включено ДДС');
             const pricePerSqm = area > 0 ? (price ?? 0) / area : null;
             const perSqmText = !hidePricePerSqm && pricePerSqm != null

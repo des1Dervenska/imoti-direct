@@ -72,22 +72,19 @@ export const DEFAULT_PROPERTY_IMAGE = '/images/property-placeholder.svg';
 export const GOOGLE_MAPS_SEARCH_URL = 'https://www.google.com/maps/search/?api=1&query=Белите+Брези+София';
 
 // =============================================================================
-// CURRENCY (цена винаги в EUR; показваме и в BGN)
+// CURRENCY – показваме само EUR
 // =============================================================================
 
-/** 1 EUR = 1.95583 BGN (фиксиран курс за показ) */
-export const EUR_TO_BGN = 1.95583;
-
 /**
- * Връща форматирани текстове за цена в EUR (главно) и BGN (еквивалент).
+ * Форматирана цена в EUR (при наем се добавя „/месец“).
  * @param {number} priceEur - Цена в евро
- * @param {'sale'|'rent'} category - Категория (за суфикс /месец при наем)
- * @returns {{ eurText: string, bgnText: string }}
+ * @param {'sale'|'rent'} category - Категория
+ * @returns {{ eurText: string }}
  */
-export function formatPriceEurAndBgn(priceEur, category) {
+export function formatPriceEur(priceEur, category) {
   const suffix = category === 'rent' ? '/месец' : '';
-  const fmt = (n) => new Intl.NumberFormat('bg-BG', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
-  const eurText = `${fmt(priceEur)} EUR${suffix}`;
-  const bgnText = `${fmt(Number(priceEur) * EUR_TO_BGN)} BGN${suffix}`;
-  return { eurText, bgnText };
+  const fmt = (n) =>
+    new Intl.NumberFormat('bg-BG', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
+  const eurText = `${fmt(Number(priceEur))} EUR${suffix}`;
+  return { eurText };
 }

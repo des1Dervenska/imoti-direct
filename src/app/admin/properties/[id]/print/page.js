@@ -1,6 +1,6 @@
 import { getPropertyById, getDisplayText, getLocationLine } from '@/lib/properties';
 import { propertyTypes } from '@/data/properties';
-import { formatPriceEurAndBgn, BRAND_NAME, CONTACT_PERSON, CONTACT_PHONE, CONTACT_EMAIL } from '@/lib/constants';
+import { formatPriceEur, BRAND_NAME, CONTACT_PERSON, CONTACT_PHONE, CONTACT_EMAIL } from '@/lib/constants';
 import { getTranslations } from '@/lib/translations';
 import Link from 'next/link';
 import PrintButton from './PrintButton';
@@ -48,7 +48,7 @@ export default async function PrintPropertyPage({ params }) {
 
   const typeLabel = propertyTypes.find((opt) => opt.value === type)?.label ?? type;
   const categoryLabel = category === 'sale' ? (t?.property?.sale ?? 'Продажба') : (t?.property?.rent ?? 'Наем');
-  const { eurText, bgnText } = formatPriceEurAndBgn(price, category);
+  const { eurText } = formatPriceEur(price, category);
   const pricePerSqm = !hidePricePerSqm && area > 0 ? Math.round((price ?? 0) / area) : null;
   const imageUrl = images?.[0] || '/images/placeholder-property.jpg';
 
@@ -106,7 +106,6 @@ export default async function PrintPropertyPage({ params }) {
           <p className="text-gray-600">{locationLine}</p>
           <div>
             <p className="text-xl font-semibold text-gray-900">{eurText}</p>
-            <p className="text-sm text-gray-500">{bgnText}</p>
             {priceIncludesVat != null && (
               <p className="text-xs text-gray-500">{priceIncludesVat ? 'с включено ДДС' : 'без включено ДДС'}</p>
             )}

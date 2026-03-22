@@ -651,6 +651,7 @@ export default function PropertyFilters({
             animateCards={animateCards}
             showDescription={false}
             locale={locale}
+            showStreetAddress={false}
           />
         </div>
       </section>

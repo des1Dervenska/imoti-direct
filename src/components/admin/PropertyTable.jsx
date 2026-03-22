@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { formatPriceEurAndBgn } from '@/lib/constants';
+import { formatPriceEur } from '@/lib/constants';
 import { getTypeLabel, getCategoryLabel, getConstructionTypeLabel } from '@/data/properties';
 
 const statusLabels = {
@@ -164,12 +164,11 @@ export default function PropertyTable({ properties, isDemo = false }) {
                 </td>
                 <td className="px-4 py-4 text-sm whitespace-nowrap">
                   {(() => {
-                    const { eurText, bgnText } = formatPriceEurAndBgn(property.price, property.category);
+                    const { eurText } = formatPriceEur(property.price, property.category);
                     const vatLabel = property.priceIncludesVat ? 'с ДДС' : 'без ДДС';
                     return (
                       <span>
                         <span className="text-gray-900">{eurText}</span>
-                        <span className="block text-xs text-gray-500">{bgnText}</span>
                         <span className="block text-xs text-gray-500">{vatLabel}</span>
                       </span>
                     );

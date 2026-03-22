@@ -11,7 +11,7 @@ import {
   CONTACT_PHONE,
   CONTACT_PHONE_LINK,
   CONTACT_EMAIL,
-  formatPriceEurAndBgn,
+  formatPriceEur,
 } from '@/lib/constants';
 import { getTranslations } from '@/lib/translations';
 import { Section, Container, Card, LinkButton, AnimateOnScroll } from '@/components/ui';
@@ -231,8 +231,7 @@ export default async function PropertyDetailPage({ params }) {
                     {title}
                   </h1>
                   <div className="text-graphite">
-                    <span className="text-3xl">{formatPriceEurAndBgn(price, category).eurText}</span>
-                    <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
+                    <span className="text-3xl">{formatPriceEur(price, category).eurText}</span>
                     <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
                   </div>
                 </div>
@@ -338,8 +337,7 @@ export default async function PropertyDetailPage({ params }) {
                       {title}
                     </h1>
                     <div className="mb-4">
-                      <span className="text-xl text-graphite">{formatPriceEurAndBgn(price, category).eurText}</span>
-                      <span className="block text-sm text-gray-500 mt-0.5">{formatPriceEurAndBgn(price, category).bgnText}</span>
+                      <span className="text-xl text-graphite">{formatPriceEur(price, category).eurText}</span>
                       <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
                     </div>
                     <div className="text-sm text-gray-500">
