@@ -1,6 +1,6 @@
 'use client';
 
-import { heroConfig } from '@/lib/hero.config';
+import { heroConfig, heroSectionHeightClass } from '@/lib/hero.config';
 import { BRAND_NAME_WITHOUT_NUMBER, BRAND_NAME_NUMBER } from '@/lib/constants';
 import { getTranslations } from '@/lib/translations';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
@@ -28,7 +28,7 @@ export default function HeroSection({ locale = 'bg' }) {
   const taglineStr = Array.isArray(tagline) ? tagline.join(' ') : content.tagline.join(' ');
 
   return (
-    <section className="relative h-[90vh] min-h-[600px] max-h-[900px]">
+    <section className={`relative ${heroSectionHeightClass}`}>
       {/* Background Image */}
       <div className="absolute inset-0">
         <img

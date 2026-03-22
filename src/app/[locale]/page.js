@@ -1,4 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection";
+import { homePosterDesktopMaxHeightClass } from "@/lib/hero.config";
 import { getHomePosters } from "@/lib/banners";
 import { getTranslations } from "@/lib/translations";
 import Link from "next/link";
@@ -48,16 +49,24 @@ export default async function Home({ params }) {
       {posterRows.length > 0 ? (
         <Section background="white">
           <Container>
-            <div className="space-y-6">
+            <div className="space-y-6 md:space-y-10">
               {posterRows.map(({ poster, idx, imageUrl, text, href }) => {
                 const cardBody = (
-                  <div className="mx-auto w-full max-w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm md:max-w-lg lg:max-w-md xl:max-w-lg">
-                    <img
-                      src={imageUrl}
-                      alt={text || `Poster ${idx + 1}`}
-                      className="block h-auto w-full max-h-80 object-cover sm:max-h-72 md:max-h-52 lg:max-h-48"
-                    />
-                    {text ? <div className="p-4 text-base text-graphite md:text-lg">{text}</div> : null}
+                  <div className="mx-auto w-full max-w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm md:overflow-visible">
+                    <div className="md:flex md:justify-center md:p-4 lg:p-5">
+                      <div className="w-full min-w-0 md:flex md:w-fit md:max-w-full md:flex-col">
+                        <img
+                          src={imageUrl}
+                          alt={text || `Poster ${idx + 1}`}
+                          className={`block h-auto w-full max-h-80 object-cover sm:max-h-72 md:min-w-0 md:w-auto md:max-w-full md:object-contain md:object-center ${homePosterDesktopMaxHeightClass}`}
+                        />
+                        {text ? (
+                          <div className="min-w-0 p-4 text-base text-graphite md:mt-4 md:w-full md:max-w-full md:border-t md:border-gray-100 md:pt-4 md:text-lg">
+                            {text}
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
                   </div>
                 );
 
