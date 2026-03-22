@@ -14,6 +14,14 @@ import {
 import { createProperty, updateProperty } from '@/lib/properties';
 import ImageUpload from './ImageUpload';
 
+/** EN етикети по избраните BG стойности (винаги в синхрон с FEATURE_OPTIONS) */
+function featuresEnFromBg(featuresBg) {
+  if (!Array.isArray(featuresBg)) return [];
+  return featuresBg
+    .map((bg) => FEATURE_OPTIONS.find((o) => o.bg === bg)?.en)
+    .filter(Boolean);
+}
+
 export default function PropertyForm({ property = null, isDemo = false }) {
   const router = useRouter();
   const isEditing = Boolean(property);
@@ -45,9 +53,9 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     description: property?.description || '',
     descriptionEn: property?.descriptionEn || '',
     features: property?.features ? property.features.filter((f) => FEATURE_OPTIONS.some((o) => o.bg === f)) : [],
-    featuresEn: property?.featuresEn ? property.featuresEn.filter((f) => FEATURE_OPTIONS.some((o) => o.en === f)) : [],
-    featuresOther: property?.features ? property.features.filter((f) => !FEATURE_OPTIONS.some((o) => o.bg === f)).join(', ') : '',
-    featuresEnOther: property?.featuresEn ? property.featuresEn.filter((f) => !FEATURE_OPTIONS.some((o) => o.en === f)).join(', ') : '',
+    featuresEn: property?.features
+      ? featuresEnFromBg(property.features.filter((f) => FEATURE_OPTIONS.some((o) => o.bg === f)))
+      : [],
     images: property?.images || [],
     mapUrl: property?.mapUrl || '',
     videoUrl: property?.videoUrl || '',
@@ -177,20 +185,8 @@ export default function PropertyForm({ property = null, isDemo = false }) {
       priceNote: formData.priceNote || null,
       priceNoteEn: formData.priceNoteEn || null,
       hidePricePerSqm: Boolean(formData.hidePricePerSqm),
-      features: [
-        ...(Array.isArray(formData.features) ? formData.features : []),
-        ...(formData.featuresOther || '')
-          .split(',')
-          .map((f) => f.trim())
-          .filter(Boolean),
-      ],
-      featuresEn: [
-        ...(Array.isArray(formData.featuresEn) ? formData.featuresEn : []),
-        ...(formData.featuresEnOther || '')
-          .split(',')
-          .map((f) => f.trim())
-          .filter(Boolean),
-      ],
+      features: Array.isArray(formData.features) ? [...formData.features] : [],
+      featuresEn: Array.isArray(formData.featuresEn) ? [...formData.featuresEn] : [],
       images: formData.images,
     };
 
@@ -882,9 +878,9 @@ export default function PropertyForm({ property = null, isDemo = false }) {
         <div className="space-y-4">
           <div>
             <p className="text-sm text-gray-700 mb-2">
-              Удобства – тикни за български; в английската версия излиза автоматично.
+              Само тези удобства (тик за БГ; на EN сайта се показва съответният превод в скоби).
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 max-h-64 overflow-y-auto py-2 pr-2 border border-gray-200 rounded-lg bg-gray-50/50">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 max-h-[28rem] overflow-y-auto py-2 pr-2 border border-gray-200 rounded-lg bg-gray-50/50">
               {FEATURE_OPTIONS.map((opt) => {
                 const checked = Array.isArray(formData.features) && formData.features.includes(opt.bg);
                 return (
@@ -909,36 +905,6 @@ export default function PropertyForm({ property = null, isDemo = false }) {
                   </label>
                 );
               })}
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="featuresOther" className="block text-sm text-gray-700 mb-1">
-                Други удобства (БГ, разделени със запетая)
-              </label>
-              <input
-                type="text"
-                id="featuresOther"
-                name="featuresOther"
-                value={formData.featuresOther}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="друго 1, друго 2"
-              />
-            </div>
-            <div>
-              <label htmlFor="featuresEnOther" className="block text-sm text-gray-700 mb-1">
-                Други удобства (EN, разделени със запетая)
-              </label>
-              <input
-                type="text"
-                id="featuresEnOther"
-                name="featuresEnOther"
-                value={formData.featuresEnOther}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="other 1, other 2"
-              />
             </div>
           </div>
         </div>

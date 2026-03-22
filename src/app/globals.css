@@ -75,12 +75,18 @@ h2 {
   font-family: var(--font-playfair), Georgia, serif;
 }
 
-/* Hero подзаглавие (tagline) */
+/* Hero мото / подзаглавие – Cormorant Garamond italic + лек наклон */
 .hero-tagline {
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-hero-motto), var(--font-playfair), Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  transform: skewX(-5deg);
+  display: inline-block;
 }
 .hero-tagline .tagline-number {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-style: normal;
 }
 
 /* Числото в бранда (напр. 94 в ART HOUSE 94) – default шрифт, не Playfair */
@@ -88,9 +94,36 @@ h2 {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-/* Целият текст "ART HOUSE 94" – изцяло с default шрифт (без Playfair) в hero и навбар */
+/* Навбар и др.: марката с sans */
 .brand-name-sans {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Hero заглавие: ефектът (курсив, skew) само върху думите; 94 без наклон */
+h1.hero-brand-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.2em 0.35em;
+  max-width: 100%;
+}
+
+h1.hero-brand-title .hero-brand-title-words {
+  font-family: var(--font-hero-motto), var(--font-playfair), Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  transform: skewX(-4deg);
+  display: inline-block;
+}
+
+h1.hero-brand-title .hero-brand-title-digits {
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  transform: none;
 }
 
 .line-clamp-2 {

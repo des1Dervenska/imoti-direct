@@ -57,16 +57,19 @@ export default function HeroSection({ locale = 'bg' }) {
       {/* Content - Centered */}
       <div className="relative h-full flex items-center justify-center">
         <div className="text-center px-4">
-          {/* Brand Title – изцяло default шрифт, без Playfair */}
-          <h1 className="brand-name-sans font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-[0.28em] md:tracking-[0.35em] mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
-            {BRAND_NAME_WITHOUT_NUMBER.trim().split(' ').join('   ')}{BRAND_NAME_NUMBER}
+          {/* Brand Title – арт ефект само на „ART HOUSE“; 94 изправен sans */}
+          <h1 className="hero-brand-title text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white mb-6 drop-shadow-[0_2px_14px_rgba(0,0,0,0.5)]">
+            <span className="hero-brand-title-words sm:tracking-[0.12em] md:tracking-[0.14em]">
+              {BRAND_NAME_WITHOUT_NUMBER.trim().split(' ').join('   ')}
+            </span>
+            <span className="hero-brand-title-digits">{BRAND_NAME_NUMBER}</span>
           </h1>
 
           {/* Divider */}
           <div className="w-28 h-px bg-white/70 mx-auto mb-6" />
 
-          {/* Tagline – Playfair, числата с default шрифт */}
-          <p className="hero-tagline font-semibold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white tracking-[0.12em] md:tracking-[0.15em] drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
+          {/* Мото: отделен шрифт (Cormorant italic), леко наклонено; числата остават sans */}
+          <p className="hero-tagline text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.5)] max-w-[95vw]">
             <TaglineWithNumbers text={taglineStr} />
           </p>
         </div>

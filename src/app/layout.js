@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { BRAND_NAME, BRAND_DESCRIPTION, BRAND_TAGLINE } from "@/lib/constants";
 
@@ -15,6 +15,14 @@ const geistMono = Geist_Mono({
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin", "latin-ext"],
+});
+
+/** Курсивен сериф за мотото в hero – по-„артистичен“ от sans */
+const heroMotto = Cormorant_Garamond({
+  variable: "--font-hero-motto",
+  subsets: ["latin", "latin-ext", "cyrillic"],
+  weight: ["500", "600", "700"],
+  style: ["italic", "normal"],
 });
 
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
@@ -36,7 +44,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="bg" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} antialiased bg-gray-50`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} ${heroMotto.variable} antialiased bg-gray-50`}
       >
         {children}
       </body>
