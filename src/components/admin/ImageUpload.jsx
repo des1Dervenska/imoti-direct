@@ -163,9 +163,9 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
           <label className="block text-sm text-gray-700 mb-2">
             Качени снимки ({images.length})
           </label>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0 md:pb-0">
             {images.map((url, index) => (
-              <div key={`${url}-${index}`} className="relative group">
+              <div key={`${url}-${index}`} className="relative group shrink-0 snap-start w-[42vw] max-w-[11rem] md:w-auto md:max-w-none">
                 {/* Up / Down controls */}
                 <button
                   type="button"
@@ -262,9 +262,9 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
             </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0 md:pb-0">
             {previews.map((item, index) => (
-              <div key={index} className="relative group">
+              <div key={index} className="relative group shrink-0 snap-start w-[42vw] max-w-[11rem] md:w-auto md:max-w-none">
                 <img
                   src={item.preview}
                   alt={item.name}

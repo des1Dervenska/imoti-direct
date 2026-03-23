@@ -11,7 +11,8 @@ const counterBadge =
   'rounded-full bg-black/70 text-white text-sm px-3 py-1 shadow-md z-20';
 const navBtnBase = 'absolute top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors z-20';
 const navIconStyle = 'w-5 h-5 text-gray-700';
-const thumbBase = 'flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all';
+const thumbBase =
+  'shrink-0 snap-start basis-[calc((100%-1.5rem)/4)] h-12 sm:basis-auto sm:w-20 sm:h-16 rounded-lg overflow-hidden border-2 transition-all';
 const thumbActive = 'border-graphite ring-2 ring-graphite/20';
 const thumbInactive = 'border-transparent hover:border-gray-300';
 
@@ -46,7 +47,7 @@ export default function PropertyGallery({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 min-w-0 max-w-full overflow-x-hidden">
       {/* Главна снимка – показва селектираната */}
       <div className={mainImageContainer}>
         <img
@@ -109,7 +110,7 @@ export default function PropertyGallery({
 
       {/* Миниатюри – клик селектира снимката да се вижда горе */}
       {hasMultipleImages && (
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div className="w-full min-w-0 max-w-full flex snap-x snap-mandatory gap-2 overflow-x-auto pb-2">
           {displayImages.map((image, index) => (
             <button
               key={index}
