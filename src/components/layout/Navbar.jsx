@@ -143,7 +143,12 @@ export default function Navbar({ locale = "bg" }) {
           className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-90"
           onClick={closeMenu}
         >
-          <Logo width={92} height={92} priority className="object-contain" />
+          <Logo
+            width={92}
+            height={92}
+            priority
+            className="h-20 w-20 object-contain sm:h-14 sm:w-14 md:h-[92px] md:w-[92px]"
+          />
           <div className="flex flex-col leading-none">
             <span className="brand-name-sans text-base tracking-[0.02em] text-graphite sm:text-xl">
               {BRAND_NAME_WITHOUT_NUMBER}{BRAND_NAME_NUMBER}
