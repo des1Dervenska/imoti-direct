@@ -12,6 +12,8 @@ import {
 const SORT_OPTIONS = [
   { value: 'date-desc', label: 'По дата (най-нови)' },
   { value: 'date-asc', label: 'По дата (най-стари)' },
+  { value: 'code-asc', label: 'По код (А-Я / 0-9)' },
+  { value: 'code-desc', label: 'По код (Я-А / 9-0)' },
   { value: 'title-asc', label: 'По име (А-Я)' },
   { value: 'title-desc', label: 'По име (Я-А)' },
   { value: 'price-asc', label: 'По цена (възходящо)' },
@@ -61,6 +63,12 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
         break;
       case 'date-asc':
         list.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+        break;
+      case 'code-asc':
+        list.sort((a, b) => String(a.code || '').localeCompare(String(b.code || ''), 'bg'));
+        break;
+      case 'code-desc':
+        list.sort((a, b) => String(b.code || '').localeCompare(String(a.code || ''), 'bg'));
         break;
       case 'title-asc':
         list.sort((a, b) => (a.title || '').localeCompare(b.title || ''));

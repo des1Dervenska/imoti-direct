@@ -652,6 +652,7 @@ export default function PropertyFilters({
             showDescription={false}
             locale={locale}
             showStreetAddress={false}
+            showFloorAndConstruction
           />
         </div>
       </section>

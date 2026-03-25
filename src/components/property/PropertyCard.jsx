@@ -24,6 +24,8 @@ export default function PropertyCard({
   locale = 'bg',
   /** false = само град и квартал (без улица/адрес) – за списъци наем/продажба */
   showStreetAddress = true,
+  /** true = показва етаж и тип строителство (ползва се в rent/sales списъците) */
+  showFloorAndConstruction = false,
 }) {
   const {
     slug,
@@ -34,6 +36,9 @@ export default function PropertyCard({
     price,
     area,
     rooms,
+    floor,
+    totalFloors,
+    constructionType,
     images,
     gaz,
     tec,
@@ -52,6 +57,12 @@ export default function PropertyCard({
   const imageUrl = images?.[0] || DEFAULT_PROPERTY_IMAGE;
   const isUnavailable = status === 'sold' || status === 'rented';
   const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕНА') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕНА') : null;
+  const floorValue = floor != null
+    ? `${floor === 0 ? (t.floorParter ?? 'Партер') : floor}`
+    : null;
+  const constructionLabel = constructionType
+    ? (t[`constructionType_${constructionType}`] ?? constructionType)
+    : null;
 
   const features = [
     { Icon: ArrowsPointingOutIcon, value: `${area} м²`, show: true },
@@ -136,6 +147,12 @@ export default function PropertyCard({
 
         <p className={`${cardText} mb-2`}>{typeLabel}</p>
 
+        {showFloorAndConstruction && constructionLabel && (
+          <p className={`${cardTextMuted} mb-2`}>
+            {t.constructionType ?? 'Тип строителство'}: {constructionLabel}
+          </p>
+        )}
+
         <div className={`flex items-start gap-1.5 ${cardText} mb-3`}>
           <MapPinIcon className="w-4 h-4 mt-0.5 shrink-0 text-graphite-light" />
           <span className="line-clamp-3">{addressLine}</span>
@@ -148,6 +165,11 @@ export default function PropertyCard({
               <span className="font-normal">{value}</span>
             </div>
           ))}
+          {showFloorAndConstruction && floorValue && (
+            <div className={featureStyle}>
+              <span className="font-normal">{t.floor ?? 'Етаж'}: {floorValue}</span>
+            </div>
+          )}
         </div>
 
         {showDescription && (

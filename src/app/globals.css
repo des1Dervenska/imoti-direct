@@ -10,14 +10,14 @@
   --background-alt: #f3f4f6;
 
   /* Text colors - Graphite palette */
-  --foreground: #495464;        /* Main text */
+  --foreground: #495464; /* Main text */
   --foreground-strong: #3d4654; /* Headings, emphasis */
-  --foreground-muted: #6b7a8f;  /* Secondary text, descriptions */
+  --foreground-muted: #6b7a8f; /* Secondary text, descriptions */
 
   /* Accent colors - Teal/Cyan (#0097b2) */
-  --accent: #0097b2;             /* Buttons, links, badges */
-  --accent-hover: #007a91;      /* Hover states */
-  --accent-light: #33a8be;      /* Light variant */
+  --accent: #0097b2; /* Buttons, links, badges */
+  --accent-hover: #007a91; /* Hover states */
+  --accent-light: #33a8be; /* Light variant */
 }
 
 /* Tailwind Theme Integration */
@@ -77,7 +77,9 @@ h2 {
 
 /* Hero мото / подзаглавие – Cormorant Garamond italic + лек наклон */
 .hero-tagline {
-  font-family: var(--font-hero-motto), var(--font-playfair), Georgia, "Times New Roman", serif;
+  font-family:
+    var(--font-hero-motto), var(--font-playfair), Georgia, "Times New Roman",
+    serif;
   font-style: italic;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -110,7 +112,9 @@ h1.hero-brand-title {
 }
 
 h1.hero-brand-title .hero-brand-title-words {
-  font-family: var(--font-hero-motto), var(--font-playfair), Georgia, "Times New Roman", serif;
+  font-family:
+    var(--font-hero-motto), var(--font-playfair), Georgia, "Times New Roman",
+    serif;
   font-style: italic;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -119,11 +123,14 @@ h1.hero-brand-title .hero-brand-title-words {
 }
 
 h1.hero-brand-title .hero-brand-title-digits {
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  transform: none;
+  font-family:
+    var(--font-hero-motto), var(--font-playfair), Georgia, "Times New Roman",
+    serif;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  transform: skewX(-4deg) translateY(-0.27em);
+  display: inline-block;
 }
 
 .line-clamp-2 {

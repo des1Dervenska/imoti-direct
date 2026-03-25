@@ -22,12 +22,28 @@ export async function GET() {
     const citiesEn = [...new Set(list.map((p) => p.cityEn).filter(Boolean))].sort((a, b) => a.localeCompare(b));
     const neighborhoods = [...new Set(list.map((p) => p.neighborhood).filter(Boolean))].sort((a, b) => a.localeCompare(b));
     const neighborhoodsEn = [...new Set(list.map((p) => p.neighborhoodEn).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    const usedNumericCodes = new Set(
+      list
+        .map((p) => (p?.code != null ? String(p.code).trim() : ''))
+        .filter((code) => /^\d{1,3}$/.test(code))
+        .map((code) => Number(code))
+        .filter((n) => Number.isInteger(n) && n >= 0 && n <= 999)
+    );
+    // 000 винаги е резервиран/зает.
+    usedNumericCodes.add(0);
+
+    let nextFree = 1;
+    while (usedNumericCodes.has(nextFree) && nextFree <= 999) {
+      nextFree += 1;
+    }
+    const nextCode = nextFree <= 999 ? String(nextFree).padStart(3, '0') : '';
 
     return NextResponse.json({
       cities,
       citiesEn,
       neighborhoods,
       neighborhoodsEn,
+      nextCode,
       isDemo: !!isDemo,
     });
   } catch (err) {

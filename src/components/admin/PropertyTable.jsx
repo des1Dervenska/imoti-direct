@@ -106,7 +106,7 @@ export default function PropertyTable({ properties, isDemo = false }) {
       <table className="w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider min-w-[280px]">
               Имот
             </th>
             <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
@@ -144,10 +144,10 @@ export default function PropertyTable({ properties, isDemo = false }) {
 
             return (
               <tr key={property.id} className="hover:bg-gray-50">
-                <td className="px-4 py-4 min-w-[140px]">
+                <td className="px-4 py-4 min-w-[280px]">
                   <div className="flex items-center min-w-0">
                     <div className="min-w-0">
-                      <div className="text-sm text-gray-900 truncate max-w-[200px]" title={property.title}>
+                      <div className="text-sm text-gray-900 truncate max-w-[360px]" title={property.title}>
                         {property.title}
                       </div>
                       <div className="text-sm text-gray-500">

@@ -29,6 +29,7 @@ export default function PropertyGrid({
   showDescription = true,
   locale = 'bg',
   showStreetAddress = true,
+  showFloorAndConstruction = false,
 }) {
   const t = getTranslations(locale)?.filters;
   const tryChangeCriteria = t?.tryChangeCriteria;
@@ -47,6 +48,7 @@ export default function PropertyGrid({
               showDescription={showDescription}
               locale={locale}
               showStreetAddress={showStreetAddress}
+              showFloorAndConstruction={showFloorAndConstruction}
             />
           </AnimateOnScroll>
         ) : (
@@ -56,6 +58,7 @@ export default function PropertyGrid({
             showDescription={showDescription}
             locale={locale}
             showStreetAddress={showStreetAddress}
+            showFloorAndConstruction={showFloorAndConstruction}
           />
         )
       )}

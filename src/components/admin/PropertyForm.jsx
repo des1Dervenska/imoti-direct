@@ -76,6 +76,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     citiesEn: [],
     neighborhoods: [],
     neighborhoodsEn: [],
+    nextCode: '',
   });
 
   useEffect(() => {
@@ -88,11 +89,20 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             citiesEn: data.citiesEn || [],
             neighborhoods: data.neighborhoods || [],
             neighborhoodsEn: data.neighborhoodsEn || [],
+            nextCode: data.nextCode || '',
           });
+          // Само при "Нов имот": ако кодът е празен, предложи следващия свободен (001..999).
+          if (!isEditing) {
+            setFormData((prev) => {
+              const current = prev.code != null ? String(prev.code).trim() : '';
+              if (current !== '') return prev;
+              return { ...prev, code: data.nextCode || '' };
+            });
+          }
         }
       })
       .catch(() => {});
-  }, []);
+  }, [isEditing]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -270,10 +280,11 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             onChange={handleChange}
             maxLength={100}
             className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="напр. AH-1024"
+            placeholder="напр. 006"
           />
           <p className="mt-1 text-xs text-gray-500">
             Показва се на картичките при клиента под заглавието (КОД: …). Търси се от списъка в админ панела.
+            {!isEditing && suggestions.nextCode ? ` Предложен свободен код: ${suggestions.nextCode}.` : ''}
           </p>
         </div>
       </div>
