@@ -60,9 +60,7 @@ export default function PropertyCard({
   const floorValue = floor != null
     ? `${floor === 0 ? (t.floorParter ?? 'Партер') : floor}`
     : null;
-  const constructionLabel = constructionType
-    ? (t[`constructionType_${constructionType}`] ?? constructionType)
-    : null;
+  const constructionLabel = constructionType ? String(constructionType).trim() : null;
 
   const features = [
     { Icon: ArrowsPointingOutIcon, value: `${area} м²`, show: true },
@@ -149,7 +147,7 @@ export default function PropertyCard({
 
         {showFloorAndConstruction && constructionLabel && (
           <p className={`${cardTextMuted} mb-2`}>
-            {t.constructionType ?? 'Тип строителство'}: {constructionLabel}
+            Вид строителство: {constructionLabel}
           </p>
         )}
 
