@@ -106,11 +106,11 @@ export default function PropertyTable({ properties, isDemo = false }) {
       <table className="w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider min-w-[280px]">
-              Имот
-            </th>
             <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
               Код
+            </th>
+            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider min-w-[280px]">
+              Имот
             </th>
             <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
               Категория
@@ -144,6 +144,9 @@ export default function PropertyTable({ properties, isDemo = false }) {
 
             return (
               <tr key={property.id} className="hover:bg-gray-50">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 font-mono">
+                  {property.code ? String(property.code) : '—'}
+                </td>
                 <td className="px-4 py-4 min-w-[280px]">
                   <div className="flex items-center min-w-0">
                     <div className="min-w-0">
@@ -155,9 +158,6 @@ export default function PropertyTable({ properties, isDemo = false }) {
                       </div>
                     </div>
                   </div>
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 font-mono">
-                  {property.code ? String(property.code) : '—'}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                   {getCategoryLabel(property.category)}
