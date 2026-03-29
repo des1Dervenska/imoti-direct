@@ -2,12 +2,12 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import PropertyGrid from './PropertyGrid';
-import { propertyTypes, cities, constructionTypes, yearBuiltStatuses } from '@/data/properties';
+import { propertyTypes, cities, constructionTypes } from '@/data/properties';
 import { getTranslations } from '@/lib/translations';
 import {
-  FunnelIcon,
   ArrowsUpDownIcon,
   ChevronDownIcon,
+  FunnelIcon,
   XMarkIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
@@ -90,14 +90,13 @@ export default function PropertyFilters({
   });
   const [sortBy, setSortBy] = useState('date-desc');
   const [sortOpen, setSortOpen] = useState(false);
-  const [extraFiltersOpen, setExtraFiltersOpen] = useState(false);
+  const [filtersPanelOpen, setFiltersPanelOpen] = useState(false);
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
   const sortRef = useRef(null);
-  const filterRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(e) {
       if (sortRef.current && !sortRef.current.contains(e.target)) setSortOpen(false);
-      if (filterRef.current && !filterRef.current.contains(e.target)) setExtraFiltersOpen(false);
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -146,6 +145,7 @@ export default function PropertyFilters({
   };
 
   const hasExtraFilters =
+    filters.codeSearch ||
     filters.type ||
     filters.city ||
     filters.neighborhood ||
@@ -304,341 +304,378 @@ export default function PropertyFilters({
               />
             </div>
           </div>
-          <div className="flex flex-wrap gap-4 items-center justify-end">
-            <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
-              <div className={`${countStyle} shrink-0`}>
-                <span className={countNumber}>{filteredProperties.length}</span> {t.foundCount}
-              </div>
-              <div className="flex flex-wrap gap-3 items-center justify-end">
-              {/* Сортиране – По дата (най-нови) */}
-              <div className="relative" ref={sortRef}>
-                <button
-                  type="button"
-                  onClick={() => setSortOpen((v) => !v)}
-                  className={`inline-flex items-center gap-2 px-4 py-2.5 border rounded-xl transition-all duration-200 shadow-sm ${sortOpen ? 'border-cadetblue bg-cadetblue/5 shadow' : 'border-gray-200/90 hover:border-cadetblue/50 hover:shadow'} text-graphite bg-white focus:ring-2 focus:ring-cadetblue/20 focus:border-cadetblue focus:outline-none`}
-                  aria-expanded={sortOpen}
-                  aria-haspopup="listbox"
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+            <div className={`${countStyle} shrink-0`}>
+              <span className={countNumber}>{filteredProperties.length}</span> {t.foundCount}
+            </div>
+            <div className="flex w-full flex-wrap gap-3 items-center justify-end sm:w-auto sm:min-w-0">
+            <button
+              type="button"
+              onClick={() => setFiltersPanelOpen((v) => !v)}
+              aria-expanded={filtersPanelOpen}
+              aria-controls="property-filters-panel"
+              className={`inline-flex items-center gap-2 px-4 py-2.5 border rounded-xl transition-all duration-200 shadow-sm ${filtersPanelOpen || hasExtraFilters ? 'border-cadetblue bg-cadetblue/5 shadow' : 'border-gray-200/90 hover:border-cadetblue/50 hover:shadow'} text-graphite bg-white focus:ring-2 focus:ring-cadetblue/20 focus:border-cadetblue focus:outline-none`}
+            >
+              <FunnelIcon className="w-5 h-5 shrink-0" />
+              <span className="hidden sm:inline">{filtersPanelOpen ? t.hideFiltersPanel : t.showFiltersPanel}</span>
+              {hasExtraFilters && (
+                <span className="flex items-center justify-center min-w-[18px] h-[18px] px-1 text-xs rounded-full bg-cadetblue text-white">
+                  !
+                </span>
+              )}
+              <ChevronDownIcon
+                className={`w-4 h-4 shrink-0 transition-transform duration-300 ${filtersPanelOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+            <div className="relative" ref={sortRef}>
+              <button
+                type="button"
+                onClick={() => setSortOpen((v) => !v)}
+                className={`inline-flex items-center gap-2 px-4 py-2.5 border rounded-xl transition-all duration-200 shadow-sm ${sortOpen ? 'border-cadetblue bg-cadetblue/5 shadow' : 'border-gray-200/90 hover:border-cadetblue/50 hover:shadow'} text-graphite bg-white focus:ring-2 focus:ring-cadetblue/20 focus:border-cadetblue focus:outline-none`}
+                aria-expanded={sortOpen}
+                aria-haspopup="listbox"
+              >
+                <ArrowsUpDownIcon className="w-5 h-5 shrink-0" />
+                <span className="hidden sm:inline text-left max-w-[140px] truncate">
+                  {currentSortLabel}
+                </span>
+                <ChevronDownIcon className={`w-4 h-4 shrink-0 transition-transform ${sortOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {sortOpen && (
+                <ul
+                  className="absolute right-0 top-full mt-1.5 min-w-[220px] py-1.5 bg-white border border-gray-200/90 rounded-xl shadow-xl z-50"
+                  role="listbox"
                 >
-                  <ArrowsUpDownIcon className="w-5 h-5 shrink-0" />
-                  <span className="hidden sm:inline text-left max-w-[140px] truncate">
-                    {currentSortLabel}
-                  </span>
-                  <ChevronDownIcon className={`w-4 h-4 shrink-0 transition-transform ${sortOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {sortOpen && (
-                  <ul
-                    className="absolute right-0 top-full mt-1.5 min-w-[220px] py-1.5 bg-white border border-gray-200/90 rounded-xl shadow-xl z-50"
-                    role="listbox"
-                  >
-                    {SORT_OPTIONS.map((opt) => (
-                      <li key={opt.value}>
-                        <button
-                          type="button"
-                          role="option"
-                          aria-selected={sortBy === opt.value}
-                          onClick={() => {
-                            setSortBy(opt.value);
-                            setSortOpen(false);
-                          }}
-                          className={`w-full text-left px-4 py-2.5 text-sm rounded-lg mx-1 ${sortBy === opt.value ? 'bg-cadetblue/10 text-cadetblue-dark' : 'text-graphite hover:bg-cadetblue/5 hover:text-graphite-dark'}`}
-                        >
-                          {opt.label}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+                  {SORT_OPTIONS.map((opt) => (
+                    <li key={opt.value}>
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={sortBy === opt.value}
+                        onClick={() => {
+                          setSortBy(opt.value);
+                          setSortOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 text-sm rounded-lg mx-1 ${sortBy === opt.value ? 'bg-cadetblue/10 text-cadetblue-dark' : 'text-graphite hover:bg-cadetblue/5 hover:text-graphite-dark'}`}
+                      >
+                        {opt.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            </div>
+          </div>
 
-              {/* Допълнителни филтри – Филтри */}
-              <div className="relative" ref={filterRef}>
-                <button
-                  type="button"
-                  onClick={() => setExtraFiltersOpen((v) => !v)}
-                  className={`inline-flex items-center gap-2 px-4 py-2.5 border rounded-xl transition-all duration-200 shadow-sm ${extraFiltersOpen || hasExtraFilters ? 'border-cadetblue bg-cadetblue/5 shadow' : 'border-gray-200/90 hover:border-cadetblue/50 hover:shadow'} text-graphite bg-white focus:ring-2 focus:ring-cadetblue/20 focus:border-cadetblue focus:outline-none`}
-                  aria-expanded={extraFiltersOpen}
-                >
-                  <FunnelIcon className="w-5 h-5 shrink-0" />
-                  <span className="hidden sm:inline">{t.filters}</span>
-                  {hasExtraFilters && (
-                    <span className="flex items-center justify-center min-w-[18px] h-[18px] px-1 text-xs rounded-full bg-cadetblue text-white">
-                      !
-                    </span>
-                  )}
-                  <ChevronDownIcon className={`w-4 h-4 shrink-0 transition-transform ${extraFiltersOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {extraFiltersOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-96 rounded-2xl border border-gray-200/90 bg-white shadow-xl z-50 overflow-hidden max-h-[90vh] flex flex-col">
-                    <div className="p-4 bg-gradient-to-b from-cadetblue/5 to-transparent border-b border-gray-100">
-                      <h3 className="text-sm text-graphite">{t.filters}</h3>
-                      <p className="text-xs text-graphite-light mt-0.5">{t.filtersSubtitle}</p>
+          {/* Филтри – скрити по подразбиране; същото съдържание като преди */}
+          <div
+            id="property-filters-panel"
+            className={`overflow-hidden transition-[max-height] duration-500 ease-in-out motion-reduce:transition-none ${filtersPanelOpen ? 'max-h-[10000px] mt-6' : 'max-h-0 mt-0'}`}
+            aria-hidden={!filtersPanelOpen}
+          >
+          <div className="w-full rounded-2xl border border-gray-200/90 bg-white shadow-sm overflow-hidden">
+            <div className="px-4 py-3 md:px-6 md:py-4 bg-gradient-to-b from-cadetblue/5 to-transparent border-b border-gray-100 flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-medium text-graphite">{t.filters}</h3>
+                <p className="text-xs text-graphite-light mt-0.5">{t.filtersSubtitle}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => clearExtraFilters()}
+                disabled={!hasExtraFilters}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border rounded-lg shrink-0 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent text-graphite-light hover:text-cadetblue border-gray-200/90 hover:bg-cadetblue/5"
+              >
+                <XMarkIcon className="w-3.5 h-3.5" />
+                {t.resetFilters}
+              </button>
+            </div>
+            <div className="p-4 md:p-6">
+              {/* Основни филтри: вид, етап, град, квартал | цена, стаи, тип строителство */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1.5">{t.type}</label>
+                  <select
+                    value={filters.type ?? ''}
+                    onChange={(e) => updateFilter('type', e.target.value)}
+                    className={filterSelectClass}
+                  >
+                    <option value="">{t.allTypes}</option>
+                    {propertyTypes.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {getTranslations(locale)?.property?.[opt.value] ?? opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1.5">{t.constructionStage}</label>
+                  <select
+                    value={filters.yearBuiltStatus ?? ''}
+                    onChange={(e) => updateFilter('yearBuiltStatus', e.target.value)}
+                    className={filterSelectClass}
+                  >
+                    <option value="">{t.constructionStageAny}</option>
+                    <option value="completed">{t.constructionStageCompleted}</option>
+                    <option value="under_construction">{t.constructionStageUnderConstruction}</option>
+                    <option value="not_in_use">{t.constructionStageNotInUse}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1.5">{t.city}</label>
+                  <select
+                    value={filters.city ?? ''}
+                    onChange={(e) => updateFilter('city', e.target.value)}
+                    className={filterSelectClass}
+                  >
+                    <option value="">{t.allCities}</option>
+                    {cities.map((c) => (
+                      <option key={c.value} value={c.value}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className={`block text-xs mb-1.5 ${filters.city ? 'text-gray-500' : 'text-gray-400'}`}>
+                    {t.neighborhood}
+                  </label>
+                  <select
+                    value={filters.neighborhood ?? ''}
+                    onChange={(e) => updateFilter('neighborhood', e.target.value)}
+                    disabled={!filters.city}
+                    className={filters.city ? filterSelectClass : filterSelectDisabledClass}
+                  >
+                    <option value="">
+                      {filters.city ? t.allNeighborhoods : t.selectCityFirst}
+                    </option>
+                    {neighborhoodsInCity.map((nb) => (
+                      <option key={nb} value={nb}>
+                        {nb}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="sm:col-span-2 lg:col-span-2 xl:col-span-2">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1.5">
+                        {category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceFrom}
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        step={category === 'rent' ? '50' : '1000'}
+                        placeholder={category === 'rent' ? t.pricePlaceholderMinRent : t.pricePlaceholderMinSale}
+                        value={filters.minPrice ?? ''}
+                        onChange={(e) => updateFilter('minPrice', e.target.value)}
+                        className={filterInputClass}
+                      />
                     </div>
-                    <div className="p-4 space-y-4 overflow-y-auto">
-                      {/* Първи: Тип, Град, Квартал (ако има град), Цена */}
-                      <div className="space-y-3 pb-4 border-b border-gray-100">
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.type}</label>
-                          <select
-                            value={filters.type ?? ''}
-                            onChange={(e) => updateFilter('type', e.target.value)}
-                            className={filterSelectClass}
-                          >
-                            <option value="">{t.allTypes}</option>
-                            {propertyTypes.map((opt) => (
-                              <option key={opt.value} value={opt.value}>
-                                {getTranslations(locale)?.property?.[opt.value] ?? opt.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.constructionStage}</label>
-                          <select
-                            value={filters.yearBuiltStatus ?? ''}
-                            onChange={(e) => updateFilter('yearBuiltStatus', e.target.value)}
-                            className={filterSelectClass}
-                          >
-                            <option value="">{t.constructionStageAny}</option>
-                            <option value="completed">{t.constructionStageCompleted}</option>
-                            <option value="under_construction">{t.constructionStageUnderConstruction}</option>
-                            <option value="not_in_use">{t.constructionStageNotInUse}</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.city}</label>
-                          <select
-                            value={filters.city ?? ''}
-                            onChange={(e) => updateFilter('city', e.target.value)}
-                            className={filterSelectClass}
-                          >
-                            <option value="">{t.allCities}</option>
-                            {cities.map((c) => (
-                              <option key={c.value} value={c.value}>
-                                {c.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div>
-                            <label className={`block text-xs mb-1.5 ${filters.city ? 'text-gray-500' : 'text-gray-400'}`}>
-                              {t.neighborhood}
-                            </label>
-                            <select
-                              value={filters.neighborhood ?? ''}
-                              onChange={(e) => updateFilter('neighborhood', e.target.value)}
-                              disabled={!filters.city}
-                              className={filters.city ? filterSelectClass : filterSelectDisabledClass}
-                            >
-                              <option value="">
-                                {filters.city ? t.allNeighborhoods : t.selectCityFirst}
-                              </option>
-                              {neighborhoodsInCity.map((nb) => (
-                                <option key={nb} value={nb}>
-                                  {nb}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceFrom}</label>
-                          <input
-                            type="number"
-                            min="0"
-                            step={category === 'rent' ? '50' : '1000'}
-                            placeholder={category === 'rent' ? t.pricePlaceholderMinRent : t.pricePlaceholderMinSale}
-                            value={filters.minPrice ?? ''}
-                            onChange={(e) => updateFilter('minPrice', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceTo}</label>
-                          <input
-                            type="number"
-                            min="0"
-                            step={category === 'rent' ? '50' : '1000'}
-                            placeholder={category === 'rent' ? t.pricePlaceholderMaxRent : t.pricePlaceholderMaxSale}
-                            value={filters.maxPrice ?? ''}
-                            onChange={(e) => updateFilter('maxPrice', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                      </div>
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray-500 mb-1.5">{t.rooms}</label>
-                        <select
-                          value={filters.rooms ?? ''}
-                          onChange={(e) => updateFilter('rooms', e.target.value)}
-                          className={filterSelectClass}
-                        >
-                          {ROOMS_OPTIONS.map((o) => (
-                            <option key={o.value} value={o.value}>
-                              {o.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.areaFrom}</label>
-                          <input
-                            type="number"
-                            min="0"
-                            placeholder={t.placeholderFrom}
-                            value={filters.minArea ?? ''}
-                            onChange={(e) => updateFilter('minArea', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.areaTo}</label>
-                          <input
-                            type="number"
-                            min="0"
-                            placeholder={t.placeholderTo}
-                            value={filters.maxArea ?? ''}
-                            onChange={(e) => updateFilter('maxArea', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.floorFrom}</label>
-                          <input
-                            type="number"
-                            min="0"
-                            placeholder={t.floorPlaceholderFrom}
-                            value={filters.minFloor ?? ''}
-                            onChange={(e) => updateFilter('minFloor', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.floorTo}</label>
-                          <input
-                            type="number"
-                            min="0"
-                            placeholder={t.floorPlaceholderTo}
-                            value={filters.maxFloor ?? ''}
-                            onChange={(e) => updateFilter('maxFloor', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.minPricePerSqm}</label>
-                          <input
-                            type="number"
-                            min="0"
-                            step="100"
-                            placeholder={t.placeholderFrom}
-                            value={filters.minPricePerSqm ?? ''}
-                            onChange={(e) => updateFilter('minPricePerSqm', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.maxPricePerSqm}</label>
-                          <input
-                            type="number"
-                            min="0"
-                            step="100"
-                            placeholder={t.placeholderTo}
-                            value={filters.maxPricePerSqm ?? ''}
-                            onChange={(e) => updateFilter('maxPricePerSqm', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.yearFrom}</label>
-                          <input
-                            type="number"
-                            min="1900"
-                            max="2100"
-                            placeholder={t.yearPlaceholderFrom}
-                            value={filters.yearFrom ?? ''}
-                            onChange={(e) => updateFilter('yearFrom', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.yearTo}</label>
-                          <input
-                            type="number"
-                            min="1900"
-                            max="2100"
-                            placeholder={t.yearPlaceholderTo}
-                            value={filters.yearTo ?? ''}
-                            onChange={(e) => updateFilter('yearTo', e.target.value)}
-                            className={filterInputClass}
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 gap-3">
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.gaz}</label>
-                          <select
-                            value={filters.gaz ?? ''}
-                            onChange={(e) => updateFilter('gaz', e.target.value)}
-                            className={filterSelectClass}
-                          >
-                            <option value="">{t.filterStatusAny}</option>
-                            <option value="yes">{t.filterStatusYes}</option>
-                            <option value="no">{t.filterStatusNo}</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1.5">{t.tec}</label>
-                          <select
-                            value={filters.tec ?? ''}
-                            onChange={(e) => updateFilter('tec', e.target.value)}
-                            className={filterSelectClass}
-                          >
-                            <option value="">{t.filterStatusAny}</option>
-                            <option value="yes">{t.filterStatusYes}</option>
-                            <option value="no">{t.filterStatusNo}</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray-500 mb-1.5">{t.constructionType}</label>
-                        <select
-                          value={filters.constructionType ?? ''}
-                          onChange={(e) => updateFilter('constructionType', e.target.value)}
-                          className={filterSelectClass}
-                        >
-                          <option value="">{t.constructionTypeAny}</option>
-                          {constructionTypes.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
-                              {getTranslations(locale)?.property?.[`constructionType_${opt.value}`] ?? opt.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      {hasExtraFilters && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            clearExtraFilters();
-                          }}
-                          className="w-full inline-flex items-center justify-center gap-2 py-3 text-sm text-graphite-light hover:text-cadetblue border border-gray-200/90 rounded-xl hover:bg-cadetblue/5 transition-all duration-200"
-                        >
-                          <XMarkIcon className="w-4 h-4" />
-                          {t.clearFilters}
-                        </button>
-                      )}
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1.5">
+                        {category === 'rent' ? t.rentLabel : t.priceLabel} – {t.priceTo}
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        step={category === 'rent' ? '50' : '1000'}
+                        placeholder={category === 'rent' ? t.pricePlaceholderMaxRent : t.pricePlaceholderMaxSale}
+                        value={filters.maxPrice ?? ''}
+                        onChange={(e) => updateFilter('maxPrice', e.target.value)}
+                        className={filterInputClass}
+                      />
                     </div>
                   </div>
-                )}
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1.5">{t.rooms}</label>
+                  <select
+                    value={filters.rooms ?? ''}
+                    onChange={(e) => updateFilter('rooms', e.target.value)}
+                    className={filterSelectClass}
+                  >
+                    {ROOMS_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1.5">{t.constructionType}</label>
+                  <select
+                    value={filters.constructionType ?? ''}
+                    onChange={(e) => updateFilter('constructionType', e.target.value)}
+                    className={filterSelectClass}
+                  >
+                    <option value="">{t.constructionTypeAny}</option>
+                    {constructionTypes.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {getTranslations(locale)?.property?.[`constructionType_${opt.value}`] ?? opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
+
+              <div
+                id="property-filters-more"
+                className={`overflow-hidden transition-[max-height] duration-500 ease-in-out motion-reduce:transition-none ${filtersExpanded ? 'max-h-[2000px]' : 'max-h-0'}`}
+                aria-hidden={!filtersExpanded}
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-4 mt-4 border-t border-gray-100">
+                  <div className="sm:col-span-2">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.areaFrom}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder={t.placeholderFrom}
+                          value={filters.minArea ?? ''}
+                          onChange={(e) => updateFilter('minArea', e.target.value)}
+                          className={filterInputClass}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.areaTo}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder={t.placeholderTo}
+                          value={filters.maxArea ?? ''}
+                          onChange={(e) => updateFilter('maxArea', e.target.value)}
+                          className={filterInputClass}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.floorFrom}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder={t.floorPlaceholderFrom}
+                          value={filters.minFloor ?? ''}
+                          onChange={(e) => updateFilter('minFloor', e.target.value)}
+                          className={filterInputClass}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.floorTo}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder={t.floorPlaceholderTo}
+                          value={filters.maxFloor ?? ''}
+                          onChange={(e) => updateFilter('maxFloor', e.target.value)}
+                          className={filterInputClass}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.minPricePerSqm}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="100"
+                          placeholder={t.placeholderFrom}
+                          value={filters.minPricePerSqm ?? ''}
+                          onChange={(e) => updateFilter('minPricePerSqm', e.target.value)}
+                          className={filterInputClass}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.maxPricePerSqm}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="100"
+                          placeholder={t.placeholderTo}
+                          value={filters.maxPricePerSqm ?? ''}
+                          onChange={(e) => updateFilter('maxPricePerSqm', e.target.value)}
+                          className={filterInputClass}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.yearFrom}</label>
+                        <input
+                          type="number"
+                          min="1900"
+                          max="2100"
+                          placeholder={t.yearPlaceholderFrom}
+                          value={filters.yearFrom ?? ''}
+                          onChange={(e) => updateFilter('yearFrom', e.target.value)}
+                          className={filterInputClass}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1.5">{t.yearTo}</label>
+                        <input
+                          type="number"
+                          min="1900"
+                          max="2100"
+                          placeholder={t.yearPlaceholderTo}
+                          value={filters.yearTo ?? ''}
+                          onChange={(e) => updateFilter('yearTo', e.target.value)}
+                          className={filterInputClass}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1.5">{t.gaz}</label>
+                    <select
+                      value={filters.gaz ?? ''}
+                      onChange={(e) => updateFilter('gaz', e.target.value)}
+                      className={filterSelectClass}
+                    >
+                      <option value="">{t.filterStatusAny}</option>
+                      <option value="yes">{t.filterStatusYes}</option>
+                      <option value="no">{t.filterStatusNo}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1.5">{t.tec}</label>
+                    <select
+                      value={filters.tec ?? ''}
+                      onChange={(e) => updateFilter('tec', e.target.value)}
+                      className={filterSelectClass}
+                    >
+                      <option value="">{t.filterStatusAny}</option>
+                      <option value="yes">{t.filterStatusYes}</option>
+                      <option value="no">{t.filterStatusNo}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end mt-4 pt-3 border-t border-gray-100/90">
+                <button
+                  type="button"
+                  onClick={() => setFiltersExpanded((v) => !v)}
+                  aria-expanded={filtersExpanded}
+                  aria-controls="property-filters-more"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm text-cadetblue-dark hover:text-cadetblue border border-cadetblue/30 rounded-xl hover:bg-cadetblue/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cadetblue/30"
+                >
+                  {filtersExpanded ? t.hideMoreFilters : t.showMoreFilters}
+                  <ChevronDownIcon
+                    className={`w-4 h-4 shrink-0 transition-transform duration-500 ease-in-out ${filtersExpanded ? 'rotate-180' : ''}`}
+                  />
+                </button>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </section>

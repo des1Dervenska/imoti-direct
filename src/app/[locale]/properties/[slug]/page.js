@@ -257,7 +257,6 @@ export default async function PropertyDetailPage({ params }) {
                 {videoUrl && getYoutubeVideoId(videoUrl) && (
                   <YouTubeVideoThumbnail
                     videoId={getYoutubeVideoId(videoUrl)}
-                    videoUrl={videoUrl}
                     watchVideoLabel={t.watchVideo}
                   />
                 )}
