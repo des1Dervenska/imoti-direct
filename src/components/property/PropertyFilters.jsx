@@ -120,43 +120,56 @@ export default function PropertyFilters({
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  const displayCityName = (p) => (locale === 'en' ? (p.cityEn || p.city) : p.city);
+  const displayNeighborhoodName = (p) =>
+    locale === 'en' ? (p.neighborhoodEn || p.neighborhood) : p.neighborhood;
+
   const cityOptions = useMemo(() => {
     const set = new Set();
-    cities.forEach((c) => {
-      if (c?.label) set.add(c.label);
-    });
-    properties.forEach((p) => {
-      if (p?.city) set.add(p.city);
-    });
+    if (locale === 'en') {
+      properties.forEach((p) => {
+        const name = displayCityName(p);
+        if (name) set.add(name);
+      });
+    } else {
+      cities.forEach((c) => {
+        if (c?.label) set.add(c.label);
+      });
+      properties.forEach((p) => {
+        if (p?.city) set.add(p.city);
+      });
+    }
     return [...set].sort((a, b) => a.localeCompare(b));
-  }, [properties]);
+  }, [properties, locale]);
 
   const cityQuery = normalizeText(filters.city);
   const neighborhoodQuery = normalizeText(filters.neighborhood);
 
   const citySuggestions = useMemo(() => {
     const base = cityQuery
-      ? cityOptions.filter((cityName) =>
-          properties.some(
-            (p) =>
-              normalizeText(p.city) === normalizeText(cityName) &&
-              includesSearch(cityQuery, p.city, p.cityEn)
-          ) || includesSearch(cityQuery, cityName)
+      ? cityOptions.filter(
+          (cityName) =>
+            properties.some(
+              (p) =>
+                normalizeText(displayCityName(p)) === normalizeText(cityName) &&
+                includesSearch(cityQuery, p.city, p.cityEn)
+            ) || includesSearch(cityQuery, cityName)
         )
       : cityOptions;
     return base.slice(0, 12);
-  }, [cityOptions, cityQuery, properties]);
+  }, [cityOptions, cityQuery, properties, locale]);
 
   const neighborhoodSuggestions = useMemo(() => {
     const set = new Set();
     properties.forEach((p) => {
-      if (!normalizeText(p.neighborhood)) return;
+      const nb = displayNeighborhoodName(p);
+      if (!normalizeText(nb)) return;
       if (cityQuery && !includesSearch(cityQuery, p.city, p.cityEn)) return;
       if (neighborhoodQuery && !includesSearch(neighborhoodQuery, p.neighborhood, p.neighborhoodEn)) return;
-      set.add(p.neighborhood);
+      set.add(nb);
     });
     return [...set].sort((a, b) => a.localeCompare(b)).slice(0, 12);
-  }, [properties, cityQuery, neighborhoodQuery]);
+  }, [properties, cityQuery, neighborhoodQuery, locale]);
 
   const propertyTypeAliasToOption = useMemo(() => {
     const map = new Map();
