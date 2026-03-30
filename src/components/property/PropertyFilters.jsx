@@ -19,11 +19,19 @@ const countNumber = 'text-graphite';
 const filterSelectClass =
   'w-full px-3.5 py-2.5 bg-white/90 border border-gray-200/80 rounded-lg text-graphite text-sm transition-colors duration-200 ' +
   'hover:border-cadetblue/30 focus:border-cadetblue/70 focus:ring-2 focus:ring-cadetblue/15 focus:outline-none';
-const filterSelectDisabledClass =
-  'w-full px-3.5 py-2.5 border border-gray-200/80 rounded-lg bg-gray-50/80 text-gray-400 cursor-not-allowed text-sm';
 const filterInputClass =
   'w-full px-3.5 py-2.5 bg-white/90 border border-gray-200/80 rounded-lg text-graphite text-sm transition-colors duration-200 ' +
   'hover:border-cadetblue/30 focus:border-cadetblue/70 focus:ring-2 focus:ring-cadetblue/15 focus:outline-none placeholder:text-gray-400';
+
+function normalizeText(value) {
+  return String(value ?? '').trim().toLowerCase();
+}
+
+function includesSearch(query, ...values) {
+  const normalizedQuery = normalizeText(query);
+  if (!normalizedQuery) return true;
+  return values.some((value) => normalizeText(value).includes(normalizedQuery));
+}
 
 function getPricePerSqm(property) {
   const area = property.area ?? 0;
@@ -92,32 +100,79 @@ export default function PropertyFilters({
   const [sortOpen, setSortOpen] = useState(false);
   const [filtersPanelOpen, setFiltersPanelOpen] = useState(false);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const [neighborhoodDropdownOpen, setNeighborhoodDropdownOpen] = useState(false);
   const sortRef = useRef(null);
+  const cityRef = useRef(null);
+  const neighborhoodRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(e) {
       if (sortRef.current && !sortRef.current.contains(e.target)) setSortOpen(false);
+      if (cityRef.current && !cityRef.current.contains(e.target)) setCityDropdownOpen(false);
+      if (neighborhoodRef.current && !neighborhoodRef.current.contains(e.target)) setNeighborhoodDropdownOpen(false);
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const updateFilter = (key, value) => {
-    setFilters((prev) => {
-      const next = { ...prev, [key]: value };
-      if (key === 'city') next.neighborhood = '';
-      return next;
-    });
+    setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const neighborhoodsInCity = useMemo(() => {
-    if (!filters.city) return [];
+  const cityOptions = useMemo(() => {
     const set = new Set();
+    cities.forEach((c) => {
+      if (c?.label) set.add(c.label);
+    });
     properties.forEach((p) => {
-      if (p.city === filters.city && p.neighborhood) set.add(p.neighborhood);
+      if (p?.city) set.add(p.city);
     });
     return [...set].sort((a, b) => a.localeCompare(b));
-  }, [filters.city, properties]);
+  }, [properties]);
+
+  const cityQuery = normalizeText(filters.city);
+  const neighborhoodQuery = normalizeText(filters.neighborhood);
+
+  const citySuggestions = useMemo(() => {
+    const base = cityQuery
+      ? cityOptions.filter((cityName) =>
+          properties.some(
+            (p) =>
+              normalizeText(p.city) === normalizeText(cityName) &&
+              includesSearch(cityQuery, p.city, p.cityEn)
+          ) || includesSearch(cityQuery, cityName)
+        )
+      : cityOptions;
+    return base.slice(0, 12);
+  }, [cityOptions, cityQuery, properties]);
+
+  const neighborhoodSuggestions = useMemo(() => {
+    const set = new Set();
+    properties.forEach((p) => {
+      if (!normalizeText(p.neighborhood)) return;
+      if (cityQuery && !includesSearch(cityQuery, p.city, p.cityEn)) return;
+      if (neighborhoodQuery && !includesSearch(neighborhoodQuery, p.neighborhood, p.neighborhoodEn)) return;
+      set.add(p.neighborhood);
+    });
+    return [...set].sort((a, b) => a.localeCompare(b)).slice(0, 12);
+  }, [properties, cityQuery, neighborhoodQuery]);
+
+  const propertyTypeAliasToOption = useMemo(() => {
+    const map = new Map();
+    propertyTypes.forEach((opt) => {
+      const aliases = [
+        opt.value,
+        opt.label,
+        getTranslations(locale)?.property?.[opt.value],
+      ];
+      aliases.forEach((alias) => {
+        const key = normalizeText(alias);
+        if (key) map.set(key, opt);
+      });
+    });
+    return map;
+  }, [locale]);
 
   const clearExtraFilters = () => {
     setFilters((prev) => ({
@@ -172,9 +227,24 @@ export default function PropertyFilters({
         const propCode = property.code != null ? String(property.code).trim().toLowerCase() : '';
         if (!propCode || !propCode.includes(codeQ)) return false;
       }
-      if (filters.type && property.type !== filters.type) return false;
-      if (filters.city && property.city !== filters.city) return false;
-      if (filters.neighborhood && property.neighborhood !== filters.neighborhood) return false;
+      if (filters.type) {
+        const selectedType = normalizeText(filters.type);
+        const propertyType = normalizeText(property.type);
+        const selectedOption = propertyTypeAliasToOption.get(selectedType);
+        const propertyOption = propertyTypeAliasToOption.get(propertyType);
+
+        if (selectedOption && propertyOption) {
+          const selectedGroup = normalizeText(selectedOption.label);
+          const propertyGroup = normalizeText(propertyOption.label);
+          if (selectedGroup !== propertyGroup) return false;
+        } else if (selectedType !== propertyType) {
+          return false;
+        }
+      }
+      const cityFilterQ = normalizeText(filters.city);
+      const neighborhoodFilterQ = normalizeText(filters.neighborhood);
+      if (cityFilterQ && !includesSearch(cityFilterQ, property.city, property.cityEn)) return false;
+      if (neighborhoodFilterQ && !includesSearch(neighborhoodFilterQ, property.neighborhood, property.neighborhoodEn)) return false;
       const price = property.price ?? 0;
       if (filters.minPrice) {
         const min = Number(filters.minPrice);
@@ -276,7 +346,7 @@ export default function PropertyFilters({
     }
 
     return list;
-  }, [properties, filters, sortBy]);
+  }, [properties, filters, sortBy, propertyTypeAliasToOption]);
 
   const currentSortLabel = SORT_OPTIONS.find((o) => o.value === sortBy)?.label ?? t.sort;
 
@@ -421,40 +491,69 @@ export default function PropertyFilters({
                     <option value="not_in_use">{t.constructionStageNotInUse}</option>
                   </select>
                 </div>
-                <div>
+                <div className="relative" ref={cityRef}>
                   <label className="block text-xs text-gray-500 mb-1.5">{t.city}</label>
-                  <select
+                  <input
+                    type="text"
                     value={filters.city ?? ''}
-                    onChange={(e) => updateFilter('city', e.target.value)}
-                    className={filterSelectClass}
-                  >
-                    <option value="">{t.allCities}</option>
-                    {cities.map((c) => (
-                      <option key={c.value} value={c.value}>
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(e) => {
+                      updateFilter('city', e.target.value);
+                      setCityDropdownOpen(true);
+                    }}
+                    onFocus={() => setCityDropdownOpen(true)}
+                    placeholder={t.allCities}
+                    className={filterInputClass}
+                    autoComplete="off"
+                  />
+                  {cityDropdownOpen && citySuggestions.length > 0 && (
+                    <div className="absolute z-20 mt-1 w-full max-h-52 overflow-y-auto rounded-lg border border-gray-200/90 bg-white shadow-lg">
+                      {citySuggestions.map((cityName) => (
+                        <button
+                          key={cityName}
+                          type="button"
+                          onClick={() => {
+                            updateFilter('city', cityName);
+                            setCityDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2 text-sm text-graphite hover:bg-cadetblue/5"
+                        >
+                          {cityName}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <label className={`block text-xs mb-1.5 ${filters.city ? 'text-gray-500' : 'text-gray-400'}`}>
-                    {t.neighborhood}
-                  </label>
-                  <select
+                <div className="relative" ref={neighborhoodRef}>
+                  <label className="block text-xs text-gray-500 mb-1.5">{t.neighborhood}</label>
+                  <input
+                    type="text"
                     value={filters.neighborhood ?? ''}
-                    onChange={(e) => updateFilter('neighborhood', e.target.value)}
-                    disabled={!filters.city}
-                    className={filters.city ? filterSelectClass : filterSelectDisabledClass}
-                  >
-                    <option value="">
-                      {filters.city ? t.allNeighborhoods : t.selectCityFirst}
-                    </option>
-                    {neighborhoodsInCity.map((nb) => (
-                      <option key={nb} value={nb}>
-                        {nb}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(e) => {
+                      updateFilter('neighborhood', e.target.value);
+                      setNeighborhoodDropdownOpen(true);
+                    }}
+                    onFocus={() => setNeighborhoodDropdownOpen(true)}
+                    placeholder={t.allNeighborhoods}
+                    className={filterInputClass}
+                    autoComplete="off"
+                  />
+                  {neighborhoodDropdownOpen && neighborhoodSuggestions.length > 0 && (
+                    <div className="absolute z-20 mt-1 w-full max-h-52 overflow-y-auto rounded-lg border border-gray-200/90 bg-white shadow-lg">
+                      {neighborhoodSuggestions.map((nb) => (
+                        <button
+                          key={nb}
+                          type="button"
+                          onClick={() => {
+                            updateFilter('neighborhood', nb);
+                            setNeighborhoodDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2 text-sm text-graphite hover:bg-cadetblue/5"
+                        >
+                          {nb}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="sm:col-span-2 lg:col-span-2 xl:col-span-2">
                   <div className="grid grid-cols-2 gap-3">
