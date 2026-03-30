@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatPriceEur } from '@/lib/constants';
-import { getTypeLabel, getCategoryLabel, getConstructionTypeLabel } from '@/data/properties';
+import { getTypeLabel, getCategoryLabel } from '@/data/properties';
 
 const statusLabels = {
   active: { label: 'Активна', className: 'bg-green-100 text-green-800' },
@@ -76,26 +76,27 @@ export default function PropertyTable({ properties, isDemo = false }) {
 
   if (!properties || properties.length === 0) {
     return (
-      <div className="text-center py-12 bg-gray-50 rounded-lg">
-        <p className="text-gray-500">Няма намерени имоти</p>
+      <div className="rounded-xl border border-dashed border-gray-200 bg-slate-50/50 py-14 text-center">
+        <p className="text-sm font-medium text-gray-600">Няма намерени имоти</p>
+        <p className="mt-1 text-xs text-gray-500">Променете търсенето или филтрите.</p>
       </div>
     );
   }
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto rounded-xl border border-gray-200/80 bg-white shadow-sm">
       {deleteError && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="m-4 rounded-xl border border-red-200/80 bg-red-50/90 p-4">
           <p className="text-red-800 text-sm">{deleteError}</p>
         </div>
       )}
       {cloneError && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="m-4 rounded-xl border border-red-200/80 bg-red-50/90 p-4">
           <p className="text-red-800 text-sm">{cloneError}</p>
         </div>
       )}
       {isDemo && (
-        <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div className="m-4 rounded-xl border border-amber-200/80 bg-amber-50/90 p-4">
           <p className="text-yellow-800 text-sm">
             <strong>Демо режим:</strong> Показват се примерни данни. За да добавяте и редактирате имоти,
             конфигурирайте Supabase в <code className="bg-yellow-100 px-1 rounded">.env.local</code>
@@ -103,42 +104,36 @@ export default function PropertyTable({ properties, isDemo = false }) {
         </div>
       )}
 
-      <table className="w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+      <table className="w-full divide-y divide-gray-100">
+        <thead className="bg-slate-50/95">
           <tr>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
+            <th className="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 whitespace-nowrap">
               Код
             </th>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider min-w-[280px]">
+            <th className="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 min-w-[280px]">
               Имот
             </th>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
+            <th className="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 whitespace-nowrap">
               Категория
             </th>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
               Цена
             </th>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <th className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 whitespace-nowrap w-[110px]">
               Град
             </th>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
-              Тип строит.
-            </th>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
-              Газ / ТЕЦ
-            </th>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
+            <th className="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 whitespace-nowrap">
               Статус
             </th>
-            <th className="px-4 py-3 text-left text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
+            <th className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 whitespace-nowrap w-[110px]">
               Тип
             </th>
-            <th className="px-4 py-3 text-right text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">
+            <th className="px-3 py-3.5 text-right text-xs font-semibold uppercase tracking-wide text-gray-600 whitespace-nowrap min-w-[230px]">
               Действия
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-100 bg-white">
           {properties.map((property) => {
             const status = statusLabels[property.status] || statusLabels.inactive;
 
@@ -174,27 +169,21 @@ export default function PropertyTable({ properties, isDemo = false }) {
                     );
                   })()}
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {property.city}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {getConstructionTypeLabel(property.constructionType) || '—'}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {[property.gaz && 'Газ', property.tec && 'ТЕЦ'].filter(Boolean).join(' / ') || '—'}
+                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 max-w-[110px] truncate" title={property.city}>
+                  {property.city || '—'}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap">
                   <span className={`inline-flex px-2 py-1 text-xs rounded-full ${status.className}`}>
                     {status.label}
                   </span>
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 max-w-[110px] truncate" title={getTypeLabel(property.type)}>
                   {getTypeLabel(property.type)}
                 </td>
-                <td className="px-4 py-4 whitespace-nowrap text-right text-sm">
+                <td className="px-3 py-4 whitespace-nowrap text-right text-sm">
                   <Link
                     href={`/properties/${property.slug}`}
-                    className="text-gray-600 hover:text-gray-900 mr-4"
+                    className="mr-4 text-gray-500 hover:text-gray-900 transition-colors"
                     target="_blank"
                   >
                     Преглед
@@ -203,7 +192,7 @@ export default function PropertyTable({ properties, isDemo = false }) {
                     <>
                       <Link
                         href={`/admin/properties/${property.id}/edit`}
-                        className="text-blue-600 hover:text-blue-900 mr-4"
+                        className="mr-4 font-medium text-cadetblue-dark hover:text-cadetblue transition-colors"
                       >
                         Редактирай
                       </Link>

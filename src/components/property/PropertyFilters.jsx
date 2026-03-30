@@ -116,6 +116,11 @@ export default function PropertyFilters({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Когато скриваме големия панел, не искаме „още филтри“ да анимира отделно втори път.
+  useEffect(() => {
+    if (!filtersPanelOpen) setFiltersExpanded(false);
+  }, [filtersPanelOpen]);
+
   const updateFilter = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
@@ -454,7 +459,11 @@ export default function PropertyFilters({
           {/* Филтри – скрити по подразбиране; същото съдържание като преди */}
           <div
             id="property-filters-panel"
-            className={`overflow-hidden transition-[max-height] duration-500 ease-in-out motion-reduce:transition-none ${filtersPanelOpen ? 'max-h-[10000px] mt-6' : 'max-h-0 mt-0'}`}
+            className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out motion-reduce:transition-none ${
+              filtersPanelOpen
+                ? 'max-h-[10000px] opacity-100 pointer-events-auto'
+                : 'max-h-0 opacity-0 pointer-events-none'
+            }`}
             aria-hidden={!filtersPanelOpen}
           >
           <div className="w-full rounded-2xl border border-gray-200/90 bg-white shadow-sm overflow-hidden">
@@ -633,7 +642,9 @@ export default function PropertyFilters({
 
               <div
                 id="property-filters-more"
-                className={`overflow-hidden transition-[max-height] duration-500 ease-in-out motion-reduce:transition-none ${filtersExpanded ? 'max-h-[2000px]' : 'max-h-0'}`}
+                className={`overflow-hidden transition-[max-height] ease-in-out motion-reduce:transition-none ${
+                  filtersExpanded ? 'max-h-[2000px]' : 'max-h-0'
+                } ${filtersPanelOpen ? 'duration-500' : 'duration-0'}`}
                 aria-hidden={!filtersExpanded}
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-4 mt-4 border-t border-gray-100">
