@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import PropertyGrid from './PropertyGrid';
 import { propertyTypes, cities, constructionTypes } from '@/data/properties';
 import { getTranslations } from '@/lib/translations';
@@ -100,21 +101,56 @@ export default function PropertyFilters({
   const [sortOpen, setSortOpen] = useState(false);
   const [filtersPanelOpen, setFiltersPanelOpen] = useState(false);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const [showLocationSearchHint, setShowLocationSearchHint] = useState(false);
+  const [locationHintPos, setLocationHintPos] = useState({ top: 0, left: 0, placement: 'right' });
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
   const [neighborhoodDropdownOpen, setNeighborhoodDropdownOpen] = useState(false);
   const sortRef = useRef(null);
   const cityRef = useRef(null);
   const neighborhoodRef = useRef(null);
+  const locationHintRef = useRef(null);
+  const locationHintButtonRef = useRef(null);
+  const locationHintPopupRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(e) {
       if (sortRef.current && !sortRef.current.contains(e.target)) setSortOpen(false);
       if (cityRef.current && !cityRef.current.contains(e.target)) setCityDropdownOpen(false);
       if (neighborhoodRef.current && !neighborhoodRef.current.contains(e.target)) setNeighborhoodDropdownOpen(false);
+      if (
+        locationHintRef.current &&
+        !locationHintRef.current.contains(e.target) &&
+        (!locationHintPopupRef.current || !locationHintPopupRef.current.contains(e.target))
+      ) {
+        setShowLocationSearchHint(false);
+      }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (!showLocationSearchHint) return;
+
+    function updateLocationHintPosition() {
+      if (!locationHintButtonRef.current) return;
+      const rect = locationHintButtonRef.current.getBoundingClientRect();
+      const viewportW = window.innerWidth;
+      const isDesktop = viewportW >= 640;
+      // Desktop: отваря надясно. Mobile: остава под иконката.
+      const left = isDesktop ? rect.right + 10 : rect.left;
+      const top = isDesktop ? rect.top - 8 : rect.bottom + 8;
+      setLocationHintPos({ top, left, placement: isDesktop ? 'right' : 'bottom' });
+    }
+
+    updateLocationHintPosition();
+    window.addEventListener('resize', updateLocationHintPosition);
+    window.addEventListener('scroll', updateLocationHintPosition, true);
+    return () => {
+      window.removeEventListener('resize', updateLocationHintPosition);
+      window.removeEventListener('scroll', updateLocationHintPosition, true);
+    };
+  }, [showLocationSearchHint]);
 
   // Когато скриваме големия панел, не искаме „още филтри“ да анимира отделно втори път.
   useEffect(() => {
@@ -122,7 +158,12 @@ export default function PropertyFilters({
   }, [filtersPanelOpen]);
 
   const updateFilter = (key, value) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    setFilters((prev) => {
+      const next = { ...prev, [key]: value };
+      // Връщаме първоначалната обвързаност: квартал се избира след град.
+      if (key === 'city') next.neighborhood = '';
+      return next;
+    });
   };
 
   const displayCityName = (p) => (locale === 'en' ? (p.cityEn || p.city) : p.city);
@@ -165,6 +206,7 @@ export default function PropertyFilters({
   }, [cityOptions, cityQuery, properties, locale]);
 
   const neighborhoodSuggestions = useMemo(() => {
+    if (!cityQuery) return [];
     const set = new Set();
     properties.forEach((p) => {
       const nb = displayNeighborhoodName(p);
@@ -262,6 +304,7 @@ export default function PropertyFilters({
       const cityFilterQ = normalizeText(filters.city);
       const neighborhoodFilterQ = normalizeText(filters.neighborhood);
       if (cityFilterQ && !includesSearch(cityFilterQ, property.city, property.cityEn)) return false;
+      if (neighborhoodFilterQ && !cityFilterQ) return false;
       if (neighborhoodFilterQ && !includesSearch(neighborhoodFilterQ, property.neighborhood, property.neighborhoodEn)) return false;
       const price = property.price ?? 0;
       if (filters.minPrice) {
@@ -514,7 +557,7 @@ export default function PropertyFilters({
                   </select>
                 </div>
                 <div className="relative" ref={cityRef}>
-                  <label className="block text-xs text-gray-500 mb-1.5">{t.city}</label>
+                  <label className="block text-xs text-gray-500 mb-1.5">{t.cityArea}</label>
                   <input
                     type="text"
                     value={filters.city ?? ''}
@@ -545,18 +588,40 @@ export default function PropertyFilters({
                     </div>
                   )}
                 </div>
-                <div className="relative" ref={neighborhoodRef}>
-                  <label className="block text-xs text-gray-500 mb-1.5">{t.neighborhood}</label>
+                <div className="relative self-start" ref={neighborhoodRef}>
+                  <div className="mb-1.5 flex items-center gap-1.5">
+                    <label className="block text-xs text-gray-500">{t.neighborhoodArea}</label>
+                    <div className="relative" ref={locationHintRef}>
+                      <button
+                        ref={locationHintButtonRef}
+                        type="button"
+                        onClick={() => setShowLocationSearchHint((v) => !v)}
+                        className="inline-flex h-4.5 w-4.5 items-center justify-center rounded-full border border-gray-300 bg-white text-[10px] font-semibold leading-none text-gray-600 hover:text-cadetblue hover:border-cadetblue/40 transition-colors"
+                        aria-label="Search help"
+                      >
+                        i
+                      </button>
+                    </div>
+                  </div>
                   <input
                     type="text"
                     value={filters.neighborhood ?? ''}
                     onChange={(e) => {
+                      if (!filters.city?.trim()) return;
                       updateFilter('neighborhood', e.target.value);
                       setNeighborhoodDropdownOpen(true);
                     }}
-                    onFocus={() => setNeighborhoodDropdownOpen(true)}
-                    placeholder={t.allNeighborhoods}
-                    className={filterInputClass}
+                    onFocus={() => {
+                      if (!filters.city?.trim()) return;
+                      setNeighborhoodDropdownOpen(true);
+                    }}
+                    placeholder={filters.city?.trim() ? t.allNeighborhoods : t.selectCityFirst}
+                    disabled={!filters.city?.trim()}
+                    className={
+                      filters.city?.trim()
+                        ? filterInputClass
+                        : `${filterInputClass} bg-gray-50 text-gray-400 cursor-not-allowed`
+                    }
                     autoComplete="off"
                   />
                   {neighborhoodDropdownOpen && neighborhoodSuggestions.length > 0 && (
@@ -816,6 +881,22 @@ export default function PropertyFilters({
           />
         </div>
       </section>
+      {showLocationSearchHint &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            ref={locationHintPopupRef}
+            className={`fixed z-[1000] w-56 rounded-lg border border-cadetblue/20 bg-white p-2.5 text-xs leading-relaxed text-gray-600 shadow-xl sm:w-80`}
+            style={{
+              top: locationHintPos.top,
+              left: locationHintPos.left,
+              transform: locationHintPos.placement === 'right' ? 'translateY(-10%)' : 'none',
+            }}
+          >
+            {t.locationSearchHint}
+          </div>,
+          document.body
+        )}
     </>
   );
 }
