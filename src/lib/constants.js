@@ -14,8 +14,6 @@
 // =============================================================================
 
 export const BRAND_NAME = 'ART HOUSE 94';
-/** Компактно изписване за клиентски материали (печат, предложения) */
-export const BRAND_NAME_COMPACT = 'ArtHouse 94';
 /** Текстова част за визуализация – числото 94 се показва с default шрифт, не Playfair */
 export const BRAND_NAME_WITHOUT_NUMBER = 'ART HOUSE ';
 export const BRAND_NAME_NUMBER = '94';
@@ -83,12 +81,10 @@ export const GOOGLE_MAPS_SEARCH_URL = 'https://www.google.com/maps/search/?api=1
  * @param {'sale'|'rent'} category - Категория
  * @returns {{ eurText: string }}
  */
-export function formatPriceEur(priceEur, category, locale = 'bg') {
-  const suffix =
-    category === 'rent' ? (locale === 'en' ? '/month' : '/месец') : '';
-  const intlLocale = locale === 'en' ? 'en-GB' : 'bg-BG';
+export function formatPriceEur(priceEur, category) {
+  const suffix = category === 'rent' ? '/месец' : '';
   const fmt = (n) =>
-    new Intl.NumberFormat(intlLocale, { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
+    new Intl.NumberFormat('bg-BG', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
   const eurText = `${fmt(Number(priceEur))} EUR${suffix}`;
   return { eurText };
 }
