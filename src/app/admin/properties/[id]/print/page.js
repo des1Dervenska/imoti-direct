@@ -33,6 +33,7 @@ export default async function PrintPropertyPage({ params, searchParams }) {
   const { title, description, features, priceNote } = display;
   const titleHasDigits = /\d/.test(String(title ?? ''));
   const {
+    code,
     category,
     type,
     price,
@@ -83,9 +84,6 @@ export default async function PrintPropertyPage({ params, searchParams }) {
       <div className="max-w-4xl mx-auto px-6 py-12 print:py-6 print:px-0">
         <header className="mb-6 print:mb-4 text-center">
           <p className="text-sm text-cadetblue tracking-wide brand-name-sans">{BRAND_NAME}</p>
-          <p className="text-xs text-graphite-light mt-1">
-            {locale === 'en' ? 'Client presentation - not an offer' : 'Представяне за клиент – не е оферта'}
-          </p>
         </header>
 
         <article className="bg-white rounded-xl shadow-md overflow-hidden print:shadow-none print:rounded-none">
@@ -102,6 +100,13 @@ export default async function PrintPropertyPage({ params, searchParams }) {
               <span className="px-2.5 py-1 rounded-full bg-white/95 text-graphite shadow-sm">{categoryLabel}</span>
               <span className="px-2.5 py-1 rounded-full bg-cadetblue text-white shadow-sm">{typeLabel}</span>
             </div>
+            {code != null && String(code).trim() !== '' && (
+              <div className="absolute bottom-3 right-3 z-20 text-xs">
+                <span className="px-2.5 py-1 rounded-full bg-white/95 text-graphite shadow-sm">
+                  {(tp.listingCode ?? (locale === 'en' ? 'REF' : 'КОД'))}: {String(code).trim()}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="p-6 print:p-4 space-y-5 print:space-y-4">
