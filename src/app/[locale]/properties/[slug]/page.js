@@ -35,6 +35,7 @@ import {
 
 /** Винаги свежи данни – нови обяви се отварят веднага. */
 export const dynamic = 'force-dynamic';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.arthouse94.com';
 
 function formatDate(dateString, locale) {
   return new Date(dateString).toLocaleDateString(locale === 'en' ? 'en-GB' : 'bg-BG', {
@@ -134,9 +135,33 @@ export async function generateMetadata({ params }) {
     return { title: `${t.notFound} | ${BRAND_NAME}` };
   }
   const display = getDisplayText(property, locale);
+  const rawImage = property.images?.[0] || '/images/placeholder-property.jpg';
+  const imageUrl = rawImage.startsWith('http') ? rawImage : `${SITE_URL}${rawImage}`;
+  const pageUrl = `${SITE_URL}/${locale}/properties/${slug}`;
+  const metaDescription = (display.description || '').substring(0, 160);
+
   return {
     title: `${display.title} | ${BRAND_NAME}`,
-    description: (display.description || '').substring(0, 160),
+    description: metaDescription,
+    alternates: { canonical: pageUrl },
+    openGraph: {
+      type: 'website',
+      url: pageUrl,
+      title: `${display.title} | ${BRAND_NAME}`,
+      description: metaDescription,
+      images: [
+        {
+          url: imageUrl,
+          alt: display.title || BRAND_NAME,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${display.title} | ${BRAND_NAME}`,
+      description: metaDescription,
+      images: [imageUrl],
+    },
   };
 }
 
