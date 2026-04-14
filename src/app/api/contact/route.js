@@ -1,15 +1,16 @@
-import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const TO_EMAIL = process.env.CONTACT_EMAIL || 'genoveva@arthouse.com';
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Website <onboarding@resend.dev>';
+const TO_EMAIL = process.env.CONTACT_EMAIL || "genoveva@arthouse94.com";
+const FROM_EMAIL =
+  process.env.RESEND_FROM_EMAIL || "Website <onboarding@resend.dev>";
 
 export async function POST(request) {
   if (!process.env.RESEND_API_KEY || !TO_EMAIL) {
     return NextResponse.json(
-      { error: 'Email is not configured.' },
-      { status: 500 }
+      { error: "Email is not configured." },
+      { status: 500 },
     );
   }
 
@@ -19,13 +20,13 @@ export async function POST(request) {
 
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
       return NextResponse.json(
-        { error: 'Name, email and message are required.' },
-        { status: 400 }
+        { error: "Name, email and message are required." },
+        { status: 400 },
       );
     }
 
-    const subjectLabel = subject || '(no subject)';
-    const accentColor = '#0097b2';
+    const subjectLabel = subject || "(no subject)";
+    const accentColor = "#0097b2";
     const html = `
 <!DOCTYPE html>
 <html>
@@ -63,7 +64,7 @@ export async function POST(request) {
                 <tr>
                   <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
                     <span style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">Телефон</span><br>
-                    <span style="color: #1e293b; font-size: 16px;">${phone ? escapeHtml(phone) : '—'}</span>
+                    <span style="color: #1e293b; font-size: 16px;">${phone ? escapeHtml(phone) : "—"}</span>
                   </td>
                 </tr>
                 <tr>
@@ -103,28 +104,25 @@ export async function POST(request) {
     });
 
     if (error) {
-      console.error('[Resend]', error);
+      console.error("[Resend]", error);
       return NextResponse.json(
-        { error: error.message || 'Failed to send email.' },
-        { status: 500 }
+        { error: error.message || "Failed to send email." },
+        { status: 500 },
       );
     }
 
     return NextResponse.json({ success: true, id: data?.id });
   } catch (err) {
-    console.error('[Contact API]', err);
-    return NextResponse.json(
-      { error: 'Server error.' },
-      { status: 500 }
-    );
+    console.error("[Contact API]", err);
+    return NextResponse.json({ error: "Server error." }, { status: 500 });
   }
 }
 
 function escapeHtml(text) {
-  if (typeof text !== 'string') return '';
+  if (typeof text !== "string") return "";
   return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
