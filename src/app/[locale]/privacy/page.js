@@ -1,16 +1,27 @@
 import { BRAND_NAME, CONTACT_EMAIL, CONTACT_PERSON } from '@/lib/constants';
 import { getTranslations } from '@/lib/translations';
 import { Section, Container, AnimateOnScroll } from '@/components/ui';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.arthouse94.com';
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const t = getTranslations(locale);
+  const pageUrl = `${SITE_URL}/${locale}/privacy`;
+  const description =
+    locale === 'en'
+      ? `Privacy policy and personal data protection when using ${BRAND_NAME} website.`
+      : `Политика за поверителност и защита на личните данни при използване на сайта на ${BRAND_NAME}.`;
   return {
     title: `${t.privacy.title} | ${BRAND_NAME}`,
-    description:
-      locale === 'en'
-        ? `Privacy policy and personal data protection when using ${BRAND_NAME} website.`
-        : `Политика за поверителност и защита на личните данни при използване на сайта на ${BRAND_NAME}.`,
+    description,
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        bg: `${SITE_URL}/bg/privacy`,
+        en: `${SITE_URL}/en/privacy`,
+        'x-default': `${SITE_URL}/bg/privacy`,
+      },
+    },
   };
 }
 

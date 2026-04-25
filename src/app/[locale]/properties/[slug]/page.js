@@ -37,6 +37,232 @@ import {
 export const dynamic = 'force-dynamic';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.arthouse94.com';
 
+function cleanText(value = '') {
+  return String(value).replace(/\s+/g, ' ').trim();
+}
+
+function buildMetaDescription(display, property, locale) {
+  const parts = [];
+  const area = property?.area ? `${property.area} м²` : '';
+  const rooms = property?.rooms ? `${property.rooms} ${locale === 'en' ? 'rooms' : 'стаи'}` : '';
+  const location = cleanText(getLocationLine(display) || [display?.city, display?.neighborhood].filter(Boolean).join(', '));
+  const summary = cleanText(display?.description || '');
+
+  if (cleanText(display?.title)) parts.push(cleanText(display.title));
+  if (location) parts.push(location);
+  if (area) parts.push(area);
+  if (rooms) parts.push(rooms);
+  if (summary) parts.push(summary);
+
+  const text = cleanText(parts.join(' - '));
+  return text.length > 160 ? `${text.slice(0, 157).trimEnd()}...` : text;
+}
+
+function buildSeoKeywords(display, property, locale) {
+  const city = cleanText(display?.city);
+  const neighborhood = cleanText(display?.neighborhood);
+  const type = cleanText(display?.type);
+  const category = property?.category === 'rent' ? 'rent' : property?.category === 'sale' ? 'sale' : '';
+
+  const baseBg = [
+    'имот',
+    'имоти',
+    'наем',
+    'продажба',
+    'купува имот',
+    'търся имот',
+    'търся апартамент',
+    'обяви имоти',
+    'обява имот',
+    'недвижими имоти',
+    'недвижим имот',
+    'брокер имоти',
+    'агенция за имоти',
+    'агенция недвижими имоти',
+    'българия имоти',
+    'имоти българия',
+    'имоти в българия',
+    'имоти софия',
+    'имот софия',
+    'имоти в софия',
+    'имот в софия',
+    'апартаменти софия',
+    'къщи софия',
+    'офиси софия',
+    'апартамент',
+    'апартаменти',
+    'къща',
+    'къщи',
+    'офис',
+    'офиси',
+    'парцел',
+    'земя',
+    'земеделска земя',
+    'търговски обект',
+    'магазин под наем',
+    'магазин за продажба',
+    'етаж от къща',
+    'студио под наем',
+    'двустаен апартамент',
+    'тристаен апартамент',
+    'четиристаен апартамент',
+    'сграда',
+    'строителство',
+    'ново строителство',
+    'строителна компания',
+    'сгради ново строителство',
+    'жилищна сграда',
+    'бизнес сграда',
+    'сграда с акт 16',
+    'акт 14',
+    'акт 15',
+    'акт 16',
+    'готов за нанасяне',
+    'обзаведен апартамент',
+    'необзаведен апартамент',
+    'луксозен апартамент',
+    'луксозни имоти',
+    'инвестиционен имот',
+    'инвестиционни имоти',
+    'имот за инвестиция',
+    'висока доходност имот',
+    'доход от наем',
+    'луксозен имот',
+  ];
+  const baseEn = [
+    'real estate',
+    'real estate agency',
+    'estate agent',
+    'property broker',
+    'property',
+    'properties',
+    'rent',
+    'rental property',
+    'rent apartment',
+    'rent house',
+    'find property',
+    'buy property',
+    'sell property',
+    'for sale',
+    'property listings',
+    'real estate listings',
+    'sofia property',
+    'property in sofia',
+    'apartments sofia',
+    'houses sofia',
+    'offices sofia',
+    'bulgaria real estate',
+    'property in bulgaria',
+    'apartments in bulgaria',
+    'apartment',
+    'apartments',
+    'house',
+    'houses',
+    'office',
+    'offices',
+    'land',
+    'plot',
+    'commercial property',
+    'retail space',
+    'building',
+    'construction',
+    'new construction',
+    'residential building',
+    'business building',
+    'ready to move',
+    'furnished apartment',
+    'unfurnished apartment',
+    'two bedroom apartment',
+    'three bedroom apartment',
+    'four bedroom apartment',
+    'investment property',
+    'property investment',
+    'rental yield',
+    'luxury property',
+    'luxury real estate',
+  ];
+
+  const local = [
+    city && `имоти ${city}`,
+    city && `наем ${city}`,
+    city && `продажба ${city}`,
+    city && `недвижими имоти ${city}`,
+    city && `апартаменти ${city}`,
+    city && `къщи ${city}`,
+    city && `офиси ${city}`,
+    city && `ново строителство ${city}`,
+    city && `луксозни имоти ${city}`,
+    city && `двустаен ${city}`,
+    city && `тристаен ${city}`,
+    city && `${city} имоти`,
+    neighborhood && `имоти ${neighborhood}`,
+    neighborhood && `наем ${neighborhood}`,
+    neighborhood && `продажба ${neighborhood}`,
+    neighborhood && `недвижими имоти ${neighborhood}`,
+    neighborhood && `апартамент ${neighborhood}`,
+    neighborhood && `офис ${neighborhood}`,
+    neighborhood && `ново строителство ${neighborhood}`,
+    city && `property in ${city}`,
+    city && `rent in ${city}`,
+    city && `real estate in ${city}`,
+    city && `apartments in ${city}`,
+    city && `houses in ${city}`,
+    city && `real estate ${city}`,
+    neighborhood && `property in ${neighborhood}`,
+    neighborhood && `rent in ${neighborhood}`,
+    neighborhood && `apartments in ${neighborhood}`,
+    type && `имот ${type}`,
+    type && `${type} под наем`,
+    type && `${type} за продажба`,
+    type && `${type} в ${city}`,
+    type && `${type} ${neighborhood}`,
+    type && `${type} property`,
+    type && `${type} for rent`,
+    type && `${type} for sale`,
+  ].filter(Boolean);
+
+  const intent = [
+    category === 'rent' ? 'имот под наем' : '',
+    category === 'rent' ? 'апартамент под наем' : '',
+    category === 'rent' ? 'дългосрочен наем' : '',
+    category === 'rent' ? 'краткосрочен наем' : '',
+    category === 'rent' ? 'наем без посредник' : '',
+    category === 'rent' ? 'наем обзаведен апартамент' : '',
+    category === 'rent' ? 'наем в софия' : '',
+    category === 'rent' ? 'property for rent' : '',
+    category === 'rent' ? 'apartment for rent' : '',
+    category === 'rent' ? 'house for rent' : '',
+    category === 'rent' ? 'long term rent' : '',
+    category === 'sale' ? 'имот за продажба' : '',
+    category === 'sale' ? 'апартамент за продажба' : '',
+    category === 'sale' ? 'къща за продажба' : '',
+    category === 'sale' ? 'офис за продажба' : '',
+    category === 'sale' ? 'ново строителство за продажба' : '',
+    category === 'sale' ? 'имот за инвестиция софия' : '',
+    category === 'sale' ? 'property for sale' : '',
+    category === 'sale' ? 'apartment for sale' : '',
+    category === 'sale' ? 'house for sale' : '',
+    category === 'sale' ? 'new construction for sale' : '',
+  ].filter(Boolean);
+
+  return Array.from(
+    new Set(
+      [
+        cleanText(display?.title),
+        city,
+        neighborhood,
+        type,
+        ...baseBg,
+        ...baseEn,
+        ...local,
+        ...intent,
+      ]
+        .map(cleanText)
+        .filter(Boolean)
+    )
+  );
+}
+
 function formatDate(dateString, locale) {
   return new Date(dateString).toLocaleDateString(locale === 'en' ? 'en-GB' : 'bg-BG', {
     year: 'numeric',
@@ -138,17 +364,30 @@ export async function generateMetadata({ params }) {
   const rawImage = property.images?.[0] || '/images/placeholder-property.jpg';
   const imageUrl = rawImage.startsWith('http') ? rawImage : `${SITE_URL}${rawImage}`;
   const pageUrl = `${SITE_URL}/${locale}/properties/${slug}`;
-  const metaDescription = (display.description || '').substring(0, 160);
+  const metaDescription = buildMetaDescription(display, property, locale);
+  const titleSuffix = cleanText(getLocationLine(display) || display.city || '');
+  const composedTitle = titleSuffix ? `${display.title} - ${titleSuffix} | ${BRAND_NAME}` : `${display.title} | ${BRAND_NAME}`;
+  const basePropertyPath = `/properties/${slug}`;
 
   return {
-    title: `${display.title} | ${BRAND_NAME}`,
+    metadataBase: new URL(SITE_URL),
+    title: composedTitle,
     description: metaDescription,
-    alternates: { canonical: pageUrl },
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        bg: `${SITE_URL}/bg${basePropertyPath}`,
+        en: `${SITE_URL}/en${basePropertyPath}`,
+        'x-default': `${SITE_URL}/${locale}${basePropertyPath}`,
+      },
+    },
     openGraph: {
       type: 'website',
       url: pageUrl,
-      title: `${display.title} | ${BRAND_NAME}`,
+      title: composedTitle,
       description: metaDescription,
+      locale: locale === 'en' ? 'en_GB' : 'bg_BG',
+      alternateLocale: locale === 'en' ? ['bg_BG'] : ['en_GB'],
       images: [
         {
           url: imageUrl,
@@ -158,10 +397,11 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${display.title} | ${BRAND_NAME}`,
+      title: composedTitle,
       description: metaDescription,
       images: [imageUrl],
     },
+    keywords: buildSeoKeywords(display, property, locale),
   };
 }
 
@@ -221,9 +461,74 @@ export default async function PropertyDetailPage({ params }) {
   const mapQuery = locationLine || [display.city, display.neighborhood].filter(Boolean).join(', ');
   const contactSubject = locale === 'en' ? 'Inquiry re:' : 'Запитване за:';
   const propertyPath = `${prefix}/properties/${slug}`;
+  const pageUrl = `${SITE_URL}${propertyPath}`;
+  const rawPrimaryImage = images?.[0] || '/images/placeholder-property.jpg';
+  const primaryImageUrl = rawPrimaryImage.startsWith('http') ? rawPrimaryImage : `${SITE_URL}${rawPrimaryImage}`;
+  const locationLineClean = cleanText(locationLine);
+  const propertyJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateListing',
+    name: cleanText(title),
+    description: cleanText(description || ''),
+    url: pageUrl,
+    datePosted: createdAt,
+    image: images?.length ? images.map((img) => (img.startsWith('http') ? img : `${SITE_URL}${img}`)) : [primaryImageUrl],
+    inLanguage: locale === 'en' ? 'en' : 'bg',
+    mainEntityOfPage: pageUrl,
+    offers: {
+      '@type': 'Offer',
+      price: Number(price) || 0,
+      priceCurrency: 'EUR',
+      availability: isUnavailable ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+      url: pageUrl,
+    },
+    floorSize: area ? { '@type': 'QuantitativeValue', value: Number(area), unitCode: 'MTK' } : undefined,
+    numberOfRooms: rooms ? Number(rooms) : undefined,
+    address: locationLineClean
+      ? {
+          '@type': 'PostalAddress',
+          addressLocality: cleanText(display.city || ''),
+          addressRegion: cleanText(display.neighborhood || ''),
+          streetAddress: locationLineClean,
+          addressCountry: 'BG',
+        }
+      : undefined,
+  };
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: t.home,
+        item: `${SITE_URL}/${locale}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: category === 'sale' ? t.sales : t.rent,
+        item: `${SITE_URL}${category === 'sale' ? `${prefix}/sales` : `${prefix}/rent`}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: cleanText(title),
+        item: pageUrl,
+      },
+    ],
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(propertyJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Section background="light" padding="sm">
         <Container>
           <AnimateOnScroll direction="down">

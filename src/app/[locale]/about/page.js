@@ -13,13 +13,30 @@ import {
   UserGroupIcon,
   ArrowTrendingUpIcon,
 } from '@heroicons/react/24/outline';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.arthouse94.com';
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const t = getTranslations(locale);
+  const pageUrl = `${SITE_URL}/${locale}/about`;
+  const description = `${BRAND_NAME} - ${t.brand.description}. ${t.brand.tagline}.`;
   return {
     title: `${t.about.title} | ${BRAND_NAME}`,
-    description: `${BRAND_NAME} - ${t.brand.description}. ${t.brand.tagline}.`,
+    description,
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        bg: `${SITE_URL}/bg/about`,
+        en: `${SITE_URL}/en/about`,
+        'x-default': `${SITE_URL}/bg/about`,
+      },
+    },
+    openGraph: {
+      type: 'website',
+      url: pageUrl,
+      title: `${t.about.title} | ${BRAND_NAME}`,
+      description,
+    },
   };
 }
 

@@ -1,16 +1,27 @@
 import { BRAND_NAME, CONTACT_EMAIL, CONTACT_PERSON } from '@/lib/constants';
 import { getTranslations } from '@/lib/translations';
 import { Section, Container, AnimateOnScroll } from '@/components/ui';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.arthouse94.com';
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const t = getTranslations(locale);
+  const pageUrl = `${SITE_URL}/${locale}/terms`;
+  const description =
+    locale === 'en'
+      ? `Terms of use of the ${BRAND_NAME} website - real estate for sale and rent.`
+      : `Общи условия за ползване на уебсайта на ${BRAND_NAME} - недвижими имоти за продажба и наем.`;
   return {
     title: `${t.terms.title} | ${BRAND_NAME}`,
-    description:
-      locale === 'en'
-        ? `Terms of use of the ${BRAND_NAME} website – real estate for sale and rent.`
-        : `Общи условия за ползване на уебсайта на ${BRAND_NAME} – недвижими имоти за продажба и наем.`,
+    description,
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        bg: `${SITE_URL}/bg/terms`,
+        en: `${SITE_URL}/en/terms`,
+        'x-default': `${SITE_URL}/bg/terms`,
+      },
+    },
   };
 }
 
