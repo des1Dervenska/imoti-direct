@@ -6,7 +6,10 @@ import PropertyTable from './PropertyTable';
 import {
   propertyTypes,
   propertyStatuses,
+  getCategoryLabel,
+  getTypeLabel,
 } from '@/data/properties';
+import { formatPriceEur } from '@/lib/constants';
 
 const SORT_OPTIONS = [
   { value: 'date-desc', label: 'По дата (най-нови)' },
@@ -30,14 +33,27 @@ const categoryTabs = [
   { value: 'rent', label: 'Наем' },
 ];
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 export default function AdminPropertiesToolbar({ properties = [], isDemo = false }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('date-desc');
+  const [sortBy, setSortBy] = useState('code-desc');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [cityFilter, setCityFilter] = useState('');
   const [neighborhoodFilter, setNeighborhoodFilter] = useState('');
+  const statusLabelMap = useMemo(
+    () => Object.fromEntries(propertyStatuses.map((item) => [item.value, item.label])),
+    []
+  );
 
   const uniqueCities = useMemo(() => {
     const cities = [...new Set(properties.map((p) => p.city).filter(Boolean))];
@@ -113,6 +129,72 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
 
     return list;
   }, [properties, searchQuery, sortBy, categoryFilter, typeFilter, statusFilter, cityFilter, neighborhoodFilter]);
+
+  const handleExportExcel = () => {
+    const rows = filteredAndSorted.map((p) => {
+      const { eurText } = formatPriceEur(p.price, p.category);
+      return {
+        code: p.code ? String(p.code) : '—',
+        title: p.title || '—',
+        category: getCategoryLabel(p.category) || '—',
+        price: eurText,
+        city: p.city || '—',
+        status: statusLabelMap[p.status] || p.status || '—',
+        type: getTypeLabel(p.type) || '—',
+        area: p.area != null ? `${p.area} m²` : '—',
+        rooms: p.rooms != null && p.rooms !== '' ? String(p.rooms) : '—',
+        slug: p.slug || '—',
+      };
+    });
+
+    const headerRow = ['Код', 'Имот', 'Категория', 'Цена', 'Град', 'Статус', 'Тип', 'Площ', 'Стаи', 'Slug'];
+    const bodyRows = rows.map((r) => [
+      r.code,
+      r.title,
+      r.category,
+      r.price,
+      r.city,
+      r.status,
+      r.type,
+      r.area,
+      r.rooms,
+      r.slug,
+    ]);
+
+    const tableHtml = `
+      <table>
+        <thead>
+          <tr>${headerRow.map((h) => `<th>${escapeHtml(h)}</th>`).join('')}</tr>
+        </thead>
+        <tbody>
+          ${bodyRows
+            .map((cells) => `<tr>${cells.map((cell) => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`)
+            .join('')}
+        </tbody>
+      </table>
+    `;
+
+    const content = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+</head>
+<body>
+  ${tableHtml}
+</body>
+</html>`;
+    const blob = new Blob(['\uFEFF', content], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const now = new Date();
+    const fileDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    link.href = url;
+    link.download = `imoti-admin-export-${fileDate}.xls`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div>
@@ -258,12 +340,21 @@ export default function AdminPropertiesToolbar({ properties = [], isDemo = false
             </div>
           </div>
         </div>
-        <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-gray-200/90 bg-white/90 px-3 py-1 text-xs font-medium text-gray-600 shadow-sm">
-          <span className="tabular-nums text-gray-900">{filteredAndSorted.length}</span>
-          <span className="text-gray-400">/</span>
-          <span className="tabular-nums">{properties.length}</span>
-          <span className="text-gray-500">имота</span>
-        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <p className="inline-flex items-center gap-2 rounded-full border border-gray-200/90 bg-white/90 px-3 py-1 text-xs font-medium text-gray-600 shadow-sm">
+            <span className="tabular-nums text-gray-900">{filteredAndSorted.length}</span>
+            <span className="text-gray-400">/</span>
+            <span className="tabular-nums">{properties.length}</span>
+            <span className="text-gray-500">имота</span>
+          </p>
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            className="inline-flex items-center rounded-xl border border-gray-200/90 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-cadetblue/40"
+          >
+            Export Excel
+          </button>
+        </div>
       </div>
 
       <div className="bg-white px-4 py-4 md:px-6 md:pb-6 md:pt-2">

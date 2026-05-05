@@ -9,8 +9,8 @@ import { getTypeLabel, getCategoryLabel } from '@/data/properties';
 const statusLabels = {
   active: { label: 'Активна', className: 'bg-green-100 text-green-800' },
   pending: { label: 'Чакаща', className: 'bg-yellow-100 text-yellow-800' },
-  sold: { label: 'Продадена', className: 'bg-blue-100 text-blue-800' },
-  rented: { label: 'Отдадена', className: 'bg-blue-100 text-blue-800' },
+  sold: { label: 'Продаден', className: 'bg-blue-100 text-blue-800' },
+  rented: { label: 'Отдаден', className: 'bg-blue-100 text-blue-800' },
   inactive: { label: 'Блокирана', className: 'bg-gray-100 text-gray-800' },
 };
 

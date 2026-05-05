@@ -482,8 +482,8 @@ export const propertyCategories = [
 export const propertyStatuses = [
   { value: PROPERTY_STATUS.ACTIVE, label: 'Активна' },
   { value: PROPERTY_STATUS.PENDING, label: 'Чакаща' },
-  { value: PROPERTY_STATUS.SOLD, label: 'Продадена' },
-  { value: PROPERTY_STATUS.RENTED, label: 'Отдадена' },
+  { value: PROPERTY_STATUS.SOLD, label: 'Продаден' },
+  { value: PROPERTY_STATUS.RENTED, label: 'Отдаден' },
   { value: PROPERTY_STATUS.INACTIVE, label: 'Блокирана' },
 ];
 
