@@ -56,7 +56,7 @@ export default function PropertyCard({
     : getLocationLine(display);
   const imageUrl = images?.[0] || DEFAULT_PROPERTY_IMAGE;
   const isUnavailable = status === 'sold' || status === 'rented';
-  const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕНА') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕНА') : null;
+  const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕН') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕН') : null;
   const floorValue = floor != null
     ? `${floor === 0 ? (t.floorParter ?? 'Партер') : floor}`
     : null;
