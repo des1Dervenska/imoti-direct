@@ -80,6 +80,9 @@ export default function ContactContent({ locale = 'bg' }) {
   const prefix = `/${locale}`;
   const isEn = locale === 'en';
   const contactCity = isEn ? CONTACT_CITY_EN : CONTACT_CITY;
+  const qrCaption = isEn
+    ? 'Scan the QR code to open our website on your phone.'
+    : 'Сканирайте QR кода, за да отворите нашия сайт на телефона си.';
 
   // Премахваме „бл. 4“ от показвания адрес в секцията „Контакти“.
   const stripBlockNumber = (addr) => {
@@ -263,6 +266,16 @@ export default function ContactContent({ locale = 'bg' }) {
 
               {/* Social Links */}
               <div className="mt-8 pt-8 border-t">
+                <div className="mb-5 flex flex-col items-start gap-2">
+                  <img
+                    src="/arthouseQRkod.png"
+                    alt="Arthouse website QR code"
+                    className="w-32 h-32 rounded-md border border-graphite/10 bg-white p-2 shadow-sm"
+                  />
+                  <p className="text-sm text-graphite-light">
+                    {qrCaption}
+                  </p>
+                </div>
                 <h3 className="text-graphite mb-4">{t.followUs}</h3>
                 <div className="flex space-x-4">
                   {SOCIAL_LINKS.map((link) => (
