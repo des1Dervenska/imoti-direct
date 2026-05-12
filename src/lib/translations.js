@@ -123,6 +123,10 @@ export const translations = {
       mapTitle: 'Локация на офиса',
       propertyInquiry: 'Имот:',
       propertyInquirySuffix: 'Желая да проведем оглед на гореспоменатия обект',
+      callCtaTitle: 'Свържете се с нас',
+      callCtaBody: 'Обадете ни се, за да уговорим среща, на която да разгледате детайли по конкретния имот.',
+      callOnViber: 'Viber',
+      callOnWhatsApp: 'WhatsApp',
     },
     sales: {
       title: 'Имоти за продажба',
@@ -458,6 +462,10 @@ export const translations = {
       mapTitle: 'Office location',
       propertyInquiry: 'Property:',
       propertyInquirySuffix: 'I would like to arrange a viewing of the above property',
+      callCtaTitle: 'Get in touch with us',
+      callCtaBody: 'Call us to arrange a meeting where you can review the details of the specific property.',
+      callOnViber: 'Viber',
+      callOnWhatsApp: 'WhatsApp',
     },
     sales: {
       title: 'Properties for sale',
