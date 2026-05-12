@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { displayBgPhoneOrRaw } from "@/lib/phone";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const TO_EMAIL = process.env.CONTACT_EMAIL || "genoveva@arthouse94.com";
@@ -27,6 +28,7 @@ export async function POST(request) {
 
     const subjectLabel = subject || "(no subject)";
     const accentColor = "#0097b2";
+    const phoneDisplay = phone ? displayBgPhoneOrRaw(phone) : "";
     const html = `
 <!DOCTYPE html>
 <html>
@@ -64,7 +66,7 @@ export async function POST(request) {
                 <tr>
                   <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
                     <span style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">Телефон</span><br>
-                    <span style="color: #1e293b; font-size: 16px;">${phone ? escapeHtml(phone) : "—"}</span>
+                    <span style="color: #1e293b; font-size: 16px;">${phoneDisplay ? escapeHtml(phoneDisplay) : "—"}</span>
                   </td>
                 </tr>
                 <tr>

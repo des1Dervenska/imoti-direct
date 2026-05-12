@@ -31,8 +31,10 @@ export const CONTACT_PERSON_EN = "Genoveva Fileva";
 export const FACEBOOK_APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || "";
 /** Facebook Page ID за линк „Отвори чат в Messenger“ (m.me). Работи на телефон и десктоп. */
 export const FACEBOOK_PAGE_ID = "61580202105400";
-export const CONTACT_PHONE = "0887 803 064";
+
+/** Показван текст и за tel:/Viber/WhatsApp (E.164 без интервали). */
 export const CONTACT_PHONE_LINK = "+359887803064";
+export const CONTACT_PHONE = "+359 88 780 3064";
 export const CONTACT_EMAIL =
   process.env.CONTACT_EMAIL || "genoveva@arthouse94.com";
 export const CONTACT_ADDRESS = "Бул. България, ж.к. Белите Брези";
