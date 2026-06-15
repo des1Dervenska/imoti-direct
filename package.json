@@ -11,6 +11,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@supabase/supabase-js": "^2.99.1",
+    "cloudinary": "^2.10.0",
     "flowbite-react": "^0.12.17",
     "next": "16.1.6",
     "react": "19.2.3",

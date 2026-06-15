@@ -91,48 +91,44 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
 
   // Upload selected files
   const handleUpload = async () => {
-    console.log('[ImageUpload] handleUpload called');
-    console.log('[ImageUpload] selectedFiles:', selectedFiles.length);
-    console.log('[ImageUpload] storageReady:', storageReady);
+    if (selectedFiles.length === 0) {
+      setErrors(['Изберете поне една снимка преди качване.']);
+      return;
+    }
 
-    if (selectedFiles.length === 0 || !storageReady) {
-      console.log('[ImageUpload] Aborting - no files or storage not ready');
+    if (!storageReady) {
+      setErrors(['Качването не е налично. Добавете CLOUDINARY_URL в .env.local и рестартирайте сървъра.']);
       return;
     }
 
     setIsUploading(true);
     setErrors([]);
 
-    console.log('[ImageUpload] Calling uploadMultipleImages...');
-    const { urls, errors: uploadErrors } = await uploadMultipleImages(
-      selectedFiles,
-      (progress) => {
-        setUploadProgress(progress);
+    try {
+      const { urls, errors: uploadErrors } = await uploadMultipleImages(
+        selectedFiles,
+        (progress) => {
+          setUploadProgress(progress);
+        }
+      );
+
+      if (uploadErrors.length > 0) {
+        setErrors(uploadErrors);
       }
-    );
 
-    console.log('[ImageUpload] Upload complete. URLs:', urls);
-    console.log('[ImageUpload] Upload errors:', uploadErrors);
-
-    setIsUploading(false);
-    setUploadProgress(null);
-
-    if (uploadErrors.length > 0) {
-      setErrors(uploadErrors);
-    }
-
-    if (urls.length > 0) {
-      // Add new URLs to existing images
-      const newImages = [...images, ...urls];
-      console.log('[ImageUpload] Calling onChange with new images:', newImages);
-      onChange(newImages);
-
-      // Clear selected files
-      previews.forEach((p) => URL.revokeObjectURL(p.preview));
-      setSelectedFiles([]);
-      setPreviews([]);
-    } else {
-      console.log('[ImageUpload] No URLs returned - not calling onChange');
+      if (urls.length > 0) {
+        onChange([...images, ...urls]);
+        previews.forEach((p) => URL.revokeObjectURL(p.preview));
+        setSelectedFiles([]);
+        setPreviews([]);
+      } else if (uploadErrors.length === 0) {
+        setErrors(['Снимката не беше качена. Няма отговор от сървъра.']);
+      }
+    } catch {
+      setErrors(['Неочаквана грешка при качване. Опитайте отново.']);
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(null);
     }
   };
 
@@ -148,8 +144,9 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
     return (
       <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-yellow-800 text-sm">
-          <strong>Supabase Storage не е конфигуриран.</strong> За да качвате снимки,
-          добавете Supabase credentials в <code className="bg-yellow-100 px-1 rounded">.env.local</code>
+          <strong>Качването на снимки не е налично.</strong> Добавете{' '}
+          <code className="bg-yellow-100 px-1 rounded">CLOUDINARY_URL</code> в{' '}
+          <code className="bg-yellow-100 px-1 rounded">.env.local</code> и рестартирайте сървъра.
         </p>
       </div>
     );

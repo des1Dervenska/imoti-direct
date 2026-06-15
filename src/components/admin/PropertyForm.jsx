@@ -174,10 +174,6 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     setSuccess(null);
     setIsSubmitting(true);
 
-    console.log('[PropertyForm] handleSubmit called');
-    console.log('[PropertyForm] Current formData.images:', formData.images);
-
-    // Prepare data
     const codeTrimmed =
       typeof formData.code === 'string' ? formData.code.trim().slice(0, 100) : '';
     const propertyData = {
@@ -200,21 +196,14 @@ export default function PropertyForm({ property = null, isDemo = false }) {
       images: formData.images,
     };
 
-    console.log('[PropertyForm] Prepared propertyData:', propertyData);
-    console.log('[PropertyForm] propertyData.images:', propertyData.images);
-
     try {
       let result;
 
       if (isEditing) {
-        console.log('[PropertyForm] Calling updateProperty with id:', property.id);
         result = await updateProperty(property.id, propertyData);
       } else {
-        console.log('[PropertyForm] Calling createProperty');
         result = await createProperty(propertyData);
       }
-
-      console.log('[PropertyForm] API result:', result);
 
       if (result.error) {
         setError(result.error);
@@ -227,8 +216,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
         }
       }
     } catch (err) {
-      setError('Възникна неочаквана грешка. Моля, опитайте отново.');
-      console.error('[PropertyForm] Exception:', err);
+      setError(err?.message || 'Възникна неочаквана грешка. Моля, опитайте отново.');
     } finally {
       setIsSubmitting(false);
     }
@@ -928,12 +916,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
           <ImageUpload
             images={formData.images}
             onChange={(newImages) => {
-              console.log('[PropertyForm] ImageUpload onChange called with:', newImages);
-              setFormData(prev => {
-                const updated = { ...prev, images: newImages };
-                console.log('[PropertyForm] Updated formData.images:', updated.images);
-                return updated;
-              });
+              setFormData((prev) => ({ ...prev, images: newImages }));
             }}
             disabled={isSubmitting}
           />

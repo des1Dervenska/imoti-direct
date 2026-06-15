@@ -61,21 +61,39 @@ export default function PosterSingleImageUpload({
   };
 
   const handleUpload = async () => {
-    if (!selectedFile || !storageReady) return;
+    if (!selectedFile) {
+      setError('Изберете снимка преди качване.');
+      return;
+    }
+    if (!storageReady) {
+      setError('Качването не е налично. Добавете CLOUDINARY_URL в .env.local и рестартирайте сървъра.');
+      return;
+    }
+
     setUploading(true);
     setError('');
     const previousUrl = value;
-    const { url, error: err } = await uploadPosterImage(selectedFile);
-    setUploading(false);
-    if (err) {
-      setError(err);
-      return;
+
+    try {
+      const { url, error: err } = await uploadPosterImage(selectedFile);
+      if (err) {
+        setError(err);
+        return;
+      }
+      if (!url) {
+        setError('Снимката не беше качена. Няма отговор от сървъра.');
+        return;
+      }
+      clearPending();
+      if (previousUrl && previousUrl !== url) {
+        await deletePropertyImage(previousUrl);
+      }
+      onChange(url);
+    } catch {
+      setError('Неочаквана грешка при качване. Опитайте отново.');
+    } finally {
+      setUploading(false);
     }
-    clearPending();
-    if (previousUrl && previousUrl !== url) {
-      await deletePropertyImage(previousUrl);
-    }
-    onChange(url);
   };
 
   const handleRemove = async () => {
@@ -89,8 +107,9 @@ export default function PosterSingleImageUpload({
     return (
       <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-yellow-800 text-sm">
-          <strong>Supabase Storage не е конфигуриран.</strong> Добавете credentials в{' '}
-          <code className="bg-yellow-100 px-1 rounded">.env.local</code>
+          <strong>Качването на снимки не е налично.</strong> Добавете{' '}
+          <code className="bg-yellow-100 px-1 rounded">CLOUDINARY_URL</code> в{' '}
+          <code className="bg-yellow-100 px-1 rounded">.env.local</code> и рестартирайте сървъра.
         </p>
       </div>
     );
