@@ -14,7 +14,7 @@ export default function AdminLayout({ children }) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <Link href="/admin/properties" className="text-xl text-gray-900">
-                Admin Panel
+                Admin's panel
               </Link>
               <nav className="flex gap-4">
                 <Link
