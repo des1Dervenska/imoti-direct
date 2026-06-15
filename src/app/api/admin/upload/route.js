@@ -1,14 +1,10 @@
 import { NextResponse } from 'next/server';
 import { requireAdminSession } from '@/lib/admin-api-auth';
 import {
-  deleteCloudinaryImage,
-  getSupabaseStoragePath,
   isCloudinaryConfigured,
-  isCloudinaryImageUrl,
-  isSupabaseStorageUrl,
   uploadImageBuffer,
 } from '@/lib/cloudinary-server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { deleteStoredImage } from '@/lib/image-storage-server';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -93,43 +89,13 @@ export async function DELETE(request) {
       return NextResponse.json({ error: 'Липсва URL на снимка' }, { status: 400 });
     }
 
-    if (isCloudinaryImageUrl(url)) {
-      const result = await deleteCloudinaryImage(url);
-      if (!result.success) {
-        return NextResponse.json({ error: result.error }, { status: 500 });
-      }
-      return NextResponse.json({ success: true });
+    const result = await deleteStoredImage(url);
+
+    if (!result.success) {
+      return NextResponse.json({ error: result.error }, { status: 500 });
     }
 
-    if (isSupabaseStorageUrl(url)) {
-      if (!supabaseAdmin) {
-        return NextResponse.json(
-          { error: 'Supabase service role не е конфигуриран за изтриване на стари снимки' },
-          { status: 503 }
-        );
-      }
-
-      const filePath = getSupabaseStoragePath(url);
-      if (!filePath) {
-        return NextResponse.json({ error: 'Невалиден Supabase URL' }, { status: 400 });
-      }
-
-      const { error } = await supabaseAdmin.storage
-        .from('property-images')
-        .remove([filePath]);
-
-      if (error) {
-        return NextResponse.json(
-          { error: `Грешка при изтриване от Supabase: ${error.message}` },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json({ success: true });
-    }
-
-    // Външен или неизвестен URL – премахваме само от формата/базата
-    return NextResponse.json({ success: true, skipped: true });
+    return NextResponse.json({ success: true, skipped: !!result.skipped });
   } catch (err) {
     console.error('[api/admin/upload DELETE]', err);
     return NextResponse.json(

@@ -12,6 +12,7 @@ import {
   PROPERTY_STATUS,
 } from '@/data/properties';
 import { createProperty, updateProperty } from '@/lib/properties';
+import { deletePropertyImage } from '@/lib/storage';
 import ImageUpload from './ImageUpload';
 
 /** EN етикети по избраните BG стойности (винаги в синхрон с FEATURE_OPTIONS) */
@@ -208,6 +209,14 @@ export default function PropertyForm({ property = null, isDemo = false }) {
       if (result.error) {
         setError(result.error);
       } else {
+        if (isEditing && Array.isArray(property?.images) && property.images.length > 0) {
+          const savedImages = propertyData.images || [];
+          const removedUrls = property.images.filter((url) => !savedImages.includes(url));
+          if (removedUrls.length > 0) {
+            await Promise.all(removedUrls.map((url) => deletePropertyImage(url)));
+          }
+        }
+
         setSuccess(isEditing ? 'Имотът е обновен успешно!' : 'Имотът е създаден успешно!');
         if (!isEditing) {
           setTimeout(() => {

@@ -97,9 +97,22 @@ export default function PosterSingleImageUpload({
   };
 
   const handleRemove = async () => {
-    if (value && storageReady) {
-      await deletePropertyImage(value);
+    if (!value) {
+      onChange('');
+      return;
     }
+
+    setUploading(true);
+    setError('');
+
+    const { success, error: deleteError } = await deletePropertyImage(value);
+    setUploading(false);
+
+    if (!success) {
+      setError(deleteError || 'Снимката не беше изтрита от storage');
+      return;
+    }
+
     onChange('');
   };
 

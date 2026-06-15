@@ -1,15 +1,37 @@
 import { NextResponse } from 'next/server';
 import { deleteProperty } from '@/lib/properties';
+import { deleteStoredImages } from '@/lib/image-storage-server';
+import { supabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
 
 /**
  * DELETE /api/admin/properties/[id]
- * Изтрива имот по id.
+ * Изтрива снимките от storage и след това имота от базата.
  */
 export async function DELETE(request, context) {
   try {
     const { id } = await context.params;
     if (!id) {
       return NextResponse.json({ error: 'Липсва id на имот' }, { status: 400 });
+    }
+
+    const idVal = Number(id);
+    if (Number.isNaN(idVal)) {
+      return NextResponse.json({ error: 'Невалиден id на имот' }, { status: 400 });
+    }
+
+    if (isSupabaseConfigured && supabaseAdmin) {
+      const { data: row } = await supabaseAdmin
+        .from('properties')
+        .select('images')
+        .eq('id', idVal)
+        .maybeSingle();
+
+      if (row?.images?.length) {
+        const { failed } = await deleteStoredImages(row.images);
+        if (failed.length > 0) {
+          console.error('[api/admin/properties/delete] storage cleanup failed:', failed);
+        }
+      }
     }
 
     const { error, isDemo } = await deleteProperty(id);

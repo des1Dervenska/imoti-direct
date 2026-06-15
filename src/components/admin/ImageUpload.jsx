@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { uploadMultipleImages, isStorageConfigured } from '@/lib/storage';
+import { uploadMultipleImages, isStorageConfigured, deletePropertyImage } from '@/lib/storage';
 
 export default function ImageUpload({ images = [], onChange, disabled = false }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -9,6 +9,7 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(null);
   const [errors, setErrors] = useState([]);
+  const [deletingIndex, setDeletingIndex] = useState(null);
   const fileInputRef = useRef(null);
 
   const storageReady = isStorageConfigured();
@@ -71,10 +72,23 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
     setPreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Remove uploaded image
-  const removeUploadedImage = (index) => {
-    const newImages = images.filter((_, i) => i !== index);
-    onChange(newImages);
+  // Remove uploaded image (and from Cloudinary / Supabase storage)
+  const removeUploadedImage = async (index) => {
+    if (disabled || deletingIndex !== null) return;
+
+    const url = images[index];
+    setDeletingIndex(index);
+    setErrors([]);
+
+    const { success, error } = await deletePropertyImage(url);
+    setDeletingIndex(null);
+
+    if (!success) {
+      setErrors([error || 'Снимката не беше изтрита от storage']);
+      return;
+    }
+
+    onChange(images.filter((_, i) => i !== index));
   };
 
   // Reorder uploaded images
@@ -190,10 +204,10 @@ export default function ImageUpload({ images = [], onChange, disabled = false })
                 <button
                   type="button"
                   onClick={() => removeUploadedImage(index)}
-                  disabled={disabled}
-                  className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-sm hover:bg-red-600"
+                  disabled={disabled || deletingIndex !== null}
+                  className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-sm hover:bg-red-600 disabled:opacity-50"
                 >
-                  &times;
+                  {deletingIndex === index ? '…' : '×'}
                 </button>
               </div>
             ))}
