@@ -2,6 +2,7 @@ import HeroSection from "@/components/sections/HeroSection";
 import { homePosterDesktopMaxHeightClass } from "@/lib/hero.config";
 import { getHomePosters } from "@/lib/banners";
 import { getTranslations } from "@/lib/translations";
+import { BRAND_NAME, BRAND_DESCRIPTION, CONTACT_PHONE_LINK, CONTACT_EMAIL } from "@/lib/constants";
 import Link from "next/link";
 import { Section, Container, LinkButton, Card, FeatureCard, AnimateOnScroll } from "@/components/ui";
 import {
@@ -13,6 +14,57 @@ import {
 
 /** Винаги свежи данни – нови обяви се показват веднага на началната страница. */
 export const dynamic = 'force-dynamic';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.arthouse94.com";
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const t = getTranslations(locale);
+  const pageUrl = `${SITE_URL}/${locale}`;
+  const title =
+    locale === "en"
+      ? `${BRAND_NAME} | Real Estate in Sofia and Bulgaria`
+      : `${BRAND_NAME} | Недвижими имоти в София и България`;
+  const description =
+    locale === "en"
+      ? `${BRAND_DESCRIPTION}. Buy, sell and rent apartments, houses and offices in Sofia and Bulgaria.`
+      : `${BRAND_DESCRIPTION}. Покупка, продажба и наем на апартаменти, къщи и офиси в София и България.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        bg: `${SITE_URL}/bg`,
+        en: `${SITE_URL}/en`,
+        "x-default": `${SITE_URL}/bg`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      url: pageUrl,
+      title,
+      description,
+      locale: locale === "en" ? "en_GB" : "bg_BG",
+      alternateLocale: locale === "en" ? ["bg_BG"] : ["en_GB"],
+      images: [{ url: `${SITE_URL}/images/logo.jpg`, alt: BRAND_NAME }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${SITE_URL}/images/logo.jpg`],
+    },
+    keywords: [
+      locale === "en" ? "real estate" : "недвижими имоти",
+      locale === "en" ? "property in sofia" : "имоти софия",
+      locale === "en" ? "property for rent" : "имоти под наем",
+      locale === "en" ? "property for sale" : "имоти за продажба",
+      BRAND_NAME,
+      t.home.heroTitle,
+    ],
+  };
+}
 
 export default async function Home({ params }) {
   const { locale } = await params;
@@ -41,9 +93,34 @@ export default async function Home({ params }) {
     { title: t.home.professionalism, description: t.home.professionalismDesc, icon: <UserGroupIcon className="w-8 h-8 text-graphite" /> },
     { title: t.home.fairPrices, description: t.home.fairPricesDesc, icon: <CurrencyDollarIcon className="w-8 h-8 text-graphite" /> },
   ];
+  const pageUrl = `${SITE_URL}/${locale}`;
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: BRAND_NAME,
+    url: pageUrl,
+    inLanguage: locale,
+  };
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: BRAND_NAME,
+    url: pageUrl,
+    telephone: CONTACT_PHONE_LINK,
+    email: CONTACT_EMAIL,
+    areaServed: locale === "en" ? "Bulgaria" : "България",
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
       <HeroSection locale={locale} />
 
       {posterRows.length > 0 ? (

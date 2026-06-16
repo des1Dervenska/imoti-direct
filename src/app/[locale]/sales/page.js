@@ -7,16 +7,47 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 /** Винаги свежи данни от Supabase – нови обяви се показват веднага (без кеш на страницата). */
 export const dynamic = 'force-dynamic';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.arthouse94.com";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const t = getTranslations(locale);
+  const pageUrl = `${SITE_URL}/${locale}/sales`;
+  const description =
+    locale === "en"
+      ? "Browse our current listings for sale: apartments, houses and land in Bulgaria."
+      : "Разгледайте нашите актуални оферти за продажба на апартаменти, къщи и парцели в България.";
   return {
     title: `${t.sales.title} | ${BRAND_NAME}`,
-    description:
-      locale === "en"
-        ? "Browse our current listings for sale: apartments, houses and land in Bulgaria."
-        : "Разгледайте нашите актуални оферти за продажба на апартаменти, къщи и парцели в България.",
+    description,
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        bg: `${SITE_URL}/bg/sales`,
+        en: `${SITE_URL}/en/sales`,
+        "x-default": `${SITE_URL}/bg/sales`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      url: pageUrl,
+      title: `${t.sales.title} | ${BRAND_NAME}`,
+      description,
+      locale: locale === "en" ? "en_GB" : "bg_BG",
+      alternateLocale: locale === "en" ? ["bg_BG"] : ["en_GB"],
+    },
+    twitter: {
+      card: "summary",
+      title: `${t.sales.title} | ${BRAND_NAME}`,
+      description,
+    },
+    keywords: [
+      locale === "en" ? "properties for sale" : "имоти за продажба",
+      locale === "en" ? "apartments for sale" : "апартаменти за продажба",
+      locale === "en" ? "houses for sale" : "къщи за продажба",
+      locale === "en" ? "property sofia" : "имоти софия",
+      BRAND_NAME,
+    ],
   };
 }
 
@@ -25,9 +56,25 @@ export default async function SalesPage({ params }) {
   const t = getTranslations(locale);
   const prefix = `/${locale}`;
   const properties = await getSaleProperties();
+  const pageUrl = `${SITE_URL}/${locale}/sales`;
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${t.sales.title} | ${BRAND_NAME}`,
+    url: pageUrl,
+    itemListElement: properties.slice(0, 30).map((property, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${SITE_URL}/${locale}/properties/${property.slug}`,
+    })),
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
       <Section background="white" padding="md" className="pt-8">
         <Container>
           <AnimateOnScroll direction="down" className="text-center">

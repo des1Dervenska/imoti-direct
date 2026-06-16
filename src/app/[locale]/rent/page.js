@@ -12,16 +12,47 @@ import {
 
 /** Винаги свежи данни от Supabase – нови обяви се показват веднага (без кеш на страницата). */
 export const dynamic = 'force-dynamic';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.arthouse94.com";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const t = getTranslations(locale);
+  const pageUrl = `${SITE_URL}/${locale}/rent`;
+  const description =
+    locale === "en"
+      ? "Browse our current rental listings: apartments and houses in Bulgaria."
+      : "Разгледайте нашите актуални оферти за наем на апартаменти и къщи в България.";
   return {
     title: `${t.rent.title} | ${BRAND_NAME}`,
-    description:
-      locale === "en"
-        ? "Browse our current rental listings: apartments and houses in Bulgaria."
-        : "Разгледайте нашите актуални оферти за наем на апартаменти и къщи в България.",
+    description,
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        bg: `${SITE_URL}/bg/rent`,
+        en: `${SITE_URL}/en/rent`,
+        "x-default": `${SITE_URL}/bg/rent`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      url: pageUrl,
+      title: `${t.rent.title} | ${BRAND_NAME}`,
+      description,
+      locale: locale === "en" ? "en_GB" : "bg_BG",
+      alternateLocale: locale === "en" ? ["bg_BG"] : ["en_GB"],
+    },
+    twitter: {
+      card: "summary",
+      title: `${t.rent.title} | ${BRAND_NAME}`,
+      description,
+    },
+    keywords: [
+      locale === "en" ? "properties for rent" : "имоти под наем",
+      locale === "en" ? "apartments for rent" : "апартаменти под наем",
+      locale === "en" ? "houses for rent" : "къщи под наем",
+      locale === "en" ? "rent sofia" : "наем софия",
+      BRAND_NAME,
+    ],
   };
 }
 
@@ -30,6 +61,18 @@ export default async function RentPage({ params }) {
   const t = getTranslations(locale);
   const prefix = `/${locale}`;
   const properties = await getRentProperties();
+  const pageUrl = `${SITE_URL}/${locale}/rent`;
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${t.rent.title} | ${BRAND_NAME}`,
+    url: pageUrl,
+    itemListElement: properties.slice(0, 30).map((property, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${SITE_URL}/${locale}/properties/${property.slug}`,
+    })),
+  };
 
   const infoCards = [
     { title: t.rent.card1Title, description: t.rent.card1Desc, icon: <CheckCircleIcon className="w-7 h-7 text-graphite" /> },
@@ -39,6 +82,10 @@ export default async function RentPage({ params }) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
       <Section background="white" padding="md" className="pt-8">
         <Container>
           <AnimateOnScroll direction="down" className="text-center">

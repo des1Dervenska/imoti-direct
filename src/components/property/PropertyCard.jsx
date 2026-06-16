@@ -56,12 +56,12 @@ export default function PropertyCard({
     : getLocationLine(display);
   const imageUrl = images?.[0] || DEFAULT_PROPERTY_IMAGE;
   const isUnavailable = status === 'sold' || status === 'rented';
-  const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕНА') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕНА') : null;
+  const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕН') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕН') : null;
   const floorValue = floor != null
     ? `${floor === 0 ? (t.floorParter ?? 'Партер') : floor}`
     : null;
   const constructionLabel = constructionType
-    ? (t[`constructionType_${constructionType}`] ?? constructionType)
+    ? (t[`constructionType_${constructionType}`] ?? String(constructionType).trim())
     : null;
 
   const features = [
@@ -149,7 +149,7 @@ export default function PropertyCard({
 
         {showFloorAndConstruction && constructionLabel && (
           <p className={`${cardTextMuted} mb-2`}>
-            {t.constructionType ?? 'Тип строителство'}: {constructionLabel}
+            {t.constructionType ?? 'Вид строителство'}: {constructionLabel}
           </p>
         )}
 

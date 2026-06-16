@@ -1,6 +1,44 @@
 import { Suspense } from 'react';
 import ContactContent from '@/app/contact/ContactContent';
 import { Section, Container, Card } from '@/components/ui';
+import { BRAND_NAME } from '@/lib/constants';
+import { getTranslations } from '@/lib/translations';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.arthouse94.com';
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const t = getTranslations(locale);
+  const pageUrl = `${SITE_URL}/${locale}/contact`;
+  const description =
+    locale === 'en'
+      ? `Contact ${BRAND_NAME} for real estate sales and rentals in Sofia and Bulgaria.`
+      : `Свържете се с ${BRAND_NAME} за продажба и наем на недвижими имоти в София и България.`;
+
+  return {
+    title: `${t.contact.title} | ${BRAND_NAME}`,
+    description,
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        bg: `${SITE_URL}/bg/contact`,
+        en: `${SITE_URL}/en/contact`,
+        'x-default': `${SITE_URL}/bg/contact`,
+      },
+    },
+    openGraph: {
+      type: 'website',
+      url: pageUrl,
+      title: `${t.contact.title} | ${BRAND_NAME}`,
+      description,
+    },
+    twitter: {
+      card: 'summary',
+      title: `${t.contact.title} | ${BRAND_NAME}`,
+      description,
+    },
+  };
+}
 
 function LoadingFallback() {
   return (

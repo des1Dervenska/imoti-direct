@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import AdminLogout from '@/components/admin/AdminLogout';
+import AdminHeader from '@/components/admin/AdminHeader';
 
 export const metadata = {
   title: 'Admin | ART HOUSE 94',
@@ -7,45 +6,11 @@ export const metadata = {
 
 export default function AdminLayout({ children }) {
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Admin Header */}
-      <header className="bg-white border-b">
-        <div className="max-w-[1600px] mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <Link href="/admin/properties" className="text-xl text-gray-900">
-                Admin's panel
-              </Link>
-              <nav className="flex gap-4">
-                <Link
-                  href="/admin/properties"
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  Имоти
-                </Link>
-                <Link
-                  href="/admin/posters"
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  Постери
-                </Link>
-              </nav>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/"
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                ← Към сайта
-              </Link>
-              <AdminLogout />
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-white">
+      <AdminHeader />
 
       {/* Admin Content */}
-      <main className="max-w-[1600px] mx-auto px-4 py-8">
+      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 py-8 pb-12">
         {children}
       </main>
     </div>

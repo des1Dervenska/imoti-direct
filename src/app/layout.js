@@ -26,11 +26,67 @@ const heroMotto = Cormorant_Garamond({
 });
 
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.arthouse94.com";
 
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: `${BRAND_NAME} - Недвижими имоти в България`,
   description: `${BRAND_DESCRIPTION}. ${BRAND_TAGLINE}. Покупко-продажба и наем на имоти в София и България.`,
-  keywords: "имоти, недвижими имоти, апартаменти, къщи, парцели, продажба, наем, България, София",
+  applicationName: BRAND_NAME,
+  keywords: [
+    "имоти",
+    "недвижими имоти",
+    "апартаменти",
+    "къщи",
+    "парцели",
+    "продажба",
+    "наем",
+    "България",
+    "София",
+    "real estate",
+    "property",
+    "rent",
+    "sale",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  alternates: {
+    languages: {
+      bg: `${SITE_URL}/bg`,
+      en: `${SITE_URL}/en`,
+      "x-default": `${SITE_URL}/bg`,
+    },
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    title: `${BRAND_NAME} - Недвижими имоти в България`,
+    description: `${BRAND_DESCRIPTION}. ${BRAND_TAGLINE}.`,
+    siteName: BRAND_NAME,
+    locale: "bg_BG",
+    alternateLocale: ["en_GB"],
+    images: [
+      {
+        url: "/images/logo.jpg",
+        alt: BRAND_NAME,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${BRAND_NAME} - Недвижими имоти в България`,
+    description: `${BRAND_DESCRIPTION}. ${BRAND_TAGLINE}.`,
+    images: ["/images/logo.jpg"],
+  },
   icons: {
     icon: '/images/logo.jpg',
     apple: '/images/logo.jpg',

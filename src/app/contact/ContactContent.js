@@ -28,7 +28,7 @@ import {
   PaperAirplaneIcon,
   ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/outline';
-import { FacebookIcon } from '@/components/icons';
+import { FacebookIcon, ViberIcon, WhatsAppIcon } from '@/components/icons';
 
 const SOCIAL_LINKS = [
   { icon: FacebookIcon, href: 'https://www.facebook.com/profile.php?id=61580202105400', label: 'Facebook' },
@@ -80,6 +80,9 @@ export default function ContactContent({ locale = 'bg' }) {
   const prefix = `/${locale}`;
   const isEn = locale === 'en';
   const contactCity = isEn ? CONTACT_CITY_EN : CONTACT_CITY;
+  const qrCaption = isEn
+    ? 'Scan the QR code to open our website on your phone.'
+    : 'Сканирайте QR кода, за да отворите нашия сайт на телефона си.';
 
   // Премахваме „бл. 4“ от показвания адрес в секцията „Контакти“.
   const stripBlockNumber = (addr) => {
@@ -263,6 +266,16 @@ export default function ContactContent({ locale = 'bg' }) {
 
               {/* Social Links */}
               <div className="mt-8 pt-8 border-t">
+                <div className="mb-5 flex flex-col items-start gap-2">
+                  <img
+                    src="/arthouseQRkod.png"
+                    alt="Arthouse website QR code"
+                    className="w-32 h-32 rounded-md border border-graphite/10 bg-white p-2 shadow-sm"
+                  />
+                  <p className="text-sm text-graphite-light">
+                    {qrCaption}
+                  </p>
+                </div>
                 <h3 className="text-graphite mb-4">{t.followUs}</h3>
                 <div className="flex space-x-4">
                   {SOCIAL_LINKS.map((link) => (
@@ -436,6 +449,83 @@ export default function ContactContent({ locale = 'bg' }) {
           </AnimateOnScroll>
         </Container>
       </Section>
+
+      {/* Call-to-Action: свържете се с нас (Viber / WhatsApp) */}
+      <section className="relative overflow-hidden bg-linear-to-br from-cadetblue via-cadetblue to-cadetblue-dark text-white py-16 md:py-20">
+        {/* Декоративни „blobs“ на фона – леко пулсиращи */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-24 -left-24 w-72 h-72 md:w-96 md:h-96 rounded-full bg-white/10 blur-3xl animate-pulse [animation-duration:6s]" />
+          <div className="absolute -bottom-24 -right-24 w-72 h-72 md:w-96 md:h-96 rounded-full bg-white/5 blur-3xl animate-pulse [animation-duration:8s]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-xl h-144 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_60%)]" />
+        </div>
+
+        <Container className="relative">
+          <AnimateOnScroll direction="up" className="text-center mx-auto max-w-3xl">
+            {/* Икона с „ripple“ ефект */}
+            <div className="relative inline-flex items-center justify-center mb-6">
+              <span
+                aria-hidden="true"
+                className="absolute inline-flex h-16 w-16 rounded-full bg-white/40 opacity-75 animate-ping"
+              />
+              <span className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/15 ring-1 ring-white/30 backdrop-blur-sm">
+                <PhoneIcon className="w-8 h-8 text-white" />
+              </span>
+            </div>
+
+            <h2 className="text-3xl md:text-4xl font-bold tracking-wide mb-4 [text-shadow:0_2px_8px_rgba(0,0,0,0.18)]">
+              {t.callCtaTitle}
+            </h2>
+            <p className="text-base md:text-lg text-white/90 max-w-xl mx-auto mb-3">
+              {t.callCtaBody}
+            </p>
+            <a
+              href={`tel:${CONTACT_PHONE_LINK}`}
+              className="inline-flex items-center gap-2 text-lg md:text-xl font-semibold text-white hover:text-white/90 mb-8 transition-colors"
+            >
+              <PhoneIcon className="w-5 h-5" />
+              {CONTACT_PHONE}
+            </a>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              {/* Viber */}
+              <a
+                href={`viber://chat?number=${encodeURIComponent(CONTACT_PHONE_LINK)}`}
+                aria-label={`Viber ${CONTACT_PHONE}`}
+                className="group relative inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#7360F2] text-white font-medium shadow-lg shadow-black/25 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-cadetblue"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/10 transition-colors duration-300"
+                />
+                <ViberIcon className="relative w-5 h-5 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6" />
+                <span className="relative">{t.callOnViber}</span>
+                <span className="relative text-white/85 text-sm hidden sm:inline">
+                  {CONTACT_PHONE}
+                </span>
+              </a>
+
+              {/* WhatsApp */}
+              <a
+                href={`https://wa.me/${CONTACT_PHONE_LINK.replace(/[^0-9]/g, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`WhatsApp ${CONTACT_PHONE}`}
+                className="group relative inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#25D366] text-white font-medium shadow-lg shadow-black/25 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-cadetblue"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/10 transition-colors duration-300"
+                />
+                <WhatsAppIcon className="relative w-5 h-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
+                <span className="relative">{t.callOnWhatsApp}</span>
+                <span className="relative text-white/85 text-sm hidden sm:inline">
+                  {CONTACT_PHONE}
+                </span>
+              </a>
+            </div>
+          </AnimateOnScroll>
+        </Container>
+      </section>
     </>
   );
 }
