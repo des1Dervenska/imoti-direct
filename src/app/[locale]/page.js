@@ -1,4 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection";
+import HomePosterImage from "@/components/sections/HomePosterImage";
 import { homePosterDesktopMaxHeightClass } from "@/lib/hero.config";
 import { getHomePosters } from "@/lib/banners";
 import { getTranslations } from "@/lib/translations";
@@ -132,7 +133,7 @@ export default async function Home({ params }) {
                   <div className="mx-auto w-full max-w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm md:overflow-visible">
                     <div className="md:flex md:justify-center md:p-4 lg:p-5">
                       <div className="w-full min-w-0 md:flex md:w-fit md:max-w-full md:flex-col">
-                        <img
+                        <HomePosterImage
                           src={imageUrl}
                           alt={text || `Poster ${idx + 1}`}
                           className={`block h-auto w-full max-h-80 object-cover sm:max-h-72 md:min-w-0 md:w-auto md:max-w-full md:object-contain md:object-center ${homePosterDesktopMaxHeightClass}`}

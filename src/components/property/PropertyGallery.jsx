@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DEFAULT_PROPERTY_IMAGE } from '@/lib/constants';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import SafeImage from '@/components/ui/SafeImage';
 
-// Styles
 const mainImageContainer = 'relative bg-white rounded-2xl overflow-hidden h-72 md:h-96 lg:h-[500px]';
 const imageStyle = 'absolute inset-0 w-full h-full object-contain';
 const counterBadge =
@@ -31,14 +31,33 @@ export default function PropertyGallery({
   codeLabel = 'КОД',
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [brokenUrls, setBrokenUrls] = useState(() => new Set());
 
-  const displayImages = images?.length > 0 ? images : [DEFAULT_PROPERTY_IMAGE];
+  const markBroken = (url) => {
+    if (!url) return;
+    setBrokenUrls((prev) => {
+      const next = new Set(prev);
+      next.add(url);
+      return next;
+    });
+  };
+
+  const validImages = useMemo(() => {
+    const list = (images || []).filter(Boolean).filter((url) => !brokenUrls.has(url));
+    return list;
+  }, [images, brokenUrls]);
+
+  const displayImages = validImages.length > 0 ? validImages : [DEFAULT_PROPERTY_IMAGE];
   const hasMultipleImages = displayImages.length > 1;
   const codeStr = code != null ? String(code).trim() : '';
   const totalImages = displayImages.length;
 
+  useEffect(() => {
+    setActiveIndex((prev) => Math.min(prev, Math.max(0, totalImages - 1)));
+  }, [totalImages]);
+
   const navigate = (direction) => {
-    setActiveIndex(prev => {
+    setActiveIndex((prev) => {
       const next = prev + direction;
       if (next < 0) return totalImages - 1;
       if (next >= totalImages) return 0;
@@ -48,12 +67,12 @@ export default function PropertyGallery({
 
   return (
     <div className="space-y-3 min-w-0 max-w-full overflow-x-hidden">
-      {/* Главна снимка – показва селектираната */}
       <div className={mainImageContainer}>
-        <img
+        <SafeImage
           src={displayImages[activeIndex]}
           alt={`${title} - снимка ${activeIndex + 1}`}
           className={imageStyle}
+          onBroken={markBroken}
         />
 
         {topLeftOverlay && (
@@ -108,19 +127,19 @@ export default function PropertyGallery({
         ))}
       </div>
 
-      {/* Миниатюри – клик селектира снимката да се вижда горе */}
       {hasMultipleImages && (
         <div className="w-full min-w-0 max-w-full flex snap-x snap-mandatory gap-2 overflow-x-auto pb-2">
           {displayImages.map((image, index) => (
             <button
-              key={index}
+              key={`${image}-${index}`}
               onClick={() => setActiveIndex(index)}
               className={`${thumbBase} ${index === activeIndex ? thumbActive : thumbInactive}`}
             >
-              <img
+              <SafeImage
                 src={image}
                 alt={`${title} - thumbnail ${index + 1}`}
                 className="w-full h-full object-contain"
+                onBroken={markBroken}
               />
             </button>
           ))}

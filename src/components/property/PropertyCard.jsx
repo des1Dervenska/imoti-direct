@@ -5,6 +5,7 @@ import { getTranslations } from '@/lib/translations';
 import { ArrowsPointingOutIcon, MapPinIcon, BoltIcon, FireIcon } from '@heroicons/react/24/outline';
 import { RoomsIcon } from '@/components/icons';
 import { Badge, LinkButton } from '@/components/ui';
+import SafeImage from '@/components/ui/SafeImage';
 
 const cardStyle = 'bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full';
 /** Единен размер за всички текстове в тялото на картичката */
@@ -54,7 +55,6 @@ export default function PropertyCard({
   const addressLine = showStreetAddress && display.address?.trim()
     ? display.address.trim()
     : getLocationLine(display);
-  const imageUrl = images?.[0] || DEFAULT_PROPERTY_IMAGE;
   const isUnavailable = status === 'sold' || status === 'rented';
   const unavailableOverlayText = status === 'sold' ? (t.statusSoldOverlay ?? 'ПРОДАДЕН') : status === 'rented' ? (t.statusRentedOverlay ?? 'ОТДАДЕН') : null;
   const floorValue = floor != null
@@ -75,8 +75,9 @@ export default function PropertyCard({
     <div className={`${cardStyle} ${isUnavailable ? 'opacity-85' : ''}`}>
       {/* Image */}
       <Link href={propertyUrl} className="block relative h-52 bg-gray-200 overflow-hidden group">
-        <img
-          src={imageUrl}
+        <SafeImage
+          src={images?.[0]}
+          fallbackSrc={DEFAULT_PROPERTY_IMAGE}
           alt={title}
           className="absolute inset-0 w-full h-full object-cover"
         />
