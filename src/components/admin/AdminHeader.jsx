@@ -39,6 +39,12 @@ export default function AdminHeader() {
               >
                 Постери
               </Link>
+              <Link
+                href="/admin/storage"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-slate-100 hover:text-gray-900 transition-colors"
+              >
+                Storage
+              </Link>
             </nav>
           </div>
           <div className="flex items-center gap-3 sm:gap-4">
