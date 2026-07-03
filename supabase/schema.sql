@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS properties (
   price DECIMAL(12, 2) NOT NULL CHECK (price >= 0),
   currency VARCHAR(3) NOT NULL DEFAULT 'EUR' CHECK (currency IN ('EUR', 'BGN')),
   price_includes_vat BOOLEAN NOT NULL DEFAULT FALSE,
+  hide_price_vat BOOLEAN NOT NULL DEFAULT FALSE,
   price_note TEXT,
   price_note_en TEXT,
 
@@ -191,6 +192,7 @@ COMMENT ON COLUMN properties.hide_price_per_sqm IS 'Hide price per square meter 
 COMMENT ON COLUMN properties.gaz IS 'Имотът има газ';
 COMMENT ON COLUMN properties.tec IS 'Имотът има ТЕЦ';
 COMMENT ON COLUMN properties.price_includes_vat IS 'TRUE = цена с включено ДДС, FALSE = цена без ДДС';
+COMMENT ON COLUMN properties.hide_price_vat IS 'TRUE = не показвай с/без ДДС в клиентската част';
 COMMENT ON COLUMN properties.price_note IS 'Забележка към цената (БГ)';
 COMMENT ON COLUMN properties.price_note_en IS 'Забележка към цената (EN)';
 COMMENT ON COLUMN properties.year_built_status IS 'Статус на година на строителство';

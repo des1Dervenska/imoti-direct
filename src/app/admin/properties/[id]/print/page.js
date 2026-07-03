@@ -46,6 +46,7 @@ export default async function PrintPropertyPage({ params, searchParams }) {
     gaz,
     tec,
     hidePricePerSqm,
+    hidePriceVat,
     constructionType,
     priceIncludesVat,
     images,
@@ -120,7 +121,7 @@ export default async function PrintPropertyPage({ params, searchParams }) {
             </div>
             <div>
               <p className="text-xl font-semibold text-cadetblue-dark">{eurText}</p>
-              {priceIncludesVat != null && (
+              {priceIncludesVat != null && !hidePriceVat && (
                 <p className="text-xs text-graphite-light">{priceIncludesVat ? tp.priceWithVat : tp.priceWithoutVat}</p>
               )}
               {priceNote && <p className="text-sm text-graphite-light mt-1">{priceNote}</p>}

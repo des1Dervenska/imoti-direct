@@ -160,7 +160,9 @@ export default function PropertyTable({ properties, isDemo = false }) {
                 <td className="px-4 py-4 text-sm whitespace-nowrap">
                   {(() => {
                     const { eurText } = formatPriceEur(property.price, property.category);
-                    const vatLabel = property.priceIncludesVat ? 'с ДДС' : 'без ДДС';
+                    const vatLabel = property.hidePriceVat
+                      ? 'ДДС скрито'
+                      : (property.priceIncludesVat ? 'с ДДС' : 'без ДДС');
                     return (
                       <span>
                         <span className="text-gray-900">{eurText}</span>

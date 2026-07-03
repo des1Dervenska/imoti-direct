@@ -57,3 +57,12 @@ CREATE POLICY "Authenticated users can manage home posters"
   TO authenticated
   USING (TRUE)
   WITH CHECK (TRUE);
+
+-- =============================================================================
+-- 3) properties.hide_price_vat – скриване на „с/без ДДС“ при клиента
+-- =============================================================================
+
+ALTER TABLE properties
+  ADD COLUMN IF NOT EXISTS hide_price_vat BOOLEAN NOT NULL DEFAULT FALSE;
+
+COMMENT ON COLUMN properties.hide_price_vat IS 'TRUE = не показвай с/без ДДС в клиентската част';

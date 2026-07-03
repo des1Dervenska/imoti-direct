@@ -65,6 +65,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
     tec: property?.tec ?? false,
     hidePricePerSqm: property?.hidePricePerSqm ?? false,
     priceIncludesVat: property?.priceIncludesVat ?? false,
+    hidePriceVat: property?.hidePriceVat ?? false,
     constructionType: property?.constructionType ?? '',
     brokerNote: property?.brokerNote ?? '',
   });
@@ -192,6 +193,7 @@ export default function PropertyForm({ property = null, isDemo = false }) {
       priceNote: formData.priceNote || null,
       priceNoteEn: formData.priceNoteEn || null,
       hidePricePerSqm: Boolean(formData.hidePricePerSqm),
+      hidePriceVat: Boolean(formData.hidePriceVat),
       features: Array.isArray(formData.features) ? [...formData.features] : [],
       featuresEn: Array.isArray(formData.featuresEn) ? [...formData.featuresEn] : [],
       images: formData.images,
@@ -676,6 +678,21 @@ export default function PropertyForm({ property = null, isDemo = false }) {
             <span className="text-sm text-gray-700">Цена с включено ДДС</span>
           </label>
           <p className="mt-1 text-xs text-gray-500">Ако не е тикнато, цената се счита за без включено ДДС.</p>
+        </div>
+        <div className="mt-4">
+          <label className="inline-flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              name="hidePriceVat"
+              checked={formData.hidePriceVat}
+              onChange={handleChange}
+              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <span className="text-sm text-gray-700">Скрий „с/без ДДС“ при показ</span>
+          </label>
+          <p className="mt-1 text-xs text-gray-500">
+            Когато е включено, клиентите няма да виждат дали цената е с или без включено ДДС.
+          </p>
         </div>
       </div>
 

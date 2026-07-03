@@ -99,6 +99,7 @@ export const CURRENCY = {
  * @property {boolean} [gaz] - Газ
  * @property {boolean} [tec] - ТЕЦ
  * @property {boolean} [priceIncludesVat] - Цена с включено ДДС (true) / без ДДС (false)
+ * @property {boolean} [hidePriceVat] - Не показвай с/без ДДС в клиентската част
  * @property {string} [constructionType] - Тип строителство: panel, tuhla, epk, pk, gredored, sglobyaema
  * @property {string|null} [brokerNote] - Лична бележка на брокера (само за админ, не се показва на сайта)
  * @property {string|null} [priceNote] - Забележка цена (БГ) – показва се над Основни характеристики при клиента

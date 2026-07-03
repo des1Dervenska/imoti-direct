@@ -45,6 +45,7 @@ export default function PropertyCard({
     tec,
     hidePricePerSqm,
     priceIncludesVat,
+    hidePriceVat,
   } = property;
   const display = getDisplayText(property, locale);
   const { title, description } = display;
@@ -125,7 +126,9 @@ export default function PropertyCard({
         <div className="mb-2 space-y-1">
           {(() => {
             const { eurText } = formatPriceEur(price, category);
-            const vatLabel = priceIncludesVat ? (t.priceWithVat ?? 'с включено ДДС') : (t.priceWithoutVat ?? 'без включено ДДС');
+            const vatLabel = !hidePriceVat
+              ? (priceIncludesVat ? (t.priceWithVat ?? 'с включено ДДС') : (t.priceWithoutVat ?? 'без включено ДДС'))
+              : null;
             const pricePerSqm = area > 0 ? (price ?? 0) / area : null;
             const perSqmText = !hidePricePerSqm && pricePerSqm != null
               ? `${Math.round(pricePerSqm)} EUR/м²${category === 'rent' ? '/мес' : ''}`
@@ -134,7 +137,7 @@ export default function PropertyCard({
               <>
                 <span className={`block ${cardText} font-medium`}>{eurText}</span>
                 {perSqmText && <span className={`block ${cardTextMuted}`}>{perSqmText}</span>}
-                <span className={`block ${cardTextMuted}`}>{vatLabel}</span>
+                {vatLabel && <span className={`block ${cardTextMuted}`}>{vatLabel}</span>}
               </>
             );
           })()}

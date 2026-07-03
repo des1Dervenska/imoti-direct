@@ -421,7 +421,7 @@ export default async function PropertyDetailPage({ params }) {
   const {
     type, category, status, price, area, rooms, floor,
     totalFloors, yearBuilt, yearBuiltStatus, images, mapUrl, videoUrl, createdAt,
-    gaz, tec, hidePricePerSqm, priceIncludesVat, constructionType, code,
+    gaz, tec, hidePricePerSqm, priceIncludesVat, hidePriceVat, constructionType, code,
   } = property;
 
   const isUnavailable = status === 'sold' || status === 'rented';
@@ -562,7 +562,9 @@ export default async function PropertyDetailPage({ params }) {
                   </h1>
                   <div className="text-graphite">
                     <span className="text-3xl">{formatPriceEur(price, category).eurText}</span>
-                    <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
+                    {!hidePriceVat && (
+                      <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
+                    )}
                   </div>
                 </div>
 
@@ -667,7 +669,9 @@ export default async function PropertyDetailPage({ params }) {
                     </h1>
                     <div className="mb-4">
                       <span className="text-xl text-graphite">{formatPriceEur(price, category).eurText}</span>
-                      <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
+                      {!hidePriceVat && (
+                        <span className="block text-xs text-gray-500 mt-0.5">{priceIncludesVat ? t.priceWithVat : t.priceWithoutVat}</span>
+                      )}
                     </div>
                     <div className="text-sm text-gray-500">
                       {t.published}: {formatDate(createdAt, locale)}
