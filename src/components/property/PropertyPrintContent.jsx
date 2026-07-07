@@ -79,8 +79,6 @@ export default function PropertyPrintContent({ property, locale = 'bg', listingU
   ];
 
   const contactName = isEn ? CONTACT_PERSON_EN : CONTACT_PERSON;
-  const telLabel = isEn ? 'Tel' : 'Тел';
-  const websiteLabel = isEn ? 'Website' : 'Уебсайт';
   const listingLinkLabel = isEn ? 'Listing' : 'Обява';
 
   return (
@@ -163,21 +161,22 @@ export default function PropertyPrintContent({ property, locale = 'bg', listingU
             </div>
           )}
 
-          <footer className="property-print-footer border-t border-gray-200 pt-4 mt-2 space-y-0.5">
-            <p className={`${PRINT_BODY} font-medium text-graphite`}>{contactName}</p>
-            <p className={`${PRINT_BODY} text-cadetblue-dark font-medium`}>{BRAND_NAME}</p>
-            <p className={PRINT_BODY}>{telLabel}: {CONTACT_PHONE}</p>
-            <p className={PRINT_BODY}>Email: {CONTACT_EMAIL}</p>
-            <p className={PRINT_BODY}>{websiteLabel}: {SITE_WEBSITE}</p>
+          <div className="property-print-footer border-t-2 border-cadetblue/30 pt-5 mt-6 print:mt-8 print:pt-4 text-center">
+            <p className={`${PRINT_PRICE} text-cadetblue-dark font-semibold`}>{BRAND_NAME}</p>
+            <p className={`${PRINT_BODY} font-medium text-graphite mt-1`}>{contactName}</p>
+            <p className={`${PRINT_BODY} font-medium text-graphite mt-0.5`}>{CONTACT_PHONE}</p>
+            <p className={`${PRINT_BODY} text-graphite-light mt-2 hidden print:block`}>
+              {CONTACT_EMAIL} · {SITE_WEBSITE}
+            </p>
             {listingUrl && (
-              <p className={`${PRINT_BODY} hidden print:block`}>
+              <p className={`text-sm text-graphite-light mt-2 hidden print:block`}>
                 {listingLinkLabel}:{' '}
                 <a href={listingUrl} className="text-cadetblue-dark underline break-all">
                   {listingUrl}
                 </a>
               </p>
             )}
-          </footer>
+          </div>
         </div>
       </article>
     </div>

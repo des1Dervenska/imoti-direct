@@ -167,7 +167,7 @@ h1.hero-brand-title .hero-brand-title-digits {
    =========================================== */
 
 body.property-print-page nav,
-body.property-print-page footer {
+body.property-print-page footer.site-footer {
   display: none !important;
 }
 
@@ -189,6 +189,11 @@ body.property-print-page main {
   .property-print-footer {
     break-inside: avoid;
     page-break-inside: avoid;
+    margin-top: auto;
+  }
+
+  body.property-print-page .property-print-footer {
+    display: block !important;
   }
 
   h1,
