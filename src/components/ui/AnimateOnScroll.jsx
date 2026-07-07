@@ -20,18 +20,21 @@ export default function AnimateOnScroll({
     const el = ref.current;
     if (!el) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          } else if (!once) {
-            setIsVisible(false);
-          }
-        });
-      },
-      { rootMargin: `${offset}px`, threshold: 0.1 }
-    );
+    const onIntersect = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else if (!once) {
+          setIsVisible(false);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(onIntersect, {
+      rootMargin: `${offset}px`,
+      // threshold 0: trigger when any pixel is visible (0.1 fails for very tall blocks on mobile)
+      threshold: 0,
+    });
 
     observer.observe(el);
     return () => observer.disconnect();

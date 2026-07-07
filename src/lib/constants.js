@@ -19,6 +19,8 @@ export const BRAND_NAME_WITHOUT_NUMBER = "ART HOUSE ";
 export const BRAND_NAME_NUMBER = "94";
 export const BRAND_DESCRIPTION = "Професионална компания за недвижими имоти";
 export const BRAND_TAGLINE = "С нас вашата сделка ще бъде в сигурни ръце";
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.arthouse94.com";
+export const SITE_WEBSITE = "www.arthouse94.com";
 
 // =============================================================================
 // CONTACT INFORMATION

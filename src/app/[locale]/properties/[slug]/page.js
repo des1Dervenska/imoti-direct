@@ -14,7 +14,7 @@ import {
   formatPriceEur,
 } from '@/lib/constants';
 import { getTranslations } from '@/lib/translations';
-import { Section, Container, Card, LinkButton, AnimateOnScroll } from '@/components/ui';
+import { Section, Container, Card, LinkButton } from '@/components/ui';
 import {
   ChevronRightIcon,
   ChevronLeftIcon,
@@ -531,16 +531,13 @@ export default async function PropertyDetailPage({ params }) {
       />
       <Section background="light" padding="sm">
         <Container>
-          <AnimateOnScroll direction="down">
-            <Breadcrumb category={category} title={title} locale={locale} />
-          </AnimateOnScroll>
+          <Breadcrumb category={category} title={title} locale={locale} />
         </Container>
       </Section>
 
       <Section background="white" padding="md">
         <Container>
-          <AnimateOnScroll direction="up">
-            <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-8">
                 <div className="relative">
                   <PropertyGallery
@@ -722,21 +719,18 @@ export default async function PropertyDetailPage({ params }) {
                 </div>
               </div>
             </div>
-          </AnimateOnScroll>
         </Container>
       </Section>
 
       <Section background="light" padding="sm" className="border-t">
         <Container>
-          <AnimateOnScroll direction="up">
-            <Link
-              href={category === 'sale' ? `${prefix}/sales` : `${prefix}/rent`}
-              className="inline-flex items-center text-graphite hover:text-graphite-dark"
-            >
-              <ChevronLeftIcon className="w-5 h-5 mr-2" />
-              {t.backTo} {category === 'sale' ? getTranslations(locale).sales.title : getTranslations(locale).rent.title}
-            </Link>
-          </AnimateOnScroll>
+          <Link
+            href={category === 'sale' ? `${prefix}/sales` : `${prefix}/rent`}
+            className="inline-flex items-center text-graphite hover:text-graphite-dark"
+          >
+            <ChevronLeftIcon className="w-5 h-5 mr-2" />
+            {t.backTo} {category === 'sale' ? getTranslations(locale).sales.title : getTranslations(locale).rent.title}
+          </Link>
         </Container>
       </Section>
     </>

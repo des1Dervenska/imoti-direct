@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { getTranslations } from '@/lib/translations';
-import { FACEBOOK_PAGE_ID } from '@/lib/constants';
+import { SITE_URL } from '@/lib/constants';
 import {
   PrinterIcon,
   ClipboardDocumentIcon,
@@ -33,10 +33,11 @@ export default function PropertyShareBar({ propertyPath, title, locale = 'bg' })
 
   useEffect(() => {
     const path = propertyPath.startsWith('/') ? propertyPath : `/${propertyPath}`;
-    setFullUrl(`${window.location.origin}${path}`);
+    const base = (process.env.NEXT_PUBLIC_SITE_URL || SITE_URL || window.location.origin).replace(/\/$/, '');
+    setFullUrl(`${base}${path}`);
   }, [propertyPath]);
 
-  const shareText = fullUrl ? (title ? `${title} ${fullUrl}` : fullUrl) : '';
+  const shareText = fullUrl ? (title ? `${title}\n${fullUrl}` : fullUrl) : '';
 
   const handleCopyLink = useCallback(() => {
     if (!fullUrl) return;
@@ -47,8 +48,9 @@ export default function PropertyShareBar({ propertyPath, title, locale = 'bg' })
   }, [fullUrl]);
 
   const handlePrint = useCallback(() => {
-    window.print();
-  }, []);
+    const printPath = `${propertyPath.replace(/\/$/, '')}/print`;
+    window.open(printPath, '_blank', 'noopener,noreferrer');
+  }, [propertyPath]);
 
   const viberUrl = shareText ? `viber://forward?text=${encodeURIComponent(shareText)}` : '#';
   const mailtoUrl = shareText
