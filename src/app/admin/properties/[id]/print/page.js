@@ -1,13 +1,25 @@
-import { getPropertyById } from '@/lib/properties';
+import { getPropertyById, getDisplayText, getLocationLine } from '@/lib/properties';
 import { SITE_URL } from '@/lib/constants';
+import { buildPropertyPrintDocumentTitle } from '@/lib/property-print';
 import { getTranslations } from '@/lib/translations';
 import Link from 'next/link';
 import PropertyPrintContent from '@/components/property/PropertyPrintContent';
 import PrintButton from '@/components/property/PrintButton';
+import PrintDocumentTitle from '@/components/property/PrintDocumentTitle';
 
-export const metadata = {
-  title: 'Печат / PDF за клиент | Admin',
-};
+export async function generateMetadata({ params, searchParams }) {
+  const { id } = await params;
+  const sp = await searchParams;
+  const locale = sp?.lang === 'en' ? 'en' : 'bg';
+  const { data: property } = await getPropertyById(id);
+  if (!property) {
+    return { title: 'Печат / PDF за клиент | Admin' };
+  }
+  const display = getDisplayText(property, locale);
+  return {
+    title: buildPropertyPrintDocumentTitle(display.title, getLocationLine(display)),
+  };
+}
 
 export default async function PrintPropertyPage({ params, searchParams }) {
   const { id } = await params;
@@ -28,11 +40,14 @@ export default async function PrintPropertyPage({ params, searchParams }) {
     );
   }
 
+  const display = getDisplayText(property, locale);
+  const documentTitle = buildPropertyPrintDocumentTitle(display.title, getLocationLine(display));
   const prefix = `/${locale}`;
   const listingUrl = property.slug ? `${SITE_URL}${prefix}/properties/${property.slug}` : null;
 
   return (
     <>
+      <PrintDocumentTitle title={documentTitle} />
       <div className="print:hidden fixed top-4 right-4 z-50 flex gap-2">
         <PrintButton label={locale === 'en' ? 'Print / Save as PDF' : 'Печат / Запази като PDF'} />
         <Link

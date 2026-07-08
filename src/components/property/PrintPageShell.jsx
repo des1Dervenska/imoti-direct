@@ -2,8 +2,9 @@
 
 import { useEffect } from 'react';
 import PrintButton from '@/components/property/PrintButton';
+import PrintDocumentTitle from '@/components/property/PrintDocumentTitle';
 
-export default function PrintPageShell({ children, backHref, backLabel, printLabel }) {
+export default function PrintPageShell({ children, backHref, backLabel, printLabel, documentTitle }) {
   useEffect(() => {
     document.body.classList.add('property-print-page');
     return () => document.body.classList.remove('property-print-page');
@@ -11,6 +12,7 @@ export default function PrintPageShell({ children, backHref, backLabel, printLab
 
   return (
     <>
+      <PrintDocumentTitle title={documentTitle} />
       <div className="print:hidden fixed top-4 right-4 z-50 flex gap-2">
         <PrintButton label={printLabel} />
         {backHref && (
