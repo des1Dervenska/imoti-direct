@@ -5,6 +5,7 @@ import {
   CONTACT_PERSON_EN,
   CONTACT_PHONE,
   CONTACT_EMAIL,
+  SITE_URL,
   SITE_WEBSITE,
   formatPriceEur,
 } from '@/lib/constants';
@@ -80,6 +81,7 @@ export default function PropertyPrintContent({ property, locale = 'bg', listingU
 
   const contactName = isEn ? CONTACT_PERSON_EN : CONTACT_PERSON;
   const contactsHeading = isEn ? 'Contacts:' : 'Контакти:';
+  const homeHref = isEn ? `${SITE_URL}/en` : `${SITE_URL}/bg`;
   const listingLinkLabel = isEn ? 'Listing' : 'Обява';
 
   return (
@@ -164,7 +166,12 @@ export default function PropertyPrintContent({ property, locale = 'bg', listingU
 
           <div className="property-print-footer border-t-2 border-cadetblue/30 pt-5 mt-6 print:mt-8 print:pt-4 text-center">
             <p className={`${PRINT_HEADING} text-graphite mb-2`}>{contactsHeading}</p>
-            <p className={`${PRINT_PRICE} text-cadetblue-dark font-semibold`}>{BRAND_NAME}</p>
+            <a
+              href={homeHref}
+              className={`${PRINT_PRICE} text-cadetblue-dark font-semibold underline decoration-cadetblue/40 hover:decoration-cadetblue`}
+            >
+              {BRAND_NAME}
+            </a>
             <p className={`${PRINT_BODY} font-medium text-graphite mt-2`}>{contactName}</p>
             <p className={`${PRINT_BODY} font-medium text-graphite mt-0.5`}>{CONTACT_PHONE}</p>
             <p className={`${PRINT_BODY} text-graphite-light mt-2 hidden print:block`}>
