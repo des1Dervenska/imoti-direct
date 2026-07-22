@@ -42,20 +42,36 @@ function cleanText(value = '') {
 }
 
 function buildMetaDescription(display, property, locale) {
+  const isEn = locale === 'en';
+  const t = getTranslations(locale).property;
   const parts = [];
-  const area = property?.area ? `${property.area} м²` : '';
-  const rooms = property?.rooms ? `${property.rooms} ${locale === 'en' ? 'rooms' : 'стаи'}` : '';
-  const location = cleanText(getLocationLine(display) || [display?.city, display?.neighborhood].filter(Boolean).join(', '));
-  const summary = cleanText(display?.description || '');
 
-  if (cleanText(display?.title)) parts.push(cleanText(display.title));
-  if (location) parts.push(location);
-  if (area) parts.push(area);
-  if (rooms) parts.push(rooms);
-  if (summary) parts.push(summary);
+  if (property?.area != null && property.area !== '') {
+    parts.push(`${property.area} м²`);
+  }
 
-  const text = cleanText(parts.join(' - '));
-  return text.length > 160 ? `${text.slice(0, 157).trimEnd()}...` : text;
+  if (property?.rooms != null && property.rooms !== '') {
+    parts.push(`${property.rooms} ${isEn ? 'rooms' : 'стаи'}`);
+  }
+
+  const floor = property?.floor;
+  const totalFloors = property?.totalFloors;
+  if (floor !== undefined && floor !== null && floor !== '') {
+    const floorLabel = floor === 0 ? (t.floorParter ?? (isEn ? 'Ground floor' : 'Партер')) : String(floor);
+    parts.push(
+      totalFloors != null && totalFloors !== ''
+        ? `${isEn ? 'Floor' : 'Етаж'} ${floorLabel} / ${totalFloors}`
+        : `${isEn ? 'Floor' : 'Етаж'} ${floorLabel}`
+    );
+  }
+
+  if (property?.price != null && property.price !== '') {
+    let { eurText } = formatPriceEur(property.price, property.category);
+    if (isEn) eurText = eurText.replace('/месец', '/month');
+    parts.push(eurText);
+  }
+
+  return parts.join(' · ');
 }
 
 function buildSeoKeywords(display, property, locale) {
